@@ -30,3 +30,10 @@ Data:
  - Wiki: www.uva-bits.nl
    * Uname: Guest, ww: Guest
 
+Mogelijkheden:
+ - Fourier analysis
+ - Dynamic Time Warping
+ - Herkennen van overgangen
+   * Kan wellicht met Hidden Markov Models
+   * Kan wellicht met `Feature Engineering(?)'
+
