@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 * and writes it to a new .csv file. */
 class RewriteTime
 {
-    // 2010-07-01 10:01:03
+    // Example of a date time 2010-07-01 10:01:03 (which results in the following format:) 
     private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
