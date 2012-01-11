@@ -9,6 +9,7 @@ class RewriteTime
 {
     // 2010-07-01 10:01:03
     private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static String delimiter = ",";
 
 
     public static void main (String args[])
@@ -29,7 +30,7 @@ class RewriteTime
         {
             try
             {
-                String[] splittedLine = line.split(";");
+                String[] splittedLine = line.split(delimiter);
                 Date date = simpleDateFormat.parse(splittedLine[1]);
                 splittedLine[1] = String.valueOf(date.getTime());
                 newLines.add(arrayToString(splittedLine)); 
@@ -49,7 +50,7 @@ class RewriteTime
     public static String arrayToString(String[] list)
     {
         String line = "";
-        for (int i = 0; i < list.length - 2; i ++)
+        for (int i = 0; i <= list.length - 2; i ++)
             line += list[i] + ";";
         return line + list[list.length - 1] + "\n";
     }
