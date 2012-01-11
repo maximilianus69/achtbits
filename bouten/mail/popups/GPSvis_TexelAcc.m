@@ -2,7 +2,6 @@
 % This function uses the Matlab2GoogleEarth toolbox. 
 % Make sure that it is installed and you set the path right.
 %% copy name of data-file to kml-file
-addpath('c:\Program Files\MATLAB\googleearth\')
 clear all
 name_dat='S538_1507_1507.txt';
 Filename=name_dat;
