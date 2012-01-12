@@ -16,8 +16,11 @@ function Matrix = readgps(fileName)
     size(Matrix)
     Matrix(:, 6:8) = Data(:, 9:11);
     northsea = dlmread("noordzeeCoordinates.txt",",");
-    inNorthSea = inpolygon(Matrix(:,2), Matrix(:,3), northsea(:,1), northsea(:,2));
+    inNorthSea = inpolygon(Matrix(:,3), Matrix(:,4), northsea(:,1), northsea(:,2));
     %inNorthSea = ones(size(Matrix)(1),1);
+    %remove zero values:
+    Matrix(~any(Matrix,2),:) = [];
+
     for i = 1:size(Matrix)(2)
         Matrix(:,i) = inNorthSea .* Matrix(:,i);
     end 
