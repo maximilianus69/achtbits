@@ -4,10 +4,11 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 
 /** Rewrites the date in a .csv file to a timestamp instead of a string
-* and writes it to a new .csv file. */
+* and writes it to a new .csv file. 
+* @author Maarten Inja*/
 class RewriteTime
 {
-    // 2010-07-01 10:01:03
+    // Example of a date time 2010-07-01 10:01:03 (which results in the following format:) 
     private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static String delimiter = ",";
 
