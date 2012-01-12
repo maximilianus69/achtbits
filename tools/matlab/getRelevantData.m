@@ -1,4 +1,11 @@
 function Data = getRelevantData( dataCSV )
+% .csv file line beforehand:
+% "device_info_serial","date_time","latitude","longitude","altitude","pressure","temperature","h_accuracy","v_accuracy","x_speed","y_speed","z_speed","gps_fixtime","location","userflag","satellites_used","positiondop","speed_accuracy"
+ 
+% Note: this is actual camel case :P
+%dataCsv = dataCSV;
+
+
 %GETRELEVANTDATA Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -28,4 +35,4 @@ function Data = getRelevantData( dataCSV )
     end 
     
 end
-
+%}
