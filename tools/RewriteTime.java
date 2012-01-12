@@ -4,7 +4,8 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 
 /** Rewrites the date in a .csv file to a timestamp instead of a string
-* and writes it to a new .csv file. */
+* and writes it to a new .csv file. 
+* @author Maarten Inja*/
 class RewriteTime
 {
     // Example of a date time 2010-07-01 10:01:03 (which results in the following format:) 
