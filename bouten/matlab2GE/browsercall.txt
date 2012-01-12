@@ -1,1 +1,1 @@
-"C:\\Program Files\\Mozilla Firefox\\firefox.exe" %s
+chromium-browser
