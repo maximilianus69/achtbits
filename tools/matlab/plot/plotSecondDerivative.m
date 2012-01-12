@@ -26,6 +26,9 @@ plot(x, y, '-s','LineWidth',1,
                 'MarkerFaceColor','auto',
                 'MarkerSize',13); 
 
+xlabel('index');
+ylabel('length vector');
+title('2nd derivative?');
 
 
 %':+', 'MarkerFaceColor', 'auto', 'MarkerSize', 10);
