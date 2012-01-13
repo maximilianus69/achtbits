@@ -22,15 +22,33 @@ Acc = sqrt(sum(AccSqared, 2));
 
 % find index of peaks by comparing with the threshold
 Peaks = Acc > peakThres;
+% Get the middle of the peak:
+% TODO: WIthout loop?
+beginPos = 0;
+endPos = 0;
+for j = 1:size(Peaks, 1)
+    if Peaks(j) == 1 && beginPos == 0
+        beginPos = j;
+    elseif Peaks(j) == 0 && beginPos ~= 0
+        Peaks(beginPos:(j-1)) = 0;
+        % Let the 1-value be on the middle of the peak
+        Peaks(round((beginPos+(j-1))/2)) = 1;
+        beginPos = 0;
+    end
+end
+        
+        
+        
+
+
+        
+
 PeakPos = find(Peaks);
 
 % use indices to retrieve start-time and end-time of period
 Clusters = [];
 time = Data(:, 2);
-for i = 1:size(PeakPos, 1)
-    if i+1 <= size(PeakPos, 1)
-        Clusters = [Clusters; time(i) time(i+1)];
-end
-
+for i = 1:(size(PeakPos, 1)-1)
+    Clusters = [Clusters; time(i) time(i+1)];
 end
 

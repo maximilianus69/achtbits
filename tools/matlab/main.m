@@ -16,6 +16,11 @@ function out = main(fileName)
     subplot(2,1,2);
     plotSecondDerivative(Der(:, 3:5));
     peakThres = 2*10^(-5);
-    findClusters(Gps, peakThres);
+    Clusters = findClusters(Gps, peakThres);
+    % 16 minutes = 960 000 ms
+    %Clusters = awesomizeClusters(Clusters, 96000);
+
+
+    out = Clusters .- Gps(1, 2);
 
     
