@@ -14,12 +14,12 @@ import java.text.SimpleDateFormat;
 * @author Maarten Inja*/
 class RewriteTime
 {
-    // Example of a date time 2010-07-01 10:01:03 (which results in the following format:) 
+    // Example of a date time: '2010-07-01 10:01:03' (which results in the following format:) 
     private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static String inputDelimiter = ",";
     private static String outputDelimiter = ",";
     /** The integers in this column will be saved in the output file. */
-    private static int[] includeColumns = {1, 2, 3, 4, 9, 10, 11}; 
+    private static int[] includeColumns = {0, 1, 2, 3, 4, 9, 10, 11}; 
 
 
     public static void main (String args[])
@@ -148,7 +148,9 @@ class RewriteTime
           FileWriter fstream = new FileWriter(fileName);
           BufferedWriter out = new BufferedWriter(fstream);
             for (String line: lines)
+            {
                 out.write(line);
+            }
           //Close the output stream
           out.close();
           }catch (Exception e){//Catch exception if any
