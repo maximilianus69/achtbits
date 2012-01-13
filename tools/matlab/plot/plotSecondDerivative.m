@@ -7,7 +7,7 @@ function result = plotSecondDerivative(Matrix)
 
 N = size(Matrix, 1);
 
-x = [1 : N];
+x = [1 : N]
 y = zeros(1, N);
 
 for i = 1:N
@@ -16,12 +16,12 @@ end
 
 % in the future we can plot every awesome thingy in the same window 
 % (we should create one function that plots everything
-h = subplot(1, 1, 1);
+% h = subplot(1, 1, 1);
 
 plot(x, y, '-s','LineWidth',1, ...
                 'MarkerEdgeColor','k', ...
                 'MarkerFaceColor','auto', ...
-                'MarkerSize',13); 
+                'MarkerSize',4); 
 
 xlabel('index');
 ylabel('length vector');

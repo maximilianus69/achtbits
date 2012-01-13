@@ -13,22 +13,22 @@ function Clusters = findClusters( Data, peakThres)
 %   use these points to determine start and end time of a period
 
 % find the acceleration
-Acc = derivative(Data(:,2:5));
+DataPrep = [Data(:, 1:2) Data(:, 6:8)];
+Acc = derivative(DataPrep);
 
 % get length of acceleration vectors
-Acc = sqrt(sum(Acc^2, 2));
+Acc = sqrt(sum(Acc.^2, 2));
 
 % find index of peaks by comparing with the threshold
-Peaks = Acc > peakThres;
-PeakPos = find(Peaks);
+Peaks = Acc > peakThres
+PeakPos = find(Peaks)
 
 % use indices to retrieve start-time and end-time of period
-Clusters = []
+Clusters = [];
 time = Data(:, 2);
 for i = 1:size(PeakPos, 1)
     if i+1 <= size(PeakPos, 1)
-        Clusters = [Clusters; time(i) time(i+1)]
-    end
+        Clusters = [Clusters; time(i) time(i+1)];
 end
 
 end
