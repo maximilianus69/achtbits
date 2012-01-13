@@ -7,7 +7,7 @@ function result = plotSecondDerivative(Matrix)
 
 N = size(Matrix, 1);
 
-x = [1 : N]
+x = [1 : N];
 y = zeros(1, N);
 
 for i = 1:N

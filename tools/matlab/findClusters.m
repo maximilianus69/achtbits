@@ -17,11 +17,12 @@ DataPrep = [Data(:, 1:2) Data(:, 6:8)];
 Acc = derivative(DataPrep);
 
 % get length of acceleration vectors
-Acc = sqrt(sum(Acc.^2, 2));
+AccSqared = Acc(:, 3:5).^2;
+Acc = sqrt(sum(AccSqared, 2));
 
 % find index of peaks by comparing with the threshold
-Peaks = Acc > peakThres
-PeakPos = find(Peaks)
+Peaks = Acc > peakThres;
+PeakPos = find(Peaks);
 
 % use indices to retrieve start-time and end-time of period
 Clusters = [];
