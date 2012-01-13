@@ -1,5 +1,9 @@
-function result = plotSecondDerivative(Matrix)
-% Argument Matrix is an N x 3 matrix containing vectors>
+function result = plotSecondDerivative(Matrix, TimeStamps, Peaks)
+% Arguments
+%   - Matrix is an N x 3 matrix containing vectors
+%   - TimeStamps is an N x 1 matrix containing timestamps (optional)
+%   - Peaks is an N x 1 matrix with Peaks (optional)
+%
 % N is the number of datapoints. 
 %
 % Time is on the x-axis of the plot. The length of each vector is on the
@@ -7,7 +11,15 @@ function result = plotSecondDerivative(Matrix)
 
 N = size(Matrix, 1);
 
-x = [1 : N];
+if nargin < 2
+    TimeStamps = [1 : N];
+end
+
+if nargin < 3
+    Peaks = [];
+end
+
+x = TimeStamps;
 y = zeros(1, N);
 
 for i = 1:N
@@ -23,7 +35,7 @@ plot(x, y, '-s','LineWidth',1, ...
                 'MarkerFaceColor','auto', ...
                 'MarkerSize',4); 
 
-xlabel('index');
+xlabel('timestamp');
 ylabel('length vector');
 title('2nd derivative?');
 
