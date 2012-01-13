@@ -1,6 +1,16 @@
-function Clusters = findClusters( Data, peakThres, timeThres)
-%FINDCLUSTERS Finds the sart and end point of a behaviour period
-%   Detailed explanation goes here
+function Clusters = findClusters( Data, peakThres)
+%FINDCLUSTERS Finds the start and end point of a behaviour period
+%   Input:
+%   Data = ID, time, x, y, z, speed_x, speed_y, speed_z
+%   peakThres = threshold for recognising peaks
+%   
+%   output:
+%   Clusters = nx2 matrix with start/end times 
+%   [begin_t1 begin_t1; ... ; begin_tn begin_tn]
+%
+%   use the data to calulate acceleration
+%   find big chances in acceleration with threshold
+%   use these points to determine start and end time of a period
 
 % find the acceleration
 Acc = derivative(Data(:,2:5));
