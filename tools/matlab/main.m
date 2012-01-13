@@ -9,7 +9,7 @@ function out = main(fileName)
     Input(:, 1:2) = Gps(:, 1:2);
     % X_speed, Y_speed and Z_speed
     Input(:, 3:5) = Gps(:, 6:8);
-    Der = derivative(Input); 
-    plotSecondDerivative(Der);
+    Der = derivative(Input)
+    plotSecondDerivative(Der(:, 3:5));
 
     
