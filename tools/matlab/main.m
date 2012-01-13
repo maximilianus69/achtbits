@@ -10,8 +10,6 @@ function out = main(fileName)
     % X_speed, Y_speed and Z_speed
     Input(:, 3:5) = Gps(:, 6:8);
     Der = derivative(Input);
-    size(Der)
-    size(Input)
     figure(1);
     subplot(2,1,1);
     plotSecondDerivative(Input(:, 3:5), Input(:, 2));
@@ -23,6 +21,6 @@ function out = main(fileName)
     %Clusters = awesomizeClusters(Clusters, 96000);
 
 
-    out = Clusters .- Gps(1, 2);
+    out = Clusters %.- Gps(1, 2);
 
     
