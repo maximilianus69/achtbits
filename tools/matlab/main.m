@@ -10,11 +10,13 @@ function out = main(fileName)
     % X_speed, Y_speed and Z_speed
     Input(:, 3:5) = Gps(:, 6:8);
     Der = derivative(Input);
+    size(Der)
+    size(Input)
     figure(1);
     subplot(2,1,1);
-    plotSecondDerivative(Gps(:, 6:8));
+    plotSecondDerivative(Input(:, 3:5), Input(:, 2));
     subplot(2,1,2);
-    plotSecondDerivative(Der(:, 3:5));
+    plotSecondDerivative(Der(:, 3:5), Der(:, 2));
     peakThres = 2*10^(-5);
     findClusters(Gps, peakThres);
 
