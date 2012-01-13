@@ -45,12 +45,6 @@ class RewriteTime
             String newLinePart = "";
             for (int column : includeColumns)
             {
-                // if a selected column contains '\\N' dont include it
-                if (splittedLine[column].indexOf("\\N") != -1)
-                {       
-                    slashNCount ++;
-                    continue;
-                }   
                 // removing those crazy '"''s!
                 newLinePart = removeChar(splittedLine[column], '\"');
 
@@ -60,6 +54,12 @@ class RewriteTime
                 // and add it to the newline
                 newLine += newLinePart + outputDelimiter;
             }
+            // if a selected column contains '\\N' dont include it
+            if (newLine.indexOf("\\N") != -1)
+            {       
+                slashNCount ++;
+                continue;
+            }   
             // now remove the last delimiter and add newline
             newLine = newLine.substring(0, newLine.length()-1) + "\n";
             // and add it to the newLines arraylist
