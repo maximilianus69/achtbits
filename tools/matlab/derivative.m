@@ -9,7 +9,7 @@ function out = derivative(coordinates)
     time1 = coordinates(1:size(coordinates, 1)-1, 2);
     time2 = coordinates(2:size(coordinates, 1), 2);
     out(:,1:2) = coordinates(:,1:2);
-    out(size(out, 1), :) = []
+    out(size(out, 1), :) = [];
     for i = 1:size(place1, 2)
         out(:,i+2) = (place1(:,i) - place2(:,i)) ./ ((time2 - time1));
     end 
