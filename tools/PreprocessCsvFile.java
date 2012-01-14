@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-import java.util.*;
+import java.util.Date;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.awt.Polygon;
@@ -10,6 +10,8 @@ import java.awt.Polygon;
 * One can select the columns that need to be inlcuded.
 * Sessions are split if they are more than a certain time apart (15 min?).
 * Lines with '\N' occurences are excluded from the new .csv files.
+* Lines with coordinates outside the north sea are excluded. 
+* Date time is converted to seconds sinds start 2008.
 * 
 * .csv file line beforehand:
 * "device_info_serial","date_time","latitude","longitude","altitude","pressure","temperature","h_accuracy","v_accuracy","x_speed","y_speed","z_speed","gps_fixtime","location","userflag","satellites_used","positiondop","speed_accuracy"
@@ -21,22 +23,33 @@ import java.awt.Polygon;
 * Assumes the first line in the input .csv file are the labels of each columns
 * Assumens the zero-based 1st index of the selected columns is the column with
 * the timestamp.
+* Assumes the zero-based 3rd and 4th index of the selected columns are the
+* columns with latitude and longitude respectively.
 *
 * @author Maarten Inja */
 class PreprocessCsvFile
 {
 
+    // Example of a date time: '2010-07-01 10:01:03' (which results in the following format:) 
+    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+
     private static final String NORTH_SEA_COORDINATES_TEXT_FILE = "northSeaCoordinates.txt";
-    //private static final long     
+    /** Birds are being tracked since breeding season 2008 (www.uva-bits.nl). 
+    * So instead of the epoch we use seconds since 2008-01-01 00:00:00.
+    * "(SIMPLE_DATE_FORMAT.parse("2008-01-01 00:00:00")).getTime() / 1000;"*/
+    private static final long USELESS_SECONDS = 1199142000;
 
     /** Minimum session time before we want to include it. */
-    private static final int SESSION_MINIMUM_LENGTH_MILLISECONDS = 5000;//3600000;
+    private static final int SESSION_MINIMUM_LENGTH_SECONDS = 3600; // 1 hour 
     private static final int SESSION_MINIMUM_LENGTH_ENTRIES = 5;
-    private static final int SESSION_SEPERATOR_MILLISECONDS = 900000; // 15 min
+    private static final int SESSION_SEPERATOR_SECONDS = 900; // 15 min
     private static final int TIMESTAMP_INDEX = 1; // not used everywhere, but still needed
-    
-    // Example of a date time: '2010-07-01 10:01:03' (which results in the following format:) 
-    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+   
+    // some of these below should be converted to final static... 
+ 
+    private static Polygon northSeaPolygon;
+
     private static String inputDelimiter = ",";
     private static String outputDelimiter = ",";
     /** The integers in this column will be saved in the output file. */
@@ -66,11 +79,39 @@ class PreprocessCsvFile
             System.out.println("Error, needs three arguments, 1st: input file name and 2nd: bird number 3rd: output file name"); 
     }
 
-
+    /** Removes those lines that have coordinates who are not in the north sea. 
+    * @warning UNTESTED*/
     public static ArrayList<String[]> preprocessNorthSeaPerimeter(
-        ArrayList<String[] lines)
+        ArrayList<String[]> lines)
     {
-        ArrayList<String> readFile(NORTH_SEA_COORDINATES_TEXT_FILE);
+
+        // create and load the north sea coordinates from file to create a polygon
+        ArrayList<String> northSeaLines = readFile(NORTH_SEA_COORDINATES_TEXT_FILE);
+        northSeaPolygon = new Polygon();
+        for (String line : northSeaLines)
+        {
+            String[] lineSplitted = line.split(",");
+            northSeaPolygon.addPoint((int) (Float.valueOf(lineSplitted[0]) * 1000), 
+                                     (int) (Float.valueOf(lineSplitted[1]) * 1000));
+        }
+       
+        // check if the coordinates of the points are in the north sea polygon  
+        int discardedLines = 0;
+        ArrayList<String[]> newLines = new ArrayList<String[]> ();
+
+        for (String[] line : lines)   
+        {
+            if (northSeaPolygon.contains( (int) (Float.valueOf(line[3]) * 1000), 
+                                          (int) (Float.valueOf(line[4]) * 1000)))
+                newLines.add(line);
+            else
+                discardedLines ++;
+        }        
+
+        System.out.println(linesDiscarded + " line(s) not included because not in north sea");
+        totalLinesDiscarded += linesDiscarded;
+        
+        return lines;
     }
 
     /** Splits the rows of the data in seperate sessions. */
@@ -89,10 +130,11 @@ class PreprocessCsvFile
 
             session.add(lineSplitted);
             timestamp = Long.valueOf(lineSplitted[1]);
-
+            
+            //System.out.printf("ts: %d, lst: %d, session_sep: %d\n", timestamp, lastTimestamp, SESSION_SEPERATOR_SECONDS);
 
             // if the difference in time was too great
-            if (timestamp - lastTimestamp > SESSION_SEPERATOR_MILLISECONDS)
+            if (timestamp - lastTimestamp > SESSION_SEPERATOR_SECONDS)
             {
                 // we create a new session (but check if we discard te old one)
                 session = sessionCheck(session);
@@ -117,7 +159,7 @@ class PreprocessCsvFile
         if (session.size() >= SESSION_MINIMUM_LENGTH_ENTRIES && 
             (Long.valueOf(session.get(session.size() - 1)[1]) - 
             Long.valueOf(session.get(0)[1]) > 
-            SESSION_MINIMUM_LENGTH_MILLISECONDS)) 
+            SESSION_MINIMUM_LENGTH_SECONDS)) 
         {
             // safe!
             writeFileConvert(session, outputDirectory + 
@@ -195,8 +237,9 @@ class PreprocessCsvFile
     {
         try
         {
-            Date date = simpleDateFormat.parse(s);
-            return String.valueOf(date.getTime());
+            Date date = SIMPLE_DATE_FORMAT.parse(s);
+            //return String.valueOf((date.getTime()/1000)-USELESS_SECONDS);
+            return String.valueOf((date.getTime()/1000)-USELESS_SECONDS);
         }
         catch(Exception e)
         {
