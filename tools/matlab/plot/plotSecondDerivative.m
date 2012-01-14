@@ -39,5 +39,10 @@ xlabel('timestamp');
 ylabel('length vector');
 title('2nd derivative?');
 
+hold on;
+for p = 1:length(Peaks)
+    line([Peaks(p) Peaks(p)], [0 max(y)], 'Color','r');
+end
+hold off;
 
 %':+', 'MarkerFaceColor', 'auto', 'MarkerSize', 10);

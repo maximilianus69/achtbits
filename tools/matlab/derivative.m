@@ -12,4 +12,4 @@ function out = derivative(coordinates)
     out(size(out, 1), :) = [];
     for i = 1:size(place1, 2)
         out(:,i+2) = (place1(:,i) - place2(:,i)) ./ ((time2 - time1));
-    end 
+    end
