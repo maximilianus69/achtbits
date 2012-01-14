@@ -11,7 +11,7 @@ import java.awt.Polygon;
 * Sessions are split if they are more than a certain time apart (15 min?).
 * Lines with '\N' occurences are excluded from the new .csv files.
 * Lines with coordinates outside the north sea are excluded. 
-* Date time is converted to seconds sinds start 2008.
+* Date time is converted to seconds since 2008-01-01 00:00:00.
 * 
 * .csv file line beforehand:
 * "device_info_serial","date_time","latitude","longitude","altitude","pressure","temperature","h_accuracy","v_accuracy","x_speed","y_speed","z_speed","gps_fixtime","location","userflag","satellites_used","positiondop","speed_accuracy"
@@ -121,7 +121,6 @@ class PreprocessCsvFile
         sessionCount = 0; sessionsDiscarded = 0; linesDiscarded = 0;
         ArrayList<String[]> session = new ArrayList<String[]> ();
 
-        System.out.println("sessionizing");
 
         for (String[] lineSplitted : lines)
         {
