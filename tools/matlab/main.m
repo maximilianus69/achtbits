@@ -9,7 +9,7 @@ function out = main(fileName)
     % plot the speed
     figure(1);
     subplot(3,1,1);
-    plotSecondDerivative(Input(:, 2:3), Input(:, 1));
+    plotSecondDerivative('velocity', Input(:, 2:3), Input(:, 1));
     
     Der = derivative(Input);
     
@@ -24,13 +24,15 @@ function out = main(fileName)
 
     % plot all the clusters
     subplot(3,1,2);
-    plotSecondDerivative(Derivative, time, [Clusters(:, 1); Clusters(:, 2)]);
+    plotSecondDerivative('acceleration and clusters', Derivative, time,...
+        [Clusters(:, 1); Clusters(:, 2)]);
 
     % group sequences of small clusters into bigger ones
     Clusters = awesomizeClusters(Clusters, 1500);
     
     % plot the new clusters
     subplot(3,1,3);
-    plotSecondDerivative(Derivative, time, [Clusters(:, 1); Clusters(:, 2)]);
+    plotSecondDerivative('acceleration and grouped clusters', Derivative,...
+        time, [Clusters(:, 1); Clusters(:, 2)]);
     
     out = Clusters;
