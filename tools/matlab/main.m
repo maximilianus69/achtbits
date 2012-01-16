@@ -15,7 +15,7 @@ function out = main(fileName)
     %peakThres = 2*10^(-5);
     peakThres = 0.01;
     % Clusters = findClusters(Gps, peakThres)
-    Clusters = findClustersNew(Gps(:, 2), Der(:, 3:5), peakThres)
+    Clusters = findClusters(Gps(:, 2), Der(:, 3:5), peakThres)
     
     figure(1);
     subplot(2,1,1);
