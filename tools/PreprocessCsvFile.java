@@ -3,6 +3,7 @@ import java.util.Date;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.awt.Polygon;
+import java.awt.Rectangle;
 
 /** Parses a .csv file of one (1) bird and splits it in processed small .csv file, 
 * each containing one (1) session. 
@@ -33,6 +34,9 @@ class PreprocessCsvFile
     // Example of a date time: '2010-07-01 10:01:03' (which results in the following format:) 
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    private static final float LOWER_BOUND_RESOLUTION = 1; // entrypoints per minute
+    private static final float UPPER_BOUND_RESOLUTION = 90; 
+
 
     private static final String NORTH_SEA_COORDINATES_TEXT_FILE = "northSeaCoordinates.txt";
     /** Birds are being tracked since breeding season 2008 (www.uva-bits.nl). 
@@ -47,7 +51,7 @@ class PreprocessCsvFile
    
     // some of these below should be converted to final static... 
  
-    private static Polygon northSeaPolygon;
+    private static DoublePolygon northSeaPolygon;
 
     private static String inputDelimiter = ",";
     private static String outputDelimiter = ",";
@@ -86,12 +90,12 @@ class PreprocessCsvFile
 
         // create and load the north sea coordinates from file to create a polygon
         ArrayList<String> northSeaLines = readFile(NORTH_SEA_COORDINATES_TEXT_FILE);
-        northSeaPolygon = new Polygon();
+        northSeaPolygon = new DoublePolygon();
         for (String line : northSeaLines)
         {
             String[] lineSplitted = line.split(",");
-            northSeaPolygon.addPoint((int) (Float.valueOf(lineSplitted[0]) * 1000), 
-                                     (int) (Float.valueOf(lineSplitted[1]) * 1000));
+            northSeaPolygon.addPoint(Double.valueOf(lineSplitted[0]), 
+                                     Double.valueOf(lineSplitted[1]));
         }
        
         // check if the coordinates of the points are in the north sea polygon  
@@ -100,14 +104,14 @@ class PreprocessCsvFile
 
         for (String[] line : lines)   
         {
-            if (northSeaPolygon.contains( (int) (Float.valueOf(line[3]) * 1000), 
-                                          (int) (Float.valueOf(line[4]) * 1000)))
+            if (!northSeaPolygon.contains(Double.valueOf(line[2]), 
+                                         Double.valueOf(line[3])))
                 newLines.add(line);
             else
                 discardedLines ++;
         }        
 
-        System.out.println(linesDiscarded + " line(s) not included because not in north sea");
+        System.out.println(discardedLines + " line(s) excluded because not in north sea");
         totalLinesDiscarded += linesDiscarded;
         
         return lines;
@@ -140,7 +144,7 @@ class PreprocessCsvFile
             lastTimestamp = timestamp;
         }
         //System.out.printf("Sessions created: %d, sessions discarded: %d, lines discarded: %d (could not fit in a session)\n", sessionCount, sessionsDiscarded, linesDiscarded);
-        System.out.println(linesDiscarded + " line(s) not included because they could not fit in a session");
+        System.out.println(linesDiscarded + " line(s) excluded because they could not fit in a session");
         totalLinesDiscarded += linesDiscarded;
         System.out.println(sessionCount + " session(s) created and written to file");
         System.out.println(sessionsDiscarded + " session(s) created but discarded");
@@ -152,12 +156,18 @@ class PreprocessCsvFile
     private static ArrayList<String[]> sessionCheck(ArrayList<String[]> session)
     {
         //System.out.println("sessionCheck");
+        
+        long sessionTimeSeconds = Long.valueOf(session.get(session.size() - 1)[1])- 
+            Long.valueOf(session.get(0)[1]);
+        sessionTimeSeconds = sessionTimeSeconds > 0 ? sessionTimeSeconds : 1;
+        float sessionResolution = (sessionTimeSeconds/session.size())/60;
 
         // large and lengthy enough to call this session a session
+        // also check if resolution is alllll right
         if (session.size() >= SESSION_MINIMUM_LENGTH_ENTRIES && 
-            (Long.valueOf(session.get(session.size() - 1)[1]) - 
-            Long.valueOf(session.get(0)[1]) > 
-            SESSION_MINIMUM_LENGTH_SECONDS)) 
+            sessionTimeSeconds > SESSION_MINIMUM_LENGTH_SECONDS &&
+            sessionResolution > LOWER_BOUND_RESOLUTION &&
+            sessionResolution < UPPER_BOUND_RESOLUTION)
         {
             // safe!
             writeFileConvert(session, outputDirectory + 
@@ -217,12 +227,19 @@ class PreprocessCsvFile
             newLines.add(newSplittedLine);
         }
 
-        columnLabels.add(arrayToString(newLines.remove(0)));
+        // add resolution to the label names
+        String[] labels = new String[newLines.get(0).length + 1];
+        System.arraycopy(newLines.remove(0), 0,
+            labels, 0, labels.length - 1);
+        labels[labels.length - 1] = "resolution=[" + LOWER_BOUND_RESOLUTION + 
+            "-" + UPPER_BOUND_RESOLUTION + "]entries/minute";
+                    
+        columnLabels.add(arrayToString(labels));
          
         System.out.println(lines.size() + " line(s) in input file");
         //System.out.println(newLines.size() + " line(s) in output file (removed the first line that indicates what column is what)");
         if (slashNCount > 0)
-            System.out.println(slashNCount + " line(s) not included because of occurence of '\\N'");
+            System.out.println(slashNCount + " line(s) excluded because of occurence of '\\N'");
         totalLinesDiscarded += slashNCount;
          
         return newLines;
@@ -322,37 +339,123 @@ class PreprocessCsvFile
 
 
 
+
+/** Used by the Roi classes to return double coordinate arrays and to
+ *    determine if a point is inside or outside of spline fitted selections. 
+ * SOURCE: http://imagej.nih.gov/ij/source/ij/process/FloatPolygon.java 
+ * Edited to use doubles. */
+private static class DoublePolygon {
+    Rectangle bounds;
+
+    /** The number of points. */
+    public int npoints;
+
+    /* The array of x coordinates. */
+    public double xpoints[];
+
+    /* The array of y coordinates. */
+    public double ypoints[];
+
+    /** Constructs an empty FloatPolygon. */ 
+    public DoublePolygon() {
+        npoints = 0;
+        xpoints = new double[10];
+        ypoints = new double[10];
+    }
+
+    /** Constructs a FloatPolygon from x and y arrays. */ 
+    public DoublePolygon(double xpoints[], double ypoints[]) {
+        if (xpoints.length!=ypoints.length)
+            throw new IllegalArgumentException("xpoints.length!=ypoints.length");
+        this.npoints = xpoints.length;
+        this.xpoints = xpoints;
+        this.ypoints = ypoints;
+    }
+
+    /** Constructs a FloatPolygon from x and y arrays. */ 
+    public DoublePolygon(double xpoints[], double ypoints[], int npoints) {
+        this.npoints = npoints;
+        this.xpoints = xpoints;
+        this.ypoints = ypoints;
+    }
+        
+    /** Returns 'true' if the point (x,y) is inside this polygon. This is a Java
+    version of the remarkably small C program by W. Randolph Franklin at
+    http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html#The%20C%20Code
+    */
+    public boolean contains(double x, double y) {
+        //System.out.printf("%f, %f in polygon?: ", x, y);
+        boolean inside = false;
+        for (int i=0, j=npoints-1; i<npoints; j=i++) {
+            if (((ypoints[i]>y)!=(ypoints[j]>y)) &&
+            (x<(xpoints[j]-xpoints[i])*(y-ypoints[i])/(ypoints[j]-ypoints[i])+xpoints[i]))
+            inside = !inside;
+        }
+        //System.out.println(inside);
+        return inside;
+    }
+
+    public Rectangle getBounds() {
+        if (npoints==0)
+            return new Rectangle();
+        if (bounds==null)
+            calculateBounds(xpoints, ypoints, npoints);
+        return bounds.getBounds();
+    }
+
+    void calculateBounds(double[] xpoints, double[] ypoints, int npoints) {
+        double minX = Float.MAX_VALUE;
+        double minY = Float.MAX_VALUE;
+        double maxX = Float.MIN_VALUE;
+        double maxY = Float.MIN_VALUE;
+        for (int i=0; i<npoints; i++) {
+            double x = xpoints[i];
+            minX = Math.min(minX, x);
+            maxX = Math.max(maxX, x);
+            double y = ypoints[i];
+            minY = Math.min(minY, y);
+            maxY = Math.max(maxY, y);
+        }
+        int iMinX = (int)Math.floor(minX);
+        int iMinY = (int)Math.floor(minY);
+        bounds = new Rectangle(iMinX, iMinY, (int)(maxX-iMinX+0.5), (int)(maxY-iMinY+0.5));
+    }
+
+    public void addPoint(double x, double y) {
+        //System.out.printf("%f, %f\n", x, y);
+        if (npoints==xpoints.length) {
+            double[] tmp = new double[npoints*2];
+            System.arraycopy(xpoints, 0, tmp, 0, npoints);
+            xpoints = tmp;
+            tmp = new double[npoints*2];
+            System.arraycopy(ypoints, 0, tmp, 0, npoints);
+            ypoints = tmp;
+        }
+        xpoints[npoints] = x;
+        ypoints[npoints] = y;
+        npoints++;
+        bounds = null;
+    }
+
+    public String toString()
+    {
+        return "length: " + npoints + "\n";
+    }
+
+    
+    public DoublePolygon duplicate() {
+        int n = this.npoints;
+        double[] xpoints = new double[n];
+        double[] ypoints = new double[n];
+        System.arraycopy(this.xpoints, 0, xpoints, 0, n);
+        System.arraycopy(this.ypoints, 0, ypoints, 0, n);   
+        return new DoublePolygon(xpoints, ypoints, n);
+    }
+
+}
+
+
 } 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
