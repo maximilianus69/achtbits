@@ -43,8 +43,7 @@ class PreprocessCsvFile
     /** Minimum session time before we want to include it. */
     private static final int SESSION_MINIMUM_LENGTH_SECONDS = 3600; // 1 hour 
     private static final int SESSION_MINIMUM_LENGTH_ENTRIES = 5;
-    private static final int SESSION_SEPERATOR_SECONDS = 900; // 15 min
-    private static final int TIMESTAMP_INDEX = 1; // not used everywhere, but still needed
+    private static final int SESSION_SEPARATOR_SECONDS = 900; // 15 min
    
     // some of these below should be converted to final static... 
  
@@ -130,10 +129,10 @@ class PreprocessCsvFile
             session.add(lineSplitted);
             timestamp = Long.valueOf(lineSplitted[1]);
             
-            //System.out.printf("ts: %d, lst: %d, session_sep: %d\n", timestamp, lastTimestamp, SESSION_SEPERATOR_SECONDS);
+            //System.out.printf("ts: %d, lst: %d, session_sep: %d\n", timestamp, lastTimestamp, SESSION_SEPARATOR_SECONDS);
 
             // if the difference in time was too great
-            if (timestamp - lastTimestamp > SESSION_SEPERATOR_SECONDS)
+            if (timestamp - lastTimestamp > SESSION_SEPARATOR_SECONDS)
             {
                 // we create a new session (but check if we discard te old one)
                 session = sessionCheck(session);
