@@ -172,7 +172,7 @@ class PreprocessCsvFile
             // safe!
             writeFileConvert(session, outputDirectory + 
                     System.getProperty("file.separator") + "bird_" + 
-                    birdNumber + "session_" + sessionCount + ".csv");
+                    birdNumber + "_session_" + sessionCount + ".csv");
             sessionCount ++;
         }
         else
