@@ -14,7 +14,7 @@ import java.awt.Polygon;
 * Date time is converted to seconds since 2008-01-01 00:00:00.
 * 
 * .csv file line beforehand:
-* "device_info_serial","date_time","latitude","longitude","altitude","pressure","temperature","h_accuracy","v_accuracy","x_speed","y_speed","z_speed","gps_fixtime","location","userflag","satellites_used","positiondop","speed_accuracy"
+* "device_info_serial","date_time","latitude","longitude","altitude","pressure","temperature","h_accuracy","v_accuracy","x_speed","y_speed","z_speed","gps_fixtime","location","userflag","satellites_used","positiondop","speed_accuracy","vnorth","veast","vdown","speed_3d"
 *
 * Input argument 1: a .csv file of one (1) bird
 * Input argument 2: the number of the bird
@@ -52,7 +52,7 @@ class PreprocessCsvFile
     private static String inputDelimiter = ",";
     private static String outputDelimiter = ",";
     /** The integers in this column will be saved in the output file. */
-    private static int[] includeColumns = {0, 1, 2, 3, 4, 9, 10, 11}; 
+    private static int[] includeColumns = {0, 1, 2, 3, 4, 18, 19, 20}; 
     private static int birdNumber = -1;
     /** The first line of the input .csv file. */
     private static ArrayList<String> columnLabels = new ArrayList<String> (1);
@@ -162,7 +162,7 @@ class PreprocessCsvFile
             // safe!
             writeFileConvert(session, outputDirectory + 
                     System.getProperty("file.separator") + "bird_" + 
-                    birdNumber + "session_" + sessionCount + ".txt");
+                    birdNumber + "session_" + sessionCount + ".csv");
             sessionCount ++;
         }
         else
