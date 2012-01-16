@@ -7,7 +7,8 @@ function ClusterFeatures = createClusterFeatures( Cluster, Data )
 %
 % Returns:
 %   Array of features of this cluster
-%   format: [startTime, endTime, duration, avg speed, height diff]
+%   format: 
+%   [startTime, endTime, duration, avgSpeed, heightDiff, grndDist]
 
 startTime = Cluster(1);
 endTime = Cluster(2);
@@ -28,10 +29,14 @@ avgSpeed = mean(speeds);
 % TODO: remove noise in height data (extreme values)
 heightDiff = max(Points(:,5)) - min(Points(:,5));
 
+% calculate ground distance between begin point to end point
+latDist = Points([1 end], 3);
+longDist = Points([1 end], 4);
+grndDist = deg2km(stdist(latDist, longDist));
+
 % return data
-% format: [startTime, endTime, duration, avg speed, height diff]
 ClusterFeatures = ...
-    [startTime, endTime, duration, avgSpeed, heightDiff];
+    [startTime, endTime, duration, avgSpeed, heightDiff, grndDist];
 
 end
 
