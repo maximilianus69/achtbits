@@ -17,11 +17,13 @@ DataPrep = [Data(:, 1:2) Data(:, 6:8)];
 Acc = derivative(DataPrep);
 
 % get length of acceleration vectors
-AccSqared = Acc(:, 3:5).^2;
-Acc = sqrt(sum(AccSqared, 2));
+AccRight = Acc(:, 3:5)
 
+for i = 1:size(AccRight, 1)
+    Acc2(i, 1) = norm(AccRight(i, :));
+end
 % find index of peaks by comparing with the threshold
-Peaks = Acc > peakThres;
+Peaks = Acc2 > peakThres
 % Get the middle of the peak:
 % TODO: WIthout loop?
 beginPos = 0;
@@ -30,9 +32,10 @@ for j = 1:size(Peaks, 1)
     if Peaks(j) == 1 && beginPos == 0
         beginPos = j;
     elseif Peaks(j) == 0 && beginPos ~= 0
-        Peaks(beginPos:(j-1)) = 0;
+        Peaks(beginPos+1:(j-1)) = 0;
         % Let the 1-value be on the middle of the peak
-        Peaks(round((beginPos+(j-1))/2)) = 1;
+        %Peaks(round((beginPos+(j-1))/2)) = 1;
+        Peaks(j) = 1;
         beginPos = 0;
     end
 end

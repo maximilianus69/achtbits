@@ -41,6 +41,7 @@ title('2nd derivative?');
 
 hold on;
 for p = 1:length(Peaks)
+    Peaks(p)
     line([Peaks(p) Peaks(p)], [0 max(y)], 'Color','r');
 end
 hold off;

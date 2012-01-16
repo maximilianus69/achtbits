@@ -15,14 +15,15 @@ function Matrix = readgps(fileName)
     Matrix(:, 3:5) = Data(:,3:5);
     % The x_speed, y_speed, z_speed
     Matrix(:, 6:8) = Data(:, 6:8);
-    northsea = dlmread('noordzeeCoordinates.txt',',');
-    inNorthSea = inpolygon(Matrix(:,3), Matrix(:,4), northsea(:,1), northsea(:,2));
+    % Deprecated check: This is done in the preprocessing java script.
+    %northsea = dlmread('noordzeeCoordinates.txt',',');
+    %inNorthSea = inpolygon(Matrix(:,3), Matrix(:,4), northsea(:,1), northsea(:,2));
     %inNorthSea = ones(size(Matrix, 1),1);
     %remove zero values:
-    Matrix(~any(Matrix,2),:) = [];
+    %Matrix(~any(Matrix,2),:) = [];
 
-    for i = 1:size(Matrix, 2)
-        Matrix(:,i) = inNorthSea .* Matrix(:,i);
-    end 
-    Matrix(~any(Matrix,2),:) = [];
+    %for i = 1:size(Matrix, 2)
+    %    Matrix(:,i) = inNorthSea .* Matrix(:,i);
+    %end 
+    %Matrix(~any(Matrix,2),:) = [];
 
