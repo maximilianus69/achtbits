@@ -231,9 +231,11 @@ class PreprocessCsvFile
         String[] labels = new String[newLines.get(0).length + 1];
         System.arraycopy(newLines.remove(0), 0,
             labels, 0, labels.length - 1);
-        labels[labels.length - 1] = "resolution=[" + LOWER_BOUND_RESOLUTION + 
-            "-" + UPPER_BOUND_RESOLUTION + "]entries/minute";
-                    
+        labels[labels.length - 1] = " with a resolution of " + 
+            LOWER_BOUND_RESOLUTION + "-" + UPPER_BOUND_RESOLUTION + 
+            " entries/minute";
+
+                                
         columnLabels.add(arrayToString(labels));
          
         System.out.println(lines.size() + " line(s) in input file");
