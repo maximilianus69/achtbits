@@ -5,6 +5,12 @@ function out = main(fileName)
     addpath('plot');
     Gps = readgps(fileName);
     Input = getTimeAndSpeed(Gps);
+    
+    % plot the speed
+    figure(1);
+    subplot(3,1,1);
+    plotSecondDerivative(Input(:, 2:3), Input(:, 1));
+    
     Der = derivative(Input);
     
     % split Der in time and derivative
@@ -15,13 +21,16 @@ function out = main(fileName)
     %peakThres = 2*10^(-5);
     peakThres = 0.01;
     Clusters = findClusters(time, Derivative, peakThres);
+
+    % plot all the clusters
+    subplot(3,1,2);
+    plotSecondDerivative(Derivative, time, [Clusters(:, 1); Clusters(:, 2)]);
+
+    % group sequences of small clusters into bigger ones
     Clusters = awesomizeClusters(Clusters, 1500);
     
-    figure(1);
-    subplot(2,1,1);
-    plotSecondDerivative(Input(:, 2:3), Input(:, 1));
-    
-    subplot(2,1,2);
+    % plot the new clusters
+    subplot(3,1,3);
     plotSecondDerivative(Derivative, time, [Clusters(:, 1); Clusters(:, 2)]);
     
     out = Clusters;
