@@ -14,7 +14,7 @@ function Matrix = readgps(fileName)
     % The x, y and z position
     Matrix(:, 3:5) = Data(:,3:5);
     % The x_speed, y_speed, z_speed
-    Matrix(:, 6:8) = Data(:, 9:11);
+    Matrix(:, 6:8) = Data(:, 6:8);
     northsea = dlmread('noordzeeCoordinates.txt',',');
     inNorthSea = inpolygon(Matrix(:,3), Matrix(:,4), northsea(:,1), northsea(:,2));
     %inNorthSea = ones(size(Matrix, 1),1);
