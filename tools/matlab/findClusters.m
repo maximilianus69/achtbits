@@ -1,6 +1,17 @@
 function Clusters = findClusters(Time, Derivative, peakThres)
-    % Accepts a derivative with time stamps in the first column
-    %Normals = ones(size(Derivative, 1), 1);
+%FINDCLUSTERS Finds the start and end point of a behaviour period
+%   Input:
+%   Time = data array of the timestamps
+%   Derivative = Data array with several derivative values, should be as long as Time
+%   peakThres = threshold for recognising peaks
+%   
+%   output:
+%   Clusters = nx2 matrix with start/end times 
+%   [begin_t1 begin_t1; ... ; begin_tn begin_tn]
+%
+%   use the data to calulate acceleration
+%   find big chances in acceleration with threshold
+%   use these points to determine start and end time of a period
         
     % Create length by 1 array of normals
     for i = 1:size(Derivative, 1)

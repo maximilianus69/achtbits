@@ -21,9 +21,6 @@ function out = main(fileName)
     subplot(2,1,1);
     plotSecondDerivative(Input(:, 3:5), Input(:, 2));
     subplot(2,1,2);
-    % 16 minutes = 960 000 ms
-    Clusters = awesomizeClusters(Clusters, 500);
+    Clusters = awesomizeClusters(Clusters, 1500);
     plotSecondDerivative(Der(:, 3:5), Der(:, 2), [Clusters(:,1); Clusters(:,2)]);
     out = Clusters;
-
-    
