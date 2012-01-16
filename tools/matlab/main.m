@@ -4,23 +4,24 @@ function out = main(fileName)
     % It uses readgps and makeVectors
     addpath('plot');
     Gps = readgps(fileName);
-    Input = ones(size(Gps, 1), 5);
-    % ID and Timestamp
-    Input(:, 1:2) = Gps(:, 1:2);
-    % X_speed, Y_speed and Z_speed
-    Input(:, 3:5) = Gps(:, 6:8);
+    Input = getTimeAndSpeed(Gps);
     Der = derivative(Input);
     
+    % split Der in time and derivative
+    time = Der(:, 1);
+    Derivative = Der(:, 2:3);
+
     % Threshold based on different time stamps
     %peakThres = 2*10^(-5);
     peakThres = 0.01;
-    % Clusters = findClusters(Gps, peakThres)
-    Clusters = findClusters(Gps(:, 2), Der(:, 3:5), peakThres)
+    Clusters = findClusters(time, Derivative, peakThres);
+    Clusters = awesomizeClusters(Clusters, 1500);
     
     figure(1);
     subplot(2,1,1);
-    plotSecondDerivative(Input(:, 3:5), Input(:, 2));
+    plotSecondDerivative(Input(:, 2:3), Input(:, 1));
+    
     subplot(2,1,2);
-    Clusters = awesomizeClusters(Clusters, 1500);
-    plotSecondDerivative(Der(:, 3:5), Der(:, 2), [Clusters(:,1); Clusters(:,2)]);
+    plotSecondDerivative(Derivative, time, [Clusters(:, 1); Clusters(:, 2)]);
+    
     out = Clusters;

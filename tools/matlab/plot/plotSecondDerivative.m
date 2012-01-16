@@ -1,8 +1,8 @@
-function result = plotSecondDerivative(Matrix, TimeStamps, Peaks)
+function result = plotSecondDerivative(Matrix, timeStamps, clusterStart)
 % Arguments
 %   - Matrix is an N x 3 matrix containing vectors
 %   - TimeStamps is an N x 1 matrix containing timestamps (optional)
-%   - Peaks is an N x 1 matrix with Peaks (optional)
+%   - clusterStart is an N x 1 matrix with clusterStart (optional)
 %
 % N is the number of datapoints. 
 %
@@ -12,23 +12,20 @@ function result = plotSecondDerivative(Matrix, TimeStamps, Peaks)
 N = size(Matrix, 1);
 
 if nargin < 2
-    TimeStamps = [1 : N];
+    timeStamps = [1 : N];
 end
 
 if nargin < 3
-    Peaks = [];
+    clusterStart = [];
 end
-
-x = TimeStamps;
+cluster = clusterStart - timeStamps(1)
+timeStamps = timeStamps - timeStamps(1);
+x = timeStamps;
 y = zeros(1, N);
 
 for i = 1:N
     y(i) = norm(Matrix(i, :));
 end
-
-% in the future we can plot every awesome thingy in the same window 
-% (we should create one function that plots everything
-% h = subplot(1, 1, 1);
 
 plot(x, y, '-s','LineWidth',1, ...
                 'MarkerEdgeColor','k', ...
@@ -39,10 +36,11 @@ xlabel('timestamp');
 ylabel('length vector');
 title('2nd derivative?');
 
+
+
 hold on;
-for p = 1:length(Peaks)
-    Peaks(p);
-    line([Peaks(p) Peaks(p)], [0 max(y)], 'Color','r');
+for p = 1:length(cluster)
+    line([cluster(p) cluster(p)], [0 max(y)], 'Color','r');
 end
 hold off;
 
