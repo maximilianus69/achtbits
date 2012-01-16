@@ -20,10 +20,10 @@ if nargin < 4
     clusterStart = [];
 end
 
-% normalize times to start at 0
+% normalize times to start at 0 and convert to zeros
 beginTime = timeStamps(1);
-cluster = clusterStart - beginTime;
-timeStamps = timeStamps - beginTime;
+cluster = (clusterStart - beginTime)/60;
+timeStamps = (timeStamps - beginTime)/60;
 
 x = timeStamps;
 y = zeros(1, N);
