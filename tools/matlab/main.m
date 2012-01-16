@@ -14,20 +14,16 @@ function out = main(fileName)
     % Threshold based on different time stamps
     %peakThres = 2*10^(-5);
     peakThres = 0.01;
-    Clusters = findClusters(Gps, peakThres)
+    % Clusters = findClusters(Gps, peakThres)
+    Clusters = findClustersNew(Gps(:, 2), Der(:, 3:5), peakThres)
     
     figure(1);
     subplot(2,1,1);
     plotSecondDerivative(Input(:, 3:5), Input(:, 2));
     subplot(2,1,2);
     % 16 minutes = 960 000 ms
-    %Clusters = awesomizeClusters(Clusters, 400);
+    Clusters = awesomizeClusters(Clusters, 500);
     plotSecondDerivative(Der(:, 3:5), Der(:, 2), [Clusters(:,1); Clusters(:,2)]);
-    Gps(1, 2)
-    Gps(size(Gps, 1), 2)
-
-
-
     out = Clusters;
 
     
