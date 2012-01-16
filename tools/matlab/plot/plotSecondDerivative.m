@@ -1,5 +1,6 @@
-function result = plotSecondDerivative(Matrix, timeStamps, clusterStart)
+function result = plotSecondDerivative(label, Matrix, timeStamps, clusterStart)
 % Arguments
+%   - label is the label for the plot
 %   - Matrix is an N x 3 matrix containing vectors
 %   - TimeStamps is an N x 1 matrix containing timestamps (optional)
 %   - clusterStart is an N x 1 matrix with clusterStart (optional)
@@ -11,15 +12,19 @@ function result = plotSecondDerivative(Matrix, timeStamps, clusterStart)
 
 N = size(Matrix, 1);
 
-if nargin < 2
+if nargin < 3
     timeStamps = [1 : N];
 end
 
-if nargin < 3
+if nargin < 4
     clusterStart = [];
 end
-cluster = clusterStart - timeStamps(1)
-timeStamps = timeStamps - timeStamps(1);
+
+% normalize times to start at 0
+beginTime = timeStamps(1);
+cluster = clusterStart - beginTime;
+timeStamps = timeStamps - beginTime;
+
 x = timeStamps;
 y = zeros(1, N);
 
@@ -34,10 +39,9 @@ plot(x, y, '-s','LineWidth',1, ...
 
 xlabel('timestamp');
 ylabel('length vector');
-title('2nd derivative?');
+title(label);
 
-
-
+% draw a vertical line at the start/end of all clusters
 hold on;
 for p = 1:length(cluster)
     line([cluster(p) cluster(p)], [0 max(y)], 'Color','r');
