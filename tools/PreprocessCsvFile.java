@@ -345,9 +345,8 @@ class PreprocessCsvFile
 /** Used by the Roi classes to return double coordinate arrays and to
  *    determine if a point is inside or outside of spline fitted selections. 
  * SOURCE: http://imagej.nih.gov/ij/source/ij/process/FloatPolygon.java 
- * Edited to use doubles. */
+ * Edited to use doubles and removed stuff. */
 private static class DoublePolygon {
-    Rectangle bounds;
 
     /** The number of points. */
     public int npoints;
@@ -397,31 +396,7 @@ private static class DoublePolygon {
         return inside;
     }
 
-    public Rectangle getBounds() {
-        if (npoints==0)
-            return new Rectangle();
-        if (bounds==null)
-            calculateBounds(xpoints, ypoints, npoints);
-        return bounds.getBounds();
-    }
 
-    void calculateBounds(double[] xpoints, double[] ypoints, int npoints) {
-        double minX = Float.MAX_VALUE;
-        double minY = Float.MAX_VALUE;
-        double maxX = Float.MIN_VALUE;
-        double maxY = Float.MIN_VALUE;
-        for (int i=0; i<npoints; i++) {
-            double x = xpoints[i];
-            minX = Math.min(minX, x);
-            maxX = Math.max(maxX, x);
-            double y = ypoints[i];
-            minY = Math.min(minY, y);
-            maxY = Math.max(maxY, y);
-        }
-        int iMinX = (int)Math.floor(minX);
-        int iMinY = (int)Math.floor(minY);
-        bounds = new Rectangle(iMinX, iMinY, (int)(maxX-iMinX+0.5), (int)(maxY-iMinY+0.5));
-    }
 
     public void addPoint(double x, double y) {
         //System.out.printf("%f, %f\n", x, y);
@@ -436,7 +411,6 @@ private static class DoublePolygon {
         xpoints[npoints] = x;
         ypoints[npoints] = y;
         npoints++;
-        bounds = null;
     }
 
     public String toString()
@@ -445,14 +419,6 @@ private static class DoublePolygon {
     }
 
     
-    public DoublePolygon duplicate() {
-        int n = this.npoints;
-        double[] xpoints = new double[n];
-        double[] ypoints = new double[n];
-        System.arraycopy(this.xpoints, 0, xpoints, 0, n);
-        System.arraycopy(this.ypoints, 0, ypoints, 0, n);   
-        return new DoublePolygon(xpoints, ypoints, n);
-    }
 
 }
 
