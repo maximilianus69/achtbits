@@ -1,4 +1,4 @@
-function out = main(fileName)
+function [Gps Clusters] = main(fileName)
     % Wrapper for reading gps coordinates from a csv file, taking the ones above
     % the north sea, and calculating vectors with the direction and speed
     % It uses readgps and makeVectors
@@ -35,4 +35,3 @@ function out = main(fileName)
     plotSecondDerivative('acceleration and grouped clusters', Derivative,...
         time, [Clusters(:, 1); Clusters(:, 2)]);
     
-    out = Clusters;
