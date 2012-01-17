@@ -6,10 +6,10 @@ function [Gps Clusters] = main(fileName)
     % Threshold based on different time stamps, used for findClusters, determines
     % what datapoints becomes peaks?
     %peakThres = 2*10^(-5);
-    peakThres = 0.01;
+    peakThres = 0.015;
 
     % Threshold used for awesomizeClusters, determines peaks in a range become one? 
-    timeThres = 500;
+    timeThres = 1200;
 
 
     addpath('plot');
@@ -35,7 +35,7 @@ function [Gps Clusters] = main(fileName)
         [Clusters(:, 1); Clusters(:, 2)]);
 
     % group sequences of small clusters into bigger ones
-    Clusters = awesomizeClusters(Clusters, timeThres);
+    Clusters = awesomizeClusters(Clusters, timeThres)
     
     % plot the new clusters
     subplot(3,1,3);

@@ -7,7 +7,7 @@ function AwesomeClusters = awesomizeClusters(LameClusters, timeThreshold)
     DiffBool = Diff < timeThreshold;
     begun = 0;
     j = 1;
-    AwesomeClusters = LameClusters(1, 2);
+    AwesomeClusters(1, 1) = LameClusters(1, 1);
     for i = (1:size(Diff, 1)-1)
         % if we have a too short cluster:
         % The difference boolean = 1 and the previous is = 0
