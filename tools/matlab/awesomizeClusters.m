@@ -26,10 +26,10 @@ function AwesomeClusters = awesomizeClusters(LameClusters, timeThreshold)
         end
     end
     AwesomeClusters(size(AwesomeClusters, 1), 2) = LameClusters(size(LameClusters, 1), 2);
-    AwesomeClusters
-    D = AwesomeClusters(:, 2) - AwesomeClusters(:, 1)
+    AwesomeClusters;
+    D = AwesomeClusters(:, 2) - AwesomeClusters(:, 1);
     DB = D > 0;
-    AwesomeClusters = AwesomeClusters .* [DB DB]
+    AwesomeClusters = AwesomeClusters .* [DB DB];
     AwesomeClusters(~any(AwesomeClusters,2),:) = []
    
 
