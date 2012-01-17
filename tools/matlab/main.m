@@ -35,7 +35,7 @@ function [Gps Clusters] = main(fileName)
         [Clusters(:, 1); Clusters(:, 2)]);
 
     % group sequences of small clusters into bigger ones
-    Clusters = awesomizeClusters(Clusters, timeThres)
+    Clusters = awesomizeClusters(Clusters, timeThres);
     
     % plot the new clusters
     subplot(3,1,3);
