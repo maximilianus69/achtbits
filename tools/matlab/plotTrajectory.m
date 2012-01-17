@@ -1,21 +1,28 @@
-function [ output_args ] = plotTrajectory( time, Coordinates, cluster )
-%PLOTTRAJECTORY Summary of this function goes here
-%   Detailed explanation goes here
+function [] = plotTrajectory( SessionCoordinates, ClusterCoordinates )
+%PLOTTRAJECTORY Plots a trajectory on a map
+%   INPUT:
+%   time - an Nx1 vector of time-stamps
+%   Coordinates - Nx2 matrix containing XY-coordinates
 
-if nargin < 3
-    cluster = [];
-end
+% open a new figure and make sure its clear
 
-figure(1)
+sessionX = SessionCoordinates(:, 1);
+sessionY = SessionCoordinates(:, 2);
 
-x = Coordinates(:, 1)
-y = Coordinates(:, 2)
+clusterX = ClusterCoordinates(:, 1);
+clusterY = ClusterCoordinates(:, 2);
 
-geoshow('netherlands_land.shp');
+
+
+fig = figure('Position', [20 200 300 400]);
+clf(fig)
+% geoshow('nh_zh_shape.shp');
 hold('on')
 
-geoshow(x, y);
+geoshow(sessionX, sessionY, 'color', 'b');
 
+geoshow(clusterX, clusterY, 'color', 'r');
 hold('off')
+
 end
 
