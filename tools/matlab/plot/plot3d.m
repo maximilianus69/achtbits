@@ -30,4 +30,3 @@ image = zeros(imageWidth, imageHeight);
 for i = 1:N
     image(xs(i), ys(i)) = zs(i);
 end
-
