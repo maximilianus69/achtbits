@@ -1,15 +1,16 @@
 function plotFeatureInfo( Feature )
-%UNTITLED2 Summary of this function goes here
+%PLOT_FEATURE_INFO plots the text info of cluster features
 %   Detailed explanation goes here
 
 % Feature format:
 %[startTime, endTime, duration, avgSpeed, heightDiff, grndDist]
-                       
-figure('Color', 'white', 'Position', [100 100 400 180]);
+       
+figure('color', 'white', 'position', [600 400 400 200]);
 axis([0 6 6 10]);
 axis off;
 
 set(0, 'DefaultTextHorizontalAlignment', 'right');
+
 
 text(1, 10, 'Cluster');
 text(1, 9, 'Duration');
