@@ -138,6 +138,8 @@ class PreprocessCsvFile
             // if the difference in time was too great
             if (timestamp - lastTimestamp > SESSION_SEPARATOR_SECONDS)
             {
+                if (session.size() > 1)
+                    session.remove(session.size()-1);
                 // we create a new session (but check if we discard te old one)
                 session = sessionCheck(session);
             }

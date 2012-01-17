@@ -1,1 +1,0 @@
-device_info_serial,date_time,latitude,longitude,altitude,vnorth,veast,vdown, with a resolution of 1.0-90.0 entries/minute
