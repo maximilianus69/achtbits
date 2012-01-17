@@ -114,7 +114,7 @@ class PreprocessCsvFile
         System.out.println(discardedLines + " line(s) excluded because not in north sea");
         totalLinesDiscarded += linesDiscarded;
         
-        return lines;
+        return newLines;
     }
 
     /** Splits the rows of the data in seperate sessions. */
