@@ -28,7 +28,7 @@ function out = main(fileName)
         [Clusters(:, 1); Clusters(:, 2)]);
 
     % group sequences of small clusters into bigger ones
-    Clusters = awesomizeClusters(Clusters, 1500);
+    Clusters = awesomizeClusters(Clusters, 2000);
     
     % plot the new clusters
     subplot(3,1,3);
