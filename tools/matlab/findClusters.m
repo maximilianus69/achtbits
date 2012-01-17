@@ -20,19 +20,25 @@ function Clusters = findClusters(Time, Derivative, peakThres)
     
     Peaks = Normals > peakThres;
     NewPeaks = ones(size(Peaks));
+    NextI = 0;
 
     for i = 1:(size(Peaks, 1)-1)
         if(Peaks(i) == 1 && Peaks(i+1) == 0)
+            % IF there is a slowdown, the next i should be 1 (going from 1 to 0):
+            NextI = 1;
+        elseif(~Peaks(i) && Peaks(i+1))
+            % If we go from - to 1:
             NewPeaks(i) = 1;
-        elseif(Peaks(i) == 0 && Peaks(i+1))
+        elseif(NextI)
             NewPeaks(i) = 1;
+            NextI = 0;
         else
             NewPeaks(i) = 0;
         end
     end
 
 PeakPos = find(NewPeaks);
-Clusters = [];
+Clusters = [Time(1), Time(PeakPos(1))];
 for i = 1:(size(PeakPos, 1)-1)
     Clusters = [Clusters; Time(PeakPos(i)) Time(PeakPos(i+1))];
 end

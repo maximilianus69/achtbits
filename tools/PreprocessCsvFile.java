@@ -104,7 +104,7 @@ class PreprocessCsvFile
 
         for (String[] line : lines)   
         {
-            if (!northSeaPolygon.contains(Double.valueOf(line[2]), 
+            if (northSeaPolygon.contains(Double.valueOf(line[2]), 
                                          Double.valueOf(line[3])))
                 newLines.add(line);
             else
