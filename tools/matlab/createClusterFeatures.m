@@ -2,13 +2,14 @@ function [ClusterFeatures, ClusterPoints] = createClusterFeatures( Cluster, Data
 % CREATE_CLUSTER_FEATURES Creates feature vectors for clusters
 %
 % Arguments:
-%   - Clusters a 1x2 vector containing start and end times of the cluster
+%   - Cluster a 1x2 vector containing start and end times of the cluster
 %   - Data is a NxM array containing all session data
 %
 % Returns:
 %   Array of features of this cluster
 %   format: 
-%   [startTime, endTime, duration, avgSpeed, heightDiff, grndDist]
+%   [startTime(s), endTime(s), duration(s), avgSpeed(m/s), ...
+%       heightDiff(m), grndDist(km)]
 
 startTime = Cluster(1);
 endTime = Cluster(2);
@@ -23,7 +24,7 @@ Points = Data(first:last, :);
 ClusterPoints = Points;
 
 % calculate avg speed
-speeds = Points(:,6) + Points(:,7);
+speeds = abs(Points(:,6)) + abs(Points(:,7));
 avgSpeed = mean(speeds);
 
 % calculate hight diff
