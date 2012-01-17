@@ -20,9 +20,9 @@ function AwesomeClusters = awesomizeClusters(LameClusters, timeThreshold)
             AwesomeClusters(j, 1) = LameClusters(i, 1);
         %if this cluster ends
         elseif (DiffBool(i) && ~DiffBool(i+1))
-            AwesomeClusters(j, 2) = LameClusters(i+1, 2);
+            AwesomeClusters(j, 2) = LameClusters(i, 2);
             j = j + 1;
-            AwesomeClusters(j, 1) = LameClusters(i+1, 2);
+            AwesomeClusters(j, 1) = LameClusters(i, 2);
         end
     end
     
