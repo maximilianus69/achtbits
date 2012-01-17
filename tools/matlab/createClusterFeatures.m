@@ -1,4 +1,4 @@
-function ClusterFeatures = createClusterFeatures( Cluster, Data )
+function [ClusterFeatures, ClusterPoints] = createClusterFeatures( Cluster, Data )
 % CREATE_CLUSTER_FEATURES Creates feature vectors for clusters
 %
 % Arguments:
@@ -20,6 +20,7 @@ last = find(Data(:,2) == endTime);
 
 % data points inside cluster
 Points = Data(first:last, :);
+ClusterPoints = Points;
 
 % calculate avg speed
 speeds = Points(:,6) + Points(:,7);
