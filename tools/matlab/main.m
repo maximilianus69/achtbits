@@ -22,7 +22,6 @@ function [Gps Clusters] = main(fileName)
     plotSecondDerivative('velocity', Input(:, 2:3), Input(:, 1));
     
     Der = derivative(Input);
-    
     % split Der in time and derivative
     time = Der(:, 1);
     Derivative = Der(:, 2:3);
