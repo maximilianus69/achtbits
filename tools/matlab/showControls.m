@@ -10,8 +10,7 @@ function pick = showControls(Buttons)
 N = length(Buttons);
 buttonH = 60;
 
-close all;
-figid = figure('Position', [600 200 400 buttonH*N], 'color', 'white');
+figid = figure('Position', [20 20 300 buttonH*N], 'color', 'white');
 hold on;
 axis([0 10 0 N]);
 axis off;
