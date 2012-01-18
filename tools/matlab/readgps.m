@@ -16,9 +16,9 @@ function Matrix = readgps(fileName)
     % The x_speed, y_speed, z_speed
     Matrix(:, 6:8) = Data(:, 6:8);
     % Deprecated check: This is done in the preprocessing java script.
-    northsea = dlmread('noordzeeCoordinates.txt',',');
-    inNorthSea = inpolygon(Matrix(:,3), Matrix(:,4), northsea(:,1), northsea(:,2));
-    sum(inNorthSea)
+    %northsea = dlmread('noordzeeCoordinates.txt',',');
+    %inNorthSea = inpolygon(Matrix(:,3), Matrix(:,4), northsea(:,1), northsea(:,2));
+    %sum(inNorthSea)
     %inNorthSea = ones(size(Matrix, 1),1);
     %remove zero values:
     %Matrix(~any(Matrix,2),:) = [];

@@ -11,25 +11,30 @@ function AwesomeClusters = awesomizeClusters(LameClusters, timeThreshold)
     for i = (1:size(Diff, 1)-1)
         % if we have a too short cluster:
         % The difference boolean = 1 and the previous is = 0
-        % Or the first difference boolean is 1 (This is now outcommented. Not sure
-        % if it works or not, but seemed to make everything worse
-        if (~DiffBool(i) && DiffBool(i+1)) %|| (DiffBool(i) && i == 1)
+        if(begun)
+            first = DiffBool(i)
+            second = DiffBool(i+1)
+        end
+        if (~(DiffBool(i)) && DiffBool(i+1))
             %Set current begin time for this cluster
             AwesomeClusters(j, 2) = LameClusters(i, 1);
             j = j+1;
             AwesomeClusters(j, 1) = LameClusters(i, 1);
+            begun = 1;
+            sprintf 'begin'
         %if this cluster ends
-        elseif (DiffBool(i) && ~DiffBool(i+1))
+        elseif (DiffBool(i) && ~(DiffBool(i+1)) && begun == 1)
+            sprintf 'end'
+            begun = 0;
             AwesomeClusters(j, 2) = LameClusters(i, 2);
             j = j + 1;
             AwesomeClusters(j, 1) = LameClusters(i, 2);
         end
     end
     AwesomeClusters(size(AwesomeClusters, 1), 2) = LameClusters(size(LameClusters, 1), 2);
-    AwesomeClusters;
     D = AwesomeClusters(:, 2) - AwesomeClusters(:, 1);
     DB = D > 0;
     AwesomeClusters = AwesomeClusters .* [DB DB];
-    AwesomeClusters(~any(AwesomeClusters,2),:) = []
+    AwesomeClusters(~any(AwesomeClusters,2),:) = [];
    
 
