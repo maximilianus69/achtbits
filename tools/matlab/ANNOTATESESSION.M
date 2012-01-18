@@ -1,4 +1,4 @@
-function [ AnnotatedClusters ] = annotateSession( fileName )
+function [ SessionData AnnotatedClusters ] = annotateSession( fileName )
 %ANNOTATESESSION a tool to annote the clusters of a session
 %
 %   INPUT:
@@ -25,6 +25,8 @@ screenSize = get(0, 'ScreenSize');
 mainFigId = figure('Name','Cluster annotation', 'NumberTitle','off', ...
     'units','normalized','outerposition',[0 0 1 1]);
     
+previousClusterClass = 0;
+
 % for each cluster:
 %   find the data and features
 %   plot the trajectory, data and features
@@ -37,6 +39,8 @@ for i = 1:size(Clusters, 1)
     cluster = Clusters(i, :);
     [ClusterFeatures ClusterData] = ...
         createClusterFeatures(cluster, SessionData);
+    
+    ClusterFeatures = [i ClusterFeatures previousClusterClass];
     
     % plot trajectory
     SessionCoordinates = SessionData(:, 3:4);
@@ -51,17 +55,19 @@ for i = 1:size(Clusters, 1)
     
     subplot(5,7,29:33)
     
+    behaviourClasses = {'sleeping', 'digesting', 'flying', 'diving', 'trawler'};
+    
     % show features  
-    plotFeatureInfo(ClusterFeatures);
+    plotFeatureInfo(ClusterFeatures, behaviourClasses);
     
     % get behaviour input
-    subplot(5,7,34:35)
-    behaviourClasses = {'sleeping', 'digesting', 'flying', 'diving', 'trawler'};
+    subplot(5,7,[27:28 34:35])
+    
     behaviour = showControls(behaviourClasses);
     
-    behaviourClasses(behaviour)
+    previousClusterClass = behaviour;
     
-    %AnnotatedClusters = [AnnotatedClusters; ClusterFeatures behaviour];
+    AnnotatedClusters = [AnnotatedClusters; ClusterFeatures behaviour];
 end
 
 close all;
