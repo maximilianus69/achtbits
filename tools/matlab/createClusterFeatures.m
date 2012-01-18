@@ -9,7 +9,7 @@ function [ClusterFeatures, ClusterPoints] = createClusterFeatures( Cluster, Data
 %   Array of features of this cluster
 %   format: 
 %   [startTime(s), endTime(s), duration(s), avgSpeed(m/s), ...
-%       heightDiff(m), grndDist(km)]
+%       heightDiff(m), grndDist(km), totDist(km)]
 
 startTime = Cluster(1);
 endTime = Cluster(2);
@@ -36,9 +36,17 @@ latDist = Points([1 end], 3);
 longDist = Points([1 end], 4);
 grndDist = deg2km(stdist(latDist, longDist));
 
+% calculate the total distance travelled
+totDist = 0;
+for i = 1:size(Points,1)-1
+    lat = Points([i i+1], 3);
+    lon = Points([i i+1], 4);
+    totDist = totDist + deg2km(stdist(lat, lon));
+end
+
 % return data
 ClusterFeatures = ...
-    [startTime, endTime, duration, avgSpeed, heightDiff, grndDist];
+    [startTime, endTime, duration, avgSpeed, heightDiff, grndDist, totDist];
 
 end
 
