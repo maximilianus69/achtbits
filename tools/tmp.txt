@@ -4,9 +4,9 @@ we per aaneengesloten reeks datapunten geen problemen krijgen met clusters
 vinden wanneer het verschil tussen twee datapunten (omdat ze te ver uit elkaar
 liggen qua tijd en afstand) te groot is. 
 
-Sessie vinden doen we zo. Als de tijd die verstreken is tussen twee datapunten 
+Sessies vinden doen we zo: Als de tijd die verstreken is tussen twee datapunten 
 te groot is (langer dan X minuten), gaan we kijken of de datapunten sinds de
-vorige keer dat dit gebeurt is tot een sessie behoren. 
+vorige keer dat dit gebeurd is tot een sessie behoren. 
 
 Deze reeks datapunten behoren tot een sessie als ze minimaal Y minuten vlucht
 beschrijven, het minimaal Z datapunten zijn en de reeks een bepaalde resolutie
@@ -18,16 +18,16 @@ dus erg belangrijk wat de parameters zijn. Onze vraag is dus hoe we deze moeten
 instellen.
 
 * Na hoeveel tijd tussen datapunten kunnen we beslissen dat een nieuwe sessie
-begonnen is (X). We vinden nu dat als er meer dan 15 minuten tussen twee 
+begonnen is (X)? We nemen nu aan dat als er meer dan 15 minuten tussen twee 
 datapunten zijn het de sessie afsluit.
 
 * Hoe lang moet een stukje vlucht zijn voordat het interessant is om te weten wat
-een vogel daar doet (Y). Als we aaneengesloten data hebben, na hoelang moeten we 
-deze in beschouwing nemen? We vinden nu dat het minimaal een uur moet zijn. Maar
+een vogel daar doet (Y)? Als we aaneengesloten data hebben, na hoelang moeten we 
+deze in beschouwing nemen? We nemen nu aan dat het minimaal een uur moet zijn. Maar
 misschien is het wel interessant wat een vogel in 5 minuten tijd doet? 
 
-Met deze instellingen gooien we ongeveer 50% van de data weg, maar weten we wel 
-zeker dat wat we overhouden goede data is.
+Met deze instellingen gooien we ongeveer 50% van de data boven de noordzee weg, maar weten we wel 
+zeker dat wat we overhouden nuttige data is.
 
 
 slapen/verteren
