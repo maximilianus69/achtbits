@@ -21,12 +21,19 @@ Clusters = analyseSession(SessionData);
 
 AnnotatedClusters = [];
 
+screenSize = get(0, 'ScreenSize');
+mainFigId = figure('Name','Cluster annotation', 'NumberTitle','off', ...
+    'units','normalized','outerposition',[0 0 1 1]);
+    
 % for each cluster:
 %   find the data and features
 %   plot the trajectory, data and features
 %   ask for user input (behaviour-class)
 for i = 1:size(Clusters, 1)
     
+    clf %clearfigure
+    
+    % get cluster features and data
     cluster = Clusters(i, :);
     [ClusterFeatures ClusterData] = ...
         createClusterFeatures(cluster, SessionData);
@@ -34,21 +41,30 @@ for i = 1:size(Clusters, 1)
     % plot trajectory
     SessionCoordinates = SessionData(:, 3:4);
     ClusterCoordinates = ClusterData(:, 3:4);
+    
+    subplot(5,7,[1:2 8:9 15:16 22:23])
     plotTrajectory(SessionCoordinates, ClusterCoordinates);
     
     % plot data
+    
     plotClusterData(ClusterData);
+    
+    subplot(5,7,29:33)
     
     % show features  
     plotFeatureInfo(ClusterFeatures);
     
     % get behaviour input
-    behaviour = showControls({'floating', 'flying', 'diving', 'trawler'});
-
-    close all;
+    subplot(5,7,34:35)
+    behaviourClasses = {'sleeping', 'digesting', 'flying', 'diving', 'trawler'};
+    behaviour = showControls(behaviourClasses);
     
-    AnnotatedClusters = [AnnotatedClusters; ClusterFeatures behaviour];
+    behaviourClasses(behaviour)
+    
+    %AnnotatedClusters = [AnnotatedClusters; ClusterFeatures behaviour];
 end
+
+close all;
 
 end
 

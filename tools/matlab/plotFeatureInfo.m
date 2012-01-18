@@ -5,7 +5,7 @@ function plotFeatureInfo( Feature )
 % Feature format:
 %[startTime, endTime, duration, avgSpeed, heightDiff, grndDist]
        
-figure('color', 'white', 'position', [340 400 400 200]);
+%figure('color', 'white', 'position', [340 400 400 200]);
 axis([0 6 5 10]);
 axis off;
 

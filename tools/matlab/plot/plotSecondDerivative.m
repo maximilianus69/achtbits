@@ -37,8 +37,8 @@ plot(x, y, '-s','LineWidth',1, ...
                 'MarkerFaceColor','auto', ...
                 'MarkerSize',4); 
 
-xlabel('timestamp');
-ylabel('length vector');
+%xlabel('timestamp');
+%ylabel('length vector');
 title(label);
 
 % draw a vertical line at the start/end of all clusters

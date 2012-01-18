@@ -12,16 +12,12 @@ sessionY = SessionCoordinates(:, 2);
 clusterX = ClusterCoordinates(:, 1);
 clusterY = ClusterCoordinates(:, 2);
 
-
-
-fig = figure('Position', [20 200 300 400]);
-clf(fig)
-% geoshow('nh_zh_shape.shp');
+%geoshow(gca, 'nh_zh_shape.shp');
 hold('on')
 
-geoshow(sessionX, sessionY, 'color', 'b');
+geoshow(gca, sessionX, sessionY, 'color', 'b');
 
-geoshow(clusterX, clusterY, 'color', 'r');
+geoshow(gca, clusterX, clusterY, 'color', 'r');
 hold('off')
 
 end
