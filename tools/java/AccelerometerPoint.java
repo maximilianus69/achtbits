@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 
-/** Class to store datapoint of accelerometer data. */
+/** Class to store datapoint of accelerometer data. 
+* Would be sweet to also have such a class for gps data (instead of a String array).
+* */
 public class AccelerometerPoint
 {
     /** In seconds. */

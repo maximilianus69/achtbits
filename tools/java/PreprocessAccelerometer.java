@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.Date;
-import java.io.*;
 import java.text.SimpleDateFormat;
 import java.awt.Polygon;
 import java.awt.Rectangle;
@@ -9,6 +8,9 @@ import java.awt.Rectangle;
 * each containing one (1) session. Optionally it can accept a .csv file with 
 * accelerometer data. It will create additional .csv session files next to the gps
 * files that contain the accelerometer data files.
+*
+* Parsed .csv files are dropped in a newly created folder ('deviceX') in the output
+* folder.
 *
 * One can select the columns that need to be inlcuded (in source).
 * Sessions are split if they are more than a certain time apart (15 min?).
@@ -33,93 +35,119 @@ import java.awt.Rectangle;
 * @author Maarten Inja */
 class PreprocessAccelerometer
 {
+   
+    ///// constants ///// 
 
     /** Used to converts date times to timestamp in ms. Example of a date time from
     * file: '2010-07-01 10:01:03' */
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = 
         new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-    ///// Read these from the config file /////
-
-    /** Boundaries to filter resolution in entrypoints per minutes. */
-    private static float lowerBoundresolution = 1; 
-    private static float upperBoundresolution = 90; 
-
-    private static String accelerometerDatafile;
-
-    /** Is a accelerometer .csv data file supplied from command line arguments?*/
-    private static boolean parseAccelerometerData;
-
+    /** Everything outside this polygon from the coordinates in the file is 
+    * discarded.*/
     private static final String NORTH_SEA_COORDINATES_TEXT_FILE = "northSeaCoordinates.txt";
     /** Birds are being tracked since breeding season 2008 (www.uva-bits.nl). 
     * So instead of the epoch we use seconds since 2008-01-01 00:00:00.
     * "(SIMPLE_DATE_FORMAT.parse("2008-01-01 00:00:00")).getTime() / 1000;"*/
     private static final long USELESS_SECONDS = 1199142000;
 
-    /** Minimum session time before we want to include it. */
-    private static final int SESSION_MINIMUM_LENGTH_SECONDS = 3600; // 1 hour 
-    private static final int SESSION_MINIMUM_LENGTH_ENTRIES = 5;
-    private static final int SESSION_SEPARATOR_SECONDS = 900; // 15 min
 
-    /** To store the completely parsed sessions in before writing to file. */
-    private static ArrayList<ArrayList<String[]>> parsedSessions = 
-        new ArrayList<ArrayList<String[]>> ();
-   
-    // some of these below should be converted to final static... 
- 
-    private static DoublePolygon northSeaPolygon;
+    ///// Command line arguments /////
+
+    /** Optional. */
+    private static String accelerometerDatafile;
+    private static String outputDirectory;
+
+    ///// (Should) Read these from the config file /////
+
+    /** Boundaries to filter resolution in entrypoints per minutes. */
+    private static float lowerBoundresolution = 1; 
+    private static float upperBoundresolution = 90; 
+
+    /** Minimum session time before we want to include it. */
+    private static final int sessionMinimumLengthSeconds = 3600; // 1 hour 
+    private static final int sessionMinimumLengthEntries = 5;
+    private static final int sessionSeparatorSeconds = 900; // 15 min
 
     private static String inputDelimiter = ",";
     private static String outputDelimiter = ",";
+
     /** The integers in this column will be saved in the output file. */
     private static int[] includeColumnsGps = {0, 1, 2, 3, 4, 18, 19, 20}; 
     private static int[] includeColumnsAcc = {1, 2, 3, 4, 5, 0}; 
-    private static int birdNumber = -1;
-    /** The first line of the input .csv file. */
-    private static ArrayList<String> columnLabels = new ArrayList<String> (1);
-    private static String outputDirectory;
 
+    ///// other /////
+
+    /** Is a accelerometer .csv data file supplied from command line arguments?*/
+    private static boolean parseAccelerometerData;
+
+    private static DoublePolygon northSeaPolygon;
+
+    /** To store the completely parsed gps sessions in before writing to file. */
+    private static ArrayList<ArrayList<String[]>> parsedSessions = 
+        new ArrayList<ArrayList<String[]>> ();
+    /** To store completely parsed accel sessions in before writing to file. */
+    private static ArrayList<ArrayList<AccelerometerPoint>> accelerosSessionized;
+   
+    private static int deviceId = -1;
+    /** Description and that what will be written to labels.txt. */
+    private static ArrayList<String> columnLabels = new ArrayList<String> (1);
     private static int sessionCount, sessionsDiscarded, linesDiscarded;
     private static int totalLinesDiscarded = 0;
-    private static int accelLinesWritten = 0;
+    /** Written to by Io.java. */
+    public static int accelLinesWritten = 0;
 
-    private static ArrayList<ArrayList<AccelerometerPoint>> accelerosSessionized;
 
     public static void main (String args[])
     {
-        if (args.length == 3 || (parseAccelerometerData = args.length == 4))
+        if (args.length == 2 || (parseAccelerometerData = args.length == 3))
         {
             System.out.println("Processing gps data .csv file");
                 
-            // TODO: read bird number from file please
-            birdNumber = Integer.valueOf(args[1]);
-            outputDirectory = args[2];
+            outputDirectory = args[1];
 
+            // read lines from file and preprocess some
             ArrayList<String[]> lines =     
                 preprocessTimeSlashN(args[0], includeColumnsGps);
+
+            // extract bird number from some column
+            deviceId = extractDeviceId(columnLabels, lines);
+
+            if (Io.createFolder(outputDirectory + Io.SYSTEM_SEPARATOR + "device" +
+                deviceId))
+                outputDirectory += Io.SYSTEM_SEPARATOR + "device" + deviceId;
+            else
+            {
+                System.out.println("Could not create directory.. exiting");
+                System.exit(1);
+            }
+
+            // preprocess some more
             lines = preprocessNorthSeaPerimeter(lines);
+
+            // split the lines into sessions
             sessionize(lines);
-            writeFile(columnLabels, outputDirectory + 
-                System.getProperty("file.separator") + "labels.txt");
+
+            // Write the labels for each column + some extra info to file. 
+            Io.writeFile(columnLabels, outputDirectory + Io.SYSTEM_SEPARATOR +
+                "labels.txt");
 
             System.out.println("Writting gps to file");
 
             // write the parsed sessions to file
             for (int i = 0; i < parsedSessions.size(); i++)
-                writeFileConvertGps(parsedSessions.get(i), 
-                    String.format(outputDirectory + 
-                    System.getProperty("file.separator") + "bird_gps_" + 
-                    birdNumber + "_session_" + "%03d" + ".csv", i));
+                Io.writeFileConvertGps(parsedSessions.get(i), 
+                    String.format(outputDirectory + Io.SYSTEM_SEPARATOR +
+                    "device_" + deviceId + "_gps_session_%03d.csv", i));
 
 
             if (parseAccelerometerData)
             {
-                accelerometerDatafile = args[3];
+                accelerometerDatafile = args[2];
                 // parse accelerometer data here ... 
 
                 System.out.println("Processing accelerometer data .csv file");
                 ArrayList<String []> acceleroLines = 
-                    preprocessTimeSlashN(args[3], includeColumnsAcc);
+                    preprocessTimeSlashN(accelerometerDatafile, includeColumnsAcc);
             
                 ArrayList<AccelerometerPoint> acceleros = 
                     AccelerometerPoint.stringArraysToPoints(acceleroLines);
@@ -130,10 +158,9 @@ class PreprocessAccelerometer
                 System.out.println("writing accel to file");
 
                 for (int i = 0; i < accelerosSessionized.size(); i++)
-                    writeFileConvertAccel(accelerosSessionized.get(i), 
-                        String.format(outputDirectory + 
-                        System.getProperty("file.separator") + "bird_accel_" + 
-                        birdNumber + "_session_" + "%03d" + ".csv", i));
+                    Io.writeFileConvertAccel(accelerosSessionized.get(i), 
+                        String.format(outputDirectory + Io.SYSTEM_SEPARATOR +
+                         "device_" + deviceId + "_accel_session_%03d.csv", i));
 
                 int lostAccelLines = acceleroLines.size() - accelLinesWritten;
                 System.out.println(accelLinesWritten + " of " + 
@@ -144,8 +171,23 @@ class PreprocessAccelerometer
 
         }
         else
-            System.out.println("Error, needs three or four arguments, 1st: input file name, 2nd: bird number, 3rd: output file name 4th (optional) input file for accelerometer data"); 
+            System.out.println("Error, needs three or four arguments, 1st: input file name, 2nd: output file name 3rd (optional) input file for accelerometer data"); 
     }
+
+    /** Uses columnLabels to find the column with the device (serial?) id. 
+    * Returns a device id if found, -1 otherwise. */
+    public static int extractDeviceId(ArrayList<String> columnLabels, 
+        ArrayList<String[]> lines)
+    {
+        int column = -1;
+        //for (String s: columnLabels)
+        //    System.out.println(s);
+        for (int i = 0; i < columnLabels.size(); i ++)
+            if (columnLabels.get(i).indexOf("serial") != -1)
+                column = i;
+        return column >= 0 ? Integer.valueOf(lines.get(0)[column]) : column;
+    }
+
 
     /** splits up arraylist with acceldatapoints to arraylist with sessions of
     * acceldatapoints. */
@@ -188,7 +230,7 @@ class PreprocessAccelerometer
     {
 
         // create and load the north sea coordinates from file to create a polygon
-        ArrayList<String> northSeaLines = readFile(NORTH_SEA_COORDINATES_TEXT_FILE);
+        ArrayList<String> northSeaLines = Io.readFile(NORTH_SEA_COORDINATES_TEXT_FILE);
         northSeaPolygon = new DoublePolygon();
         for (String line : northSeaLines)
         {
@@ -232,10 +274,10 @@ class PreprocessAccelerometer
             session.add(lineSplitted);
             timestamp = Long.valueOf(lineSplitted[1]);
             
-            //System.out.printf("ts: %d, lst: %d, session_sep: %d\n", timestamp, lastTimestamp, SESSION_SEPARATOR_SECONDS);
+            //System.out.printf("ts: %d, lst: %d, session_sep: %d\n", timestamp, lastTimestamp, sessionSeparatorSeconds);
 
             // if the difference in time was too great
-            if (timestamp - lastTimestamp > SESSION_SEPARATOR_SECONDS)
+            if (timestamp - lastTimestamp > sessionSeparatorSeconds)
             {
                 if (session.size() > 1)
                     session.remove(session.size()-1);
@@ -265,15 +307,12 @@ class PreprocessAccelerometer
 
         // large and lengthy enough to call this session a session
         // also check if resolution is alllll right
-        if (session.size() >= SESSION_MINIMUM_LENGTH_ENTRIES && 
-            sessionTimeSeconds > SESSION_MINIMUM_LENGTH_SECONDS &&
+        if (session.size() >= sessionMinimumLengthEntries && 
+            sessionTimeSeconds > sessionMinimumLengthSeconds &&
             sessionResolution > lowerBoundresolution &&
             sessionResolution < upperBoundresolution)
         {
             // safe!
-            //writeFileConvert(session, outputDirectory + 
-            //        System.getProperty("file.separator") + "bird_" + 
-            //        birdNumber + "_session_" + sessionCount + ".csv");
             parsedSessions.add(session);
             sessionCount ++;
         }
@@ -292,7 +331,7 @@ class PreprocessAccelerometer
         int[] includeColumns)
     {
         ArrayList<String[]> newLines = new ArrayList<String[]> ();
-        ArrayList<String> lines = readFile(inputFileName); 
+        ArrayList<String> lines = Io.readFile(inputFileName); 
         int count = -1;
         int slashNCount = 0;
 
@@ -344,14 +383,13 @@ class PreprocessAccelerometer
         columnLabels.add("accel: id, timestamp, index, x, y, z.. I believe...\n");
          
         System.out.println(lines.size() + " line(s) in input file");
-        //System.out.println(newLines.size() + " line(s) in output file (removed the first line that indicates what column is what)");
+
         if (slashNCount > 0)
             System.out.println(slashNCount + " line(s) excluded because of occurence of '\\N'");
         totalLinesDiscarded += slashNCount;
          
         return newLines;
    
-        //writeFile(newLines, outputFileName); 
     }
 
     /** Returns a timestamp if the string is a date time, the same string otherwise. */
@@ -360,7 +398,6 @@ class PreprocessAccelerometer
         try
         {
             Date date = SIMPLE_DATE_FORMAT.parse(s);
-            //return String.valueOf((date.getTime()/1000)-USELESS_SECONDS);
             return String.valueOf((date.getTime()/1000)-USELESS_SECONDS);
         }
         catch(Exception e)
@@ -380,76 +417,7 @@ class PreprocessAccelerometer
         return line + list[list.length - 1] + "\n";
     }
 
-    public static void writeFileConvertAccel(ArrayList<AccelerometerPoint> lines, 
-        String fileName)
-    {
-        if (lines.size() == 0)
-            return;
 
-        ArrayList<String> newLines = new ArrayList<String> ();
-        for (AccelerometerPoint point: lines)
-        {
-            newLines.addAll(point.toLines());
-            accelLinesWritten += point.getDataSize();
-        }
-
-
-        writeFile(newLines, fileName);
-    }
-    
-    /** Writes an arraylist with a string array to file. */
-    public static void writeFileConvertGps(ArrayList<String[]> lines, String fileName)
-    {   
-        ArrayList<String> newLines = new ArrayList<String> ();
-        for (String[] lineSplitted : lines)
-            newLines.add(arrayToString(lineSplitted));
-        writeFile(newLines, fileName);
-    }
-
-    /** Writes an arraylist to a file. */
-    public static void writeFile(ArrayList<String> lines, String fileName)
-    {
-        try
-        {
-          // Create file 
-          FileWriter fstream = new FileWriter(fileName);
-          BufferedWriter out = new BufferedWriter(fstream);
-            for (String line: lines)
-            {
-                out.write(line);
-            }
-          //Close the output stream
-          out.close();
-          }
-        catch (Exception e){//Catch exception if any
-          System.err.println("Error: " + e.getMessage());
-          }
-    }
-
-    /** Returns an arraylist in which each item is a line from the file*/
-    public static ArrayList<String> readFile(String fileName)
-    {
-        ArrayList<String> lines = new ArrayList<String> ();
-        try{
-          // Open the file that is the first 
-          // command line parameter
-          FileInputStream fstream = new FileInputStream(fileName);
-          // Get the object of DataInputStream
-          DataInputStream in = new DataInputStream(fstream);
-          BufferedReader br = new BufferedReader(new InputStreamReader(in));
-          String strLine;
-          //Read File Line By Line
-          while ((strLine = br.readLine()) != null)   {
-          // Print the content on the console
-                lines.add(strLine);
-          }
-          //Close the input stream
-          in.close();
-            }catch (Exception e){//Catch exception if any
-          System.err.println("Error: " + e.getMessage());
-          }
-        return lines;
-    }
 
     /** Because Java's inbuilt String.'replace' doesnt work :@ */
     public static String removeChar(String s, char c) 
@@ -464,85 +432,6 @@ class PreprocessAccelerometer
 
 
 
-/** Used by the Roi classes to return double coordinate arrays and to
- *    determine if a point is inside or outside of spline fitted selections. 
- * SOURCE: http://imagej.nih.gov/ij/source/ij/process/FloatPolygon.java 
- * Edited to use doubles and removed stuff. */
-private static class DoublePolygon {
-
-    /** The number of points. */
-    public int npoints;
-
-    /* The array of x coordinates. */
-    public double xpoints[];
-
-    /* The array of y coordinates. */
-    public double ypoints[];
-
-    /** Constructs an empty FloatPolygon. */ 
-    public DoublePolygon() {
-        npoints = 0;
-        xpoints = new double[10];
-        ypoints = new double[10];
-    }
-
-    /** Constructs a FloatPolygon from x and y arrays. */ 
-    public DoublePolygon(double xpoints[], double ypoints[]) {
-        if (xpoints.length!=ypoints.length)
-            throw new IllegalArgumentException("xpoints.length!=ypoints.length");
-        this.npoints = xpoints.length;
-        this.xpoints = xpoints;
-        this.ypoints = ypoints;
-    }
-
-    /** Constructs a FloatPolygon from x and y arrays. */ 
-    public DoublePolygon(double xpoints[], double ypoints[], int npoints) {
-        this.npoints = npoints;
-        this.xpoints = xpoints;
-        this.ypoints = ypoints;
-    }
-        
-    /** Returns 'true' if the point (x,y) is inside this polygon. This is a Java
-    version of the remarkably small C program by W. Randolph Franklin at
-    http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html#The%20C%20Code
-    */
-    public boolean contains(double x, double y) {
-        //System.out.printf("%f, %f in polygon?: ", x, y);
-        boolean inside = false;
-        for (int i=0, j=npoints-1; i<npoints; j=i++) {
-            if (((ypoints[i]>y)!=(ypoints[j]>y)) &&
-            (x<(xpoints[j]-xpoints[i])*(y-ypoints[i])/(ypoints[j]-ypoints[i])+xpoints[i]))
-            inside = !inside;
-        }
-        //System.out.println(inside);
-        return inside;
-    }
-
-
-
-    public void addPoint(double x, double y) {
-        //System.out.printf("%f, %f\n", x, y);
-        if (npoints==xpoints.length) {
-            double[] tmp = new double[npoints*2];
-            System.arraycopy(xpoints, 0, tmp, 0, npoints);
-            xpoints = tmp;
-            tmp = new double[npoints*2];
-            System.arraycopy(ypoints, 0, tmp, 0, npoints);
-            ypoints = tmp;
-        }
-        xpoints[npoints] = x;
-        ypoints[npoints] = y;
-        npoints++;
-    }
-
-    public String toString()
-    {
-        return "length: " + npoints + "\n";
-    }
-
-    
-
-}
 
 
 } 
