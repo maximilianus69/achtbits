@@ -25,6 +25,11 @@ public class AccelerometerPoint
         data.add(temp);
     }
 
+    public int getDataSize()
+    {
+        return data.size();
+    }
+
     public int getTimestamp()
     {
         return timestamp;
@@ -74,7 +79,7 @@ public class AccelerometerPoint
         ArrayList<String> lines = new ArrayList<String> ();
         for (int i = 0; i < data.size(); i ++)
         {
-            lines.add(String.format("%d,%d,%d,%f,%f,%f", id, timestamp, i,
+            lines.add(String.format("%d,%d,%d,%f,%f,%f\n", id, timestamp, i,
                 data.get(i)[0], data.get(i)[1], data.get(i)[2]));
         }
         return lines; 

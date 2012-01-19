@@ -72,6 +72,7 @@ class PreprocessAccelerometer
 
     private static int sessionCount, sessionsDiscarded, linesDiscarded;
     private static int totalLinesDiscarded = 0;
+    private static int accelLinesWritten = 0;
 
     private static ArrayList<ArrayList<AccelerometerPoint>> accelerosSessionized;
 
@@ -92,26 +93,7 @@ class PreprocessAccelerometer
             writeFile(columnLabels, outputDirectory + 
                 System.getProperty("file.separator") + "labels.txt");
 
-            if (parseAccelerometerData)
-            {
-                accelerometerDatafile = args[3];
-                // parse accelerometer data here ... 
-
-                System.out.println("Processing accelerometer date .csv file");
-                ArrayList<String []> acceleroLines = 
-                    preprocessTimeSlashN(args[3], includeColumnsAcc);
-            
-                ArrayList<AccelerometerPoint> acceleros = 
-                    AccelerometerPoint.stringArraysToPoints(acceleroLines);
-               
-                accelerosSessionized = 
-                    linkGpsWithAccelerometer(parsedSessions, acceleros);
-                                    
-                //System.out.printf("gps sessions: %d, accelSessions %d", 
-                //   parsedSessions.size(), accelerosSessionized.size());
-            }
-
-            System.out.println("Write to file");
+            System.out.println("Writting gps to file");
 
             // write the parsed sessions to file
             for (int i = 0; i < parsedSessions.size(); i++)
@@ -120,12 +102,36 @@ class PreprocessAccelerometer
                     System.getProperty("file.separator") + "bird_gps_" + 
                     birdNumber + "_session_" + "%03d" + ".csv", i));
 
-            //for (ArrayList<AccelerometerPoint> acceleroSession : accelerosSessionized)
-            for (int i = 0; i < accelerosSessionized.size(); i++)
-                writeFileConvertAccel(accelerosSessionized.get(i), 
-                    String.format(outputDirectory + 
-                    System.getProperty("file.separator") + "bird_accel_" + 
-                    birdNumber + "_session_" + "%03d" + ".csv", i));
+
+            if (parseAccelerometerData)
+            {
+                accelerometerDatafile = args[3];
+                // parse accelerometer data here ... 
+
+                System.out.println("Processing accelerometer data .csv file");
+                ArrayList<String []> acceleroLines = 
+                    preprocessTimeSlashN(args[3], includeColumnsAcc);
+            
+                ArrayList<AccelerometerPoint> acceleros = 
+                    AccelerometerPoint.stringArraysToPoints(acceleroLines);
+
+                accelerosSessionized = 
+                    linkGpsWithAccelerometer(parsedSessions, acceleros);
+
+                System.out.println("writing accel to file");
+
+                for (int i = 0; i < accelerosSessionized.size(); i++)
+                    writeFileConvertAccel(accelerosSessionized.get(i), 
+                        String.format(outputDirectory + 
+                        System.getProperty("file.separator") + "bird_accel_" + 
+                        birdNumber + "_session_" + "%03d" + ".csv", i));
+
+                int lostAccelLines = acceleroLines.size() - accelLinesWritten;
+                System.out.println(accelLinesWritten + " of " + 
+                    acceleroLines.size() + " accelerometer points written to file" +
+                    " (" + lostAccelLines + " lines lost).");
+
+            }
 
         }
         else
@@ -323,8 +329,10 @@ class PreprocessAccelerometer
             LOWER_BOUND_RESOLUTION + "-" + UPPER_BOUND_RESOLUTION + 
             " entries/minute";
 
+
                                 
         columnLabels.add(arrayToString(labels));
+        columnLabels.add("accel: id, timestamp, index, x, y, z.. I believe...\n");
          
         System.out.println(lines.size() + " line(s) in input file");
         //System.out.println(newLines.size() + " line(s) in output file (removed the first line that indicates what column is what)");
@@ -366,9 +374,17 @@ class PreprocessAccelerometer
     public static void writeFileConvertAccel(ArrayList<AccelerometerPoint> lines, 
         String fileName)
     {
+        if (lines.size() == 0)
+            return;
+
         ArrayList<String> newLines = new ArrayList<String> ();
         for (AccelerometerPoint point: lines)
+        {
             newLines.addAll(point.toLines());
+            accelLinesWritten += point.getDataSize();
+        }
+
+
         writeFile(newLines, fileName);
     }
     
