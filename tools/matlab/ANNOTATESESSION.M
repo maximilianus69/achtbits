@@ -15,6 +15,7 @@ function [ SessionData AnnotatedClusters ] = annotateSession( fileName )
 
 % read the session data from input file
 SessionData = readgps(fileName);
+SessionData = normalizeHeight(SessionData);
 
 % find clusters
 Clusters = analyseSession(SessionData);
