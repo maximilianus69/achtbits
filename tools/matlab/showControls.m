@@ -15,7 +15,7 @@ axis off;
 
 for i = 1:N
 	line(xlim, [i i]);
-	text(0, i-0.5, strcat(num2str(i), ')  ',Buttons(i)), 'fontsize', 13);
+	text(0, i-0.4, strcat(num2str(i), ')  ',Buttons(i)), 'fontsize', 16);
 end
 
 [ix, iy] = ginput(1);
