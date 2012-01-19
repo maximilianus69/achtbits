@@ -33,7 +33,7 @@ import java.awt.Rectangle;
 * TODO: write specific requirements for the accelerometer .csv data files here.
 *
 * @author Maarten Inja */
-class PreprocessAccelerometer
+class PreprocessCsvFiles
 {
    
     ///// constants ///// 

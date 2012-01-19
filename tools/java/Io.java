@@ -25,7 +25,7 @@ public class Io
         for (AccelerometerPoint point: lines)
         {
             newLines.addAll(point.toLines());
-            PreprocessAccelerometer.accelLinesWritten += point.getDataSize();
+            PreprocessCsvFiles.accelLinesWritten += point.getDataSize();
         }
 
 
@@ -37,7 +37,7 @@ public class Io
     {   
         ArrayList<String> newLines = new ArrayList<String> ();
         for (String[] lineSplitted : lines)
-            newLines.add(PreprocessAccelerometer.arrayToString(lineSplitted));
+            newLines.add(PreprocessCsvFiles.arrayToString(lineSplitted));
         writeFile(newLines, fileName);
     }
 
