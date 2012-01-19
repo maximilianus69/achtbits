@@ -6,40 +6,49 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 
 /** Parses a .csv file of one (1) bird and splits it in processed small .csv file, 
-* each containing one (1) session. 
+* each containing one (1) session. Optionally it can accept a .csv file with 
+* accelerometer data. It will create additional .csv session files next to the gps
+* files that contain the accelerometer data files.
 *
-* One can select the columns that need to be inlcuded.
+* One can select the columns that need to be inlcuded (in source).
 * Sessions are split if they are more than a certain time apart (15 min?).
 * Lines with '\N' occurences are excluded from the new .csv files.
 * Lines with coordinates outside the north sea are excluded. 
 * Date time is converted to seconds since 2008-01-01 00:00:00.
 * 
-* .csv file line beforehand:
-* "device_info_serial","date_time","latitude","longitude","altitude","pressure","temperature","h_accuracy","v_accuracy","x_speed","y_speed","z_speed","gps_fixtime","location","userflag","satellites_used","positiondop","speed_accuracy","vnorth","veast","vdown","speed_3d"
 *
-* Input argument 1: a .csv file of one (1) bird
-* Input argument 2: the number of the bird
-* Input argument 3: a directory (will be filled with bird_x_session_y.csv files)
+* Input argument 1: a .csv file of one (1) bird with gps data.
+* Input argument 2: a directory (will be filled with bird_x_session_y.csv files).
+* Input argument 3: (optional) a .csv of one (1) bird accelerometer data.
 *
-* Assumes the first line in the input .csv file are the labels of each columns
-* Assumens the zero-based 1st index of the selected columns is the column with
+* Assumes the first line in the input gps .csv file are the labels of each columns.
+* Assumens the zero-based 1st index of the selected columns is the column with.
 * the timestamp.
 * Assumes the zero-based 3rd and 4th index of the selected columns are the
 * columns with latitude and longitude respectively.
+*
+* Accelerometer .csv data files have more specific requirements.
+* TODO: write specific requirements for the accelerometer .csv data files here.
 *
 * @author Maarten Inja */
 class PreprocessAccelerometer
 {
 
-    // Example of a date time: '2010-07-01 10:01:03' (which results in the following format:) 
-    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    /** Used to converts date times to timestamp in ms. Example of a date time from
+    * file: '2010-07-01 10:01:03' */
+    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = 
+        new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    private static final float LOWER_BOUND_RESOLUTION = 1; // entrypoints per minute
-    private static final float UPPER_BOUND_RESOLUTION = 90; 
+    ///// Read these from the config file /////
 
-    private static boolean parseAccelerometerData;
+    /** Boundaries to filter resolution in entrypoints per minutes. */
+    private static float lowerBoundresolution = 1; 
+    private static float upperBoundresolution = 90; 
+
     private static String accelerometerDatafile;
 
+    /** Is a accelerometer .csv data file supplied from command line arguments?*/
+    private static boolean parseAccelerometerData;
 
     private static final String NORTH_SEA_COORDINATES_TEXT_FILE = "northSeaCoordinates.txt";
     /** Birds are being tracked since breeding season 2008 (www.uva-bits.nl). 
@@ -258,8 +267,8 @@ class PreprocessAccelerometer
         // also check if resolution is alllll right
         if (session.size() >= SESSION_MINIMUM_LENGTH_ENTRIES && 
             sessionTimeSeconds > SESSION_MINIMUM_LENGTH_SECONDS &&
-            sessionResolution > LOWER_BOUND_RESOLUTION &&
-            sessionResolution < UPPER_BOUND_RESOLUTION)
+            sessionResolution > lowerBoundresolution &&
+            sessionResolution < upperBoundresolution)
         {
             // safe!
             //writeFileConvert(session, outputDirectory + 
@@ -326,7 +335,7 @@ class PreprocessAccelerometer
         System.arraycopy(newLines.remove(0), 0,
             labels, 0, labels.length - 1);
         labels[labels.length - 1] = " with a resolution of " + 
-            LOWER_BOUND_RESOLUTION + "-" + UPPER_BOUND_RESOLUTION + 
+            lowerBoundresolution + "-" + upperBoundresolution + 
             " entries/minute";
 
 
