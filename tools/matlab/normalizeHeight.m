@@ -31,7 +31,7 @@ outliers = find(abs(h - mu) > 2*sigma);
 
 % flatten outliers
 for i = 1:length(outliers)
-    if(i > 1)
+    if(outliers(i) > 1)
         h(outliers(i)) = h(outliers(i)-1);
     else
         h(outliers(i)) = h(outliers(i)+1);
