@@ -1,1 +1,0 @@
-cat bird326timestamps.csv | grep -v \N > bird326timestamps.csv
