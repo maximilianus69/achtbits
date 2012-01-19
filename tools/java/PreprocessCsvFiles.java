@@ -72,7 +72,7 @@ class PreprocessCsvFiles
     private static String outputDelimiter = ",";
 
     /** The integers in this column will be saved in the output file. */
-    private static int[] includeColumnsGps = {0, 1, 2, 3, 4, 18, 19, 20}; 
+    private static int[] includeColumnsGps = {0, 1, 2, 3, 4, 18, 19, 20, 9, 10, 11}; 
     private static int[] includeColumnsAcc = {1, 2, 3, 4, 5, 0}; 
 
     ///// other /////
