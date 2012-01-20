@@ -3,6 +3,9 @@ function frequency = fourierOnAcc(AccData, timeStamp)
     % analisys. 
     % (now returns maximum as frequency)
     % Input: [iD, timeStamp, entry, x, y, z]
+    
+    % Turn off the warning when there are no peaks found
+    warning('off', 'signal:findpeaks:noPeaks');
 
     AccData = AccData(find(AccData(:, 2) ==  timeStamp), :);
 
