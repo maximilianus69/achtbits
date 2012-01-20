@@ -23,8 +23,9 @@ SessionData = readgps(fileName);
 
 % SessionData = normalizeHeight(SessionData);
 
-% write sessionData to file
-dlmwrite(strcat(outputPath, '\', outputFileName, '_sessionData.csv'), SessionData);
+% write sessionData to file (not included now)
+
+% dlmwrite(strcat(outputPath, '\', outputFileName, '_sessionData.csv'), SessionData);
 
 % find clusters
 Clusters = analyseSession(SessionData);
@@ -58,20 +59,17 @@ for i = 1:size(Clusters, 1)
     subplot(5,7,[1:2 8:9 15:16 22:23])
     plotTrajectory(SessionCoordinates, ClusterCoordinates);
     
-    % plot data
-    
+    % plot data    
     plotClusterData(ClusterData);
     
     subplot(5,7,29:33)
     
-    
-    
     % show features  
     plotFeatureInfo(ClusterFeatures, behaviourClasses);
-    
-    % get behaviour input
+
     subplot(5,7,[27:28 34:35])
     
+    % get behaviour input
     behaviour = showControls(behaviourClasses);
     
     previousClusterClass = behaviour;
@@ -81,8 +79,15 @@ for i = 1:size(Clusters, 1)
     AnnotatedClusters = [AnnotatedClusters; ClusterFeatures behaviour];
     
     % write features to file
-    dlmwrite(strcat(outputPath, '\', outputFileName, '_clusterFeatures.csv'), ...
-        ClusterFeatures, '-append', 'roffset', 0);
+    
+    outputFileFeatures = strcat(outputPath, '\', outputFileName,...
+        '_clusterFeatures.csv');
+    
+    if i == 1
+        dlmwrite(outputFileFeatures, ClusterFeatures);
+    else
+        dlmwrite(outputFileFeatures, ClusterFeatures, '-append', 'roffset', 0);
+    end
 end
 
 close all;
