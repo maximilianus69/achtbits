@@ -15,6 +15,8 @@ function [ output_args ] = annotateBird( deviceId, startSession )
 %   path: tools/deviceDEVICEID/session_SESSIONID/...
 %       device_DEVICEID_session_SESSIONID_clusterFeatures.csv
 
+addpath('plot');
+
 if nargin < 2
     sessionId = 0;
 else
@@ -57,6 +59,8 @@ if type  == 7
         
         sessionFilePath = strcat(folderPath, inputFilePrefix, sprintf('%03d', sessionId), '.csv');
     end
+else
+    sprintf(strcat('the folder ', folderPath, 'could not be found'))
 end
 
 end
