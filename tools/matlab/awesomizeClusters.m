@@ -32,8 +32,12 @@ function AwesomeClusters = awesomizeClusters(LameClusters, timeThreshold)
             end
         end
     end
+    % Add the end
     AwesomeClusters(size(AwesomeClusters, 1), 2) = LameClusters(size(LameClusters, 1), 2);
+    % Remove too short clusters
     D = AwesomeClusters(:, 2) - AwesomeClusters(:, 1);
-    DB = D > 0;
+    DB = D > 900;
+    % Don't delete the last cluster
+    DB(size(DB, 1)) = 1
     AwesomeClusters = AwesomeClusters .* [DB DB];
-    AwesomeClusters(~any(AwesomeClusters,2),:) = [];
+    AwesomeClusters(~any(AwesomeClusters,2),:) = []
