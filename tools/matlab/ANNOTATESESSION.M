@@ -80,7 +80,7 @@ for i = 1:size(Clusters, 1)
     
     % write features to file
     
-    outputFileFeatures = strcat(outputPath, '\', outputFileName,...
+    outputFileFeatures = strcat(outputPath, '/', outputFileName,...
         '_clusterFeatures.csv');
     
     if i == 1

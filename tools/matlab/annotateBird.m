@@ -23,7 +23,7 @@ else
     sessionId = startSession;
 end
 
-folderPath = strcat('..\parsedCsvFiles\device', deviceId);
+folderPath = strcat('../parsedCsvFiles/device', deviceId);
 type = exist(folderPath);
 
 % check if there is data for this bird ID
@@ -33,21 +33,21 @@ if type  == 7
     %   - open an annotation folder for session
     %   - run annotateSession
     
-    outputDeviceFolder = strcat('..\annotatedData\device', deviceId);
+    outputDeviceFolder = strcat('../annotatedData/device', deviceId);
     
     if exist(outputDeviceFolder, 'dir') ~= 7
         mkdir(outputDeviceFolder);
     end
     
-    inputFilePrefix = strcat('\device_', deviceId, '_gps_session_');
+    inputFilePrefix = strcat('/device_', deviceId, '_gps_session_');
     
     sessionFilePath = strcat(folderPath, inputFilePrefix, sprintf('%03d', sessionId), '.csv');
     
     while exist(sessionFilePath) == 2
         
         sessionName = strcat('session_', sprintf('%03d', sessionId));
-        fileName = strcat('\device_', deviceId, '_', sessionName);
-        outputPath = strcat(outputDeviceFolder, '\', sessionName);
+        fileName = strcat('/device_', deviceId, '_', sessionName);
+        outputPath = strcat(outputDeviceFolder, '/', sessionName);
     
         if exist(outputPath, 'dir') ~= 7
             mkdir(outputPath);
