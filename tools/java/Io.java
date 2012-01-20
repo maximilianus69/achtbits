@@ -37,7 +37,10 @@ public class Io
     {   
         ArrayList<String> newLines = new ArrayList<String> ();
         for (String[] lineSplitted : lines)
+        {
             newLines.add(PreprocessCsvFiles.arrayToString(lineSplitted));
+            PreprocessCsvFiles.gpsLinesWritten ++; // bleh is ugly 
+        }
         writeFile(newLines, fileName);
     }
 

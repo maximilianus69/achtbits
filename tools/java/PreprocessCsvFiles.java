@@ -83,23 +83,31 @@ class PreprocessCsvFiles
     private static DoublePolygon northSeaPolygon;
 
     /** To store the completely parsed gps sessions in before writing to file. */
-    private static ArrayList<ArrayList<String[]>> parsedSessions = 
-        new ArrayList<ArrayList<String[]>> ();
+    private static ArrayList<ArrayList<String[]>> parsedSessions;
     /** To store completely parsed accel sessions in before writing to file. */
     private static ArrayList<ArrayList<AccelerometerPoint>> accelerosSessionized;
    
     private static int deviceId = -1;
     /** Description and that what will be written to labels.txt. */
-    private static ArrayList<String> columnLabels = new ArrayList<String> (1);
+    private static ArrayList<String> columnLabels;
     private static int sessionCount, sessionsDiscarded, linesDiscarded;
-    private static int totalLinesDiscarded = 0;
+    private static int totalLinesDiscarded, linesRead; 
+    private static int totalGpsLines, totalAccelLines;
     /** Written to by Io.java. */
-    public static int accelLinesWritten = 0;
+    public static int gpsLinesWritten, accelLinesWritten;
 
-
-    public static void main (String args[])
+    public static int[] mainWrapper(String[] args)
     {
-        if (args.length == 2 || (parseAccelerometerData = args.length == 3))
+        totalLinesDiscarded = 0;
+        gpsLinesWritten = accelLinesWritten = 0;
+        totalGpsLines = totalAccelLines = linesRead = 0;
+        parsedSessions = new ArrayList<ArrayList<String[]>> ();
+        columnLabels = new ArrayList<String> ();
+       
+        // total gps lines, gps lines lost, total accel lines, accel lines lost 
+        int[] resultArray = {-1, -1, -1, -1};
+
+        if (args.length == 2 | (parseAccelerometerData = args.length == 3))
         {
             System.out.println("Processing gps data .csv file");
                 
@@ -108,6 +116,14 @@ class PreprocessCsvFiles
             // read lines from file and preprocess some
             ArrayList<String[]> lines =     
                 preprocessTimeSlashN(args[0], includeColumnsGps);
+System.out.println("gps lines read: " + linesRead);
+            resultArray[0] = linesRead; // total gps lines
+
+            if (lines.size() < 2)
+            {
+                System.out.println("Too little remains of gps data, exit");
+                return resultArray;
+            }
 
             // extract bird number from some column
             deviceId = extractDeviceId(columnLabels, lines);
@@ -118,11 +134,17 @@ class PreprocessCsvFiles
             else
             {
                 System.out.println("Could not create directory.. exiting");
-                System.exit(1);
+                return resultArray;
             }
 
             // preprocess some more
             lines = preprocessNorthSeaPerimeter(lines);
+
+            if (lines.size() < 2)
+            {
+                System.out.println("Too little remains of gps data, exit");
+                return resultArray;
+            }
 
             // split the lines into sessions
             sessionize(lines);
@@ -140,6 +162,9 @@ class PreprocessCsvFiles
                     "device_" + deviceId + "_gps_session_%03d.csv", i));
 
 
+resultArray[1] = resultArray[0] - gpsLinesWritten; // gps lines lost
+System.out.println("gps lines lost : " + resultArray[1]);
+
             if (parseAccelerometerData)
             {
                 accelerometerDatafile = args[2];
@@ -148,12 +173,34 @@ class PreprocessCsvFiles
                 System.out.println("Processing accelerometer data .csv file");
                 ArrayList<String []> acceleroLines = 
                     preprocessTimeSlashN(accelerometerDatafile, includeColumnsAcc);
+                resultArray[2] = linesRead; // total accel lines
+
+System.out.println("accel lines read: " + linesRead);
+
+                if (acceleroLines.size() < 2)
+                {
+                    System.out.println("Too little remains of accel data, exit");
+                    return resultArray;
+                }
             
                 ArrayList<AccelerometerPoint> acceleros = 
                     AccelerometerPoint.stringArraysToPoints(acceleroLines);
 
+                if (acceleros.size() < 2)
+                {
+                    System.out.println("Too little remains of accel data, exit");
+                    return resultArray;
+                }
+
                 accelerosSessionized = 
                     linkGpsWithAccelerometer(parsedSessions, acceleros);
+
+
+                if (acceleros.size() < 2)
+                {
+                    System.out.println("Too little remains of accel data, exit");
+                    return resultArray;
+                }
 
                 System.out.println("writing accel to file");
 
@@ -161,6 +208,9 @@ class PreprocessCsvFiles
                     Io.writeFileConvertAccel(accelerosSessionized.get(i), 
                         String.format(outputDirectory + Io.SYSTEM_SEPARATOR +
                          "device_" + deviceId + "_accel_session_%03d.csv", i));
+                
+                resultArray[3] = resultArray[2] - accelLinesWritten; // accel lines lost
+System.out.println("accel lines lost : " + resultArray[3]);
 
                 int lostAccelLines = acceleroLines.size() - accelLinesWritten;
                 System.out.println(accelLinesWritten + " of " + 
@@ -172,6 +222,13 @@ class PreprocessCsvFiles
         }
         else
             System.out.println("Error, needs three or four arguments, 1st: input file name, 2nd: output file name 3rd (optional) input file for accelerometer data"); 
+
+        return resultArray;
+    }
+
+    public static void main (String args[])
+    {
+        mainWrapper(args);
     }
 
     /** Uses columnLabels to find the column with the device (serial?) id. 
@@ -184,8 +241,27 @@ class PreprocessCsvFiles
         //    System.out.println(s);
         for (int i = 0; i < columnLabels.size(); i ++)
             if (columnLabels.get(i).indexOf("serial") != -1)
+            {
                 column = i;
-        return column >= 0 ? Integer.valueOf(lines.get(0)[column]) : column;
+                break;
+            }
+        try
+        {
+            return column >= 0 ? Integer.valueOf(lines.get(0)[column]) : column;
+        }
+        catch (Exception e)
+        {
+            System.out.println("ERROR!");
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            System.out.println("Found column " + column);
+            System.out.println("Printing lines.get(0) for debug purposes");
+            for (String s: lines.get(0))
+                System.out.println(s);
+            System.exit(1);
+        }
+        // unreachable code, freakin' compiler
+        return -1;
     }
 
 
@@ -332,6 +408,8 @@ class PreprocessCsvFiles
     {
         ArrayList<String[]> newLines = new ArrayList<String[]> ();
         ArrayList<String> lines = Io.readFile(inputFileName); 
+        linesRead = lines.size();
+
         int count = -1;
         int slashNCount = 0;
 
@@ -377,8 +455,6 @@ class PreprocessCsvFiles
             lowerBoundresolution + "-" + upperBoundresolution + 
             " entries/minute";
 
-
-                                
         columnLabels.add(arrayToString(labels));
         columnLabels.add("accel: id, timestamp, index, x, y, z.. I believe...\n");
          
