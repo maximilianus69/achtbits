@@ -7,10 +7,12 @@ function frequency = fourierOnAcc(AccData, timeStamp)
     AccData = AccData(find(AccData(:, 2) ==  timeStamp), :);
 
     %{ Delete this if you would want a plot (TODO: Remove this before delivery)
+    if 0
     % Plot the original
     subplot(2, 1, 1);
     plotAcc(AccData, timeStamp);
     title('The original accellerometer data');
+    end
     %}
 
     AccDataRaw = AccData(:, 4:6);
@@ -24,7 +26,6 @@ function frequency = fourierOnAcc(AccData, timeStamp)
     f = Fs/2*linspace(0,1,NFFT/2+1);
 
     % Plot single-sided amplitude spectrum.
-    subplot(2, 1, 2);
     Y1 = Y(:, 1);
     Y2 = Y(:, 2);
     Y3 = Y(:, 3);
@@ -32,6 +33,8 @@ function frequency = fourierOnAcc(AccData, timeStamp)
     GoodY2= 2.*abs(Y2(1:NFFT./2+1));
     GoodY3 = 2.*abs(Y3(1:NFFT./2+1));
     %{ For plotting. TODO: Remove this when we are sure it works
+    if 0
+    subplot(2, 1, 2);
     plot(f,GoodY1);
     hold on
     plot(f, GoodY1, '-s','LineWidth',1, ...
@@ -49,6 +52,7 @@ function frequency = fourierOnAcc(AccData, timeStamp)
     title('Single-Sided Amplitude Spectrum of Accellerometer Data');
     xlabel('Frequency (Hz)');
     ylabel('|AccDataRaw(f)|');
+    end
     %}
     % Find the peaks in the fourier 
     [values freq1] = findpeaks(GoodY1, 'MINPEAKHEIGHT', 0.2);
