@@ -27,6 +27,8 @@ function AwesomeClusters = awesomizeClusters(LameClusters, timeThreshold)
             j = j+1;
             % Add the new cluster beginning
             AwesomeClusters(j, 1) = LameClusters(i+1, 2);
+            % Remove the next data point, because we have been working with i+1, 
+            % which would be overwritten otherwise.
             if(i < size(array, 2))
                 array(i+1) = [];
             end
@@ -38,6 +40,6 @@ function AwesomeClusters = awesomizeClusters(LameClusters, timeThreshold)
     D = AwesomeClusters(:, 2) - AwesomeClusters(:, 1);
     DB = D > 900;
     % Don't delete the last cluster
-    DB(size(DB, 1)) = 1
+    DB(size(DB, 1)) = 1;
     AwesomeClusters = AwesomeClusters .* [DB DB];
-    AwesomeClusters(~any(AwesomeClusters,2),:) = []
+    AwesomeClusters(~any(AwesomeClusters,2),:) = [];
