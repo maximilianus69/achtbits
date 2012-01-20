@@ -1,23 +1,21 @@
-function [ output_args ] = annotateBird( deviceId, startSession )
+function [ output_args ] = annotateBird( deviceId, annotationType, startSession )
 %ANNOTATEBIRD starts annotation of all sessions of given device
 %   INPUT:
 %   deviceId - ID number of the device as a string
+%   annotationType - determines if annotation is test ('test' or 'real')
 %   startSession(optional, default:0) - ID of starting session, integer 
 %   
 %   checks if there are sessions for this device
 %   loops through all sessions and calls annotateSession
 %   writes to file:
-%   sessionData - data of every data point in session from readgps
-%   path: tools/deviceDEVICEID/session_SESSIONID/...
-%       device_DEVICEID_session_SESSIONID_sessiondata.csv
 %   
 %   clusterFeatures - features and class per cluster (row)
-%   path: tools/deviceDEVICEID/session_SESSIONID/...
+%   path: tools/device_DEVICEID/ANNOTATIONTYPE/...
 %       device_DEVICEID_session_SESSIONID_clusterFeatures.csv
 
 addpath('plot');
 
-if nargin < 2
+if nargin < 3
     sessionId = 0;
 else
     sessionId = startSession;
@@ -34,7 +32,15 @@ if type  == 7
     %   - open an annotation folder for session
     %   - run annotateSession
     
-    outputDeviceFolder = strcat('../annotatedData/device_', deviceId);
+    if annotationType == 'real'
+        outputDeviceFolder = strcat('../annotatedData/real/device_', deviceId);
+    elseif annotationType == 'test'
+        outputDeviceFolder = strcat('../annotatedData/test/device_', deviceId);
+    else
+        sprintf('please enter "test" or "real" as second argument')
+        return
+    end
+    
     
     if exist(outputDeviceFolder, 'dir') ~= 7
         mkdir(outputDeviceFolder);
