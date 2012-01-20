@@ -97,9 +97,8 @@ for i = 1:size(Clusters, 1)
     
     % write features to file
     
-    outputFile = strcat('../annotatedData/device_', deviceId, ...
-        '/device_', deviceId, '_session_', sprintf('%03d', sessionId), ...
-        '_clusterFeatures.csv');
+    outputFile = strcat(outputPath, '/device_', deviceId, '_session_', ...
+        sprintf('%03d', sessionId), '_clusterFeatures.csv');
     
     if i == 1
         dlmwrite(outputFile, ClusterFeatures);
