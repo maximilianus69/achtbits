@@ -1,4 +1,4 @@
-function [ SessionData AnnotatedClusters ] = annotateSession( fileName, outputPath, outputFileName)
+function [ SessionData AnnotatedClusters ] = annotateSession( deviceId, sessionId, fileName, outputPath, outputFileName)
 %ANNOTATESESSION a tool to annote the clusters of a session
 %
 %   INPUT:
