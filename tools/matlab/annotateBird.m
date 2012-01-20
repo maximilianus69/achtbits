@@ -23,6 +23,7 @@ else
     sessionId = startSession;
 end
 
+
 folderPath = strcat('../parsedCsvFiles/device', deviceId);
 type = exist(folderPath);
 
@@ -33,7 +34,7 @@ if type  == 7
     %   - open an annotation folder for session
     %   - run annotateSession
     
-    outputDeviceFolder = strcat('../annotatedData/device', deviceId);
+    outputDeviceFolder = strcat('../annotatedData/device_', deviceId);
     
     if exist(outputDeviceFolder, 'dir') ~= 7
         mkdir(outputDeviceFolder);
@@ -45,21 +46,18 @@ if type  == 7
     
     while exist(sessionFilePath) == 2
         
-        sessionName = strcat('session_', sprintf('%03d', sessionId));
-        fileName = strcat('/device_', deviceId, '_', sessionName);
-        outputPath = strcat(outputDeviceFolder, '/', sessionName);
-    
-        if exist(outputPath, 'dir') ~= 7
-            mkdir(outputPath);
-        end
-    
-        annotateSession(deviceId, sessionId, sessionFilePath, outputPath, fileName);
+        sprintf(strcat('starting annotation for session_', sprintf('%03d', sessionId)));
+        annotateSession(deviceId, sessionId, outputDeviceFolder);
         
         sessionId = sessionId + 1;
         
         sessionFilePath = strcat(folderPath, inputFilePrefix, sprintf('%03d', sessionId), '.csv');
     end
+    
+    sprintf(strcat('no more sessions found for ', folderPath))
+    
 else
+    
     sprintf(strcat('the folder ', folderPath, 'could not be found'))
 end
 

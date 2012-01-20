@@ -1,4 +1,4 @@
-function [ SessionData AnnotatedClusters ] = annotateSession( deviceId, sessionId, fileName, outputPath, outputFileName)
+function [ SessionGpsData AnnotatedClusters ] = annotateSession( deviceId, sessionId, outputPath)
 %ANNOTATESESSION a tool to annote the clusters of a session
 %
 %   INPUT:
@@ -19,20 +19,34 @@ behaviourClasses = {'unknown', 'sleeping', 'digesting', 'flying',...
 AnnotatedClusters = [];
     
 % read the session data from input file
-SessionData = readgps(fileName);
+SessionGpsData = readgps(deviceId, sessionId);
 
-% SessionData = normalizeHeight(SessionData);
+% read accelerometer data from file
+SessionAccData = readAcc(deviceId, sessionId);
 
-% write sessionData to file (not included now)
-
-% dlmwrite(strcat(outputPath, '\', outputFileName, '_sessionData.csv'), SessionData);
+% SessionGpsData = normalizeHeight(SessionGpsData);
 
 % find clusters
-Clusters = analyseSession(SessionData);
+Clusters = analyseSession(SessionGpsData);
 
+% initiate annotation GUI 
 screenSize = get(0, 'ScreenSize');
 mainFigId = figure('Name','Cluster annotation', 'NumberTitle','off', ...
     'units','normalized','outerposition',[0 0 1 1]);
+
+% 1 - trajectory
+% 2 - velocity
+% 3 - acceleration
+% 4 - height
+% 5 - accelero?
+% 6 - features
+% 7 - input (clickable)
+%
+% [1 1 2 2 2 2 2]
+% [1 1 3 3 3 3 3]
+% [1 1 4 4 4 4 4]
+% [1 1 5 5 5 7 7]
+% [6 6 6 6 6 7 7]
 
 % set previousClusterClass to unknown
 previousClusterClass = 1;
@@ -46,14 +60,14 @@ for i = 1:size(Clusters, 1)
     clf %clearfigure
     
     % get cluster features and data
-    cluster = Clusters(i, :);
+    clusterTime = Clusters(i, :);
     [ClusterFeatures ClusterData] = ...
-        createClusterFeatures(cluster, SessionData);
+        createClusterFeatures(clusterTime, SessionGpsData);
     
     ClusterFeatures = [i ClusterFeatures previousClusterClass];
     
     % plot trajectory
-    SessionCoordinates = SessionData(:, 3:4);
+    SessionCoordinates = SessionGpsData(:, 3:4);
     ClusterCoordinates = ClusterData(:, 3:4);
     
     subplot(5,7,[1:2 8:9 15:16 22:23])
@@ -61,6 +75,9 @@ for i = 1:size(Clusters, 1)
     
     % plot data    
     plotClusterData(ClusterData);
+    
+    subplot(5, 7, 24:26)
+    plotClusterAcc(clusterTime, SessionAccData);
     
     subplot(5,7,29:33)
     
@@ -80,13 +97,14 @@ for i = 1:size(Clusters, 1)
     
     % write features to file
     
-    outputFileFeatures = strcat(outputPath, '/', outputFileName,...
+    outputFile = strcat('../annotatedData/device_', deviceId, ...
+        '/device_', deviceId, '_session_', sprintf('%03d', sessionId), ...
         '_clusterFeatures.csv');
     
     if i == 1
-        dlmwrite(outputFileFeatures, ClusterFeatures);
+        dlmwrite(outputFile, ClusterFeatures);
     else
-        dlmwrite(outputFileFeatures, ClusterFeatures, '-append', 'roffset', 0);
+        dlmwrite(outputFile, ClusterFeatures, '-append', 'roffset', 0);
     end
 end
 
