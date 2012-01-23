@@ -34,6 +34,9 @@ screenSize = get(0, 'ScreenSize');
 mainFigId = figure('Name','Cluster annotation', 'NumberTitle','off', ...
     'units','normalized','outerposition',[0 0 1 1]);
 
+% session info
+% add to seconds: 1199142000
+
 % 1 - trajectory
 % 2 - velocity
 % 3 - acceleration
@@ -51,12 +54,14 @@ mainFigId = figure('Name','Cluster annotation', 'NumberTitle','off', ...
 % set previousClusterClass to unknown
 previousClusterClass = 1;
 
+size(Clusters, 1)
+
 % for each cluster:
 %   find the data and features
 %   plot the trajectory, data and features
 %   ask for user input (behaviour-class)
 for i = 1:size(Clusters, 1)
-    
+    i
     clf %clearfigure
     
     % get cluster features and data
@@ -77,14 +82,17 @@ for i = 1:size(Clusters, 1)
     plotClusterData(ClusterData);
     
     % plot accelerometer data
-    subplot(5, 7, 24:26)
+    
     if size(SessionAccData) == [0 0]
         text(100, 100, 'No Accelerometer data found');
     else
+        subplot(5, 7, 24:26)
         plotClusterAcc(clusterTime, SessionAccData);
+        subplot(5, 7, 31:33)
+        %subplot(5, 7, 24:26)
     end
     
-    subplot(5,7,29:33)
+    subplot(5,7,29:30)
     
     % show features  
     plotFeatureInfo(ClusterFeatures, behaviourClasses);
