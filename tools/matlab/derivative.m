@@ -4,10 +4,10 @@ function out = derivative(coordinates)
     % Output: Matrix with 2d vectors [vec1 ; vec2 ; ...; vec_n]
     % The length of the vectors represent the speed, the direction represents the
     % change of direction     
-    speed1 = coordinates(1:size(coordinates, 1)-1, 2:3);
-    speed2 = coordinates(2:size(coordinates, 1), 2:3);
-    time1 = coordinates(1:size(coordinates, 1)-1, 1);
-    time2 = coordinates(2:size(coordinates, 1), 1);
+    speed1 = coordinates(1:end-1, 2:3);
+    speed2 = coordinates(2:end, 2:3);
+    time1 = coordinates(1:end-1, 1);
+    time2 = coordinates(2:end, 1);
     out(:,1) = coordinates(:,1);
     out(size(out, 1), :) = [];
     for i = 1:size(speed1, 2)
