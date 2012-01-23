@@ -13,7 +13,7 @@ ClusterAccData = SessionAccData(inCluster, 2:6);
 
 % get all time-stamps and find the middle one
 timeEntries = unique(ClusterAccData(:, 1));
-timeToShow = timeEntries(round(size(timeEntries, 1)/2));
+timeToShow = timeEntries(ceil(size(timeEntries, 1)/2));
 isEntryToShow = ClusterAccData == timeToShow; 
 
 % get the data of the correct time stamp
