@@ -6,7 +6,7 @@ function [Gps Clusters] = main(deviceId, sessionId)
     % Threshold based on different time stamps, used for findClusters, determines
     % what datapoints becomes peaks?
     %peakThres = 2*10^(-5);
-    peakThres = 0.005;
+    peakThres = 5;
 
     % Threshold used for awesomizeClusters, determines peaks in a range become one? 
     timeThres = 1200;
@@ -17,7 +17,9 @@ function [Gps Clusters] = main(deviceId, sessionId)
     Input = getTimeAndSpeed(Gps);
     
     % plot the speed
-    figure(1);
+    fig = figure(1);
+    set(fig,'units','normalized','outerposition',[0 0 1 1]);
+
     subplot(3,1,1);
     plotSecondDerivative('velocity', Input(:, 2:3), Input(:, 1));
     
@@ -34,10 +36,9 @@ function [Gps Clusters] = main(deviceId, sessionId)
         [Clusters(:, 1); Clusters(:, 2)]);
 
     % group sequences of small clusters into bigger ones
-    Clusters = awesomizeClusters(Clusters, timeThres);
+    Clusters = groupClusters(Clusters, timeThres);
     
     % plot the new clusters
     subplot(3,1,3);
     plotSecondDerivative('acceleration and grouped clusters', Derivative,...
         time, [Clusters(:, 1); Clusters(:, 2)]);
-    

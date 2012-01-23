@@ -20,6 +20,10 @@ if nargin < 4
     clusterStart = [];
 end
 
+color1 = 'r';
+color2 = 'c';
+
+
 % normalize times to start at 0 and convert to zeros
 beginTime = timeStamps(1);
 cluster = (clusterStart - beginTime)/60;
@@ -43,9 +47,15 @@ title(label);
 
 % draw a vertical line at the start/end of all clusters
 hold on;
-for p = 1:length(cluster)
-    line([cluster(p) cluster(p)], [0 max(y)], 'Color','r');
+for p = 1:floor(length(cluster)/2)
+    line([cluster(p) cluster(p)], [0 max(y)], 'Color', color1);
 end
+for q = ceil(length(cluster)/2):length(cluster)
+    if q > 0
+        line([cluster(q) cluster(q)], [0 max(y)], 'Color', color2);
+    end
+end
+
 hold off;
 
 %':+', 'MarkerFaceColor', 'auto', 'MarkerSize', 10);
