@@ -1,4 +1,4 @@
-function [ClusterFeatures, ClusterPoints] = createClusterFeatures( Cluster, Data )
+    function [ClusterFeatures, ClusterPoints] = createClusterFeatures( Cluster, Data )
 % CREATE_CLUSTER_FEATURES Creates feature vectors for clusters
 %
 % Arguments:
@@ -9,7 +9,7 @@ function [ClusterFeatures, ClusterPoints] = createClusterFeatures( Cluster, Data
 %   Array of features of this cluster
 %   format: 
 %   [startTime(s), endTime(s), duration(s), avgSpeed(m/s), ...
-%       heightDiff(m), grndDist(km), totDist(km)]
+%       heightDiff(m), grndDist(km), totDist(km), angleVar(rad)]
 
 startTime = Cluster(1);
 endTime = Cluster(2);
@@ -44,9 +44,19 @@ for i = 1:size(Points,1)-1
     totDist = totDist + deg2km(stdist(lat, lon));
 end
 
+% calculate the variance in direction
+speeds = Points(:, 9:11);
+speeds = speeds/norm(speeds); % only interested in angle
+
+for i=1:size(speeds,1)-1
+    angle(i) = atan2(norm(cross(speeds(i,:)',speeds(i+1,:)')),dot(speeds(i,:)',speeds(i+1,:)'));
+end
+angleVar = var(angle);
+    
+
 % return data
 ClusterFeatures = ...
-    [startTime, endTime, duration, avgSpeed, heightDiff, grndDist, totDist];
+    [startTime, endTime, duration, avgSpeed, heightDiff, grndDist, totDist, angleVar];
 
 end
 
