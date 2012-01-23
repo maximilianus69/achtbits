@@ -54,14 +54,11 @@ mainFigId = figure('Name','Cluster annotation', 'NumberTitle','off', ...
 % set previousClusterClass to unknown
 previousClusterClass = 1;
 
-size(Clusters, 1)
-
 % for each cluster:
 %   find the data and features
 %   plot the trajectory, data and features
 %   ask for user input (behaviour-class)
 for i = 1:size(Clusters, 1)
-    i
     clf %clearfigure
     
     % get cluster features and data
