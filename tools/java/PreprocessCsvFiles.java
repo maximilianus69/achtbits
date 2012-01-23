@@ -222,12 +222,20 @@ System.out.println("accel lines lost : " + resultArray[3]);
                     " (" + lostAccelLines + " lines lost).");
 
             }
-
         }
         else
-            System.out.println("Error, needs three or four arguments, 1st: input file name, 2nd: output file name 3rd (optional) input file for accelerometer data"); 
+            System.out.println("Error, needs three or four arguments, 1st: input file name, 2nd: output dir 3rd (optional) input file for accelerometer data"); 
+
 
         return resultArray;
+    }
+
+    public static void exitCheck()
+    {
+        //System.out.println("CHECKING TO SEE IF THE OUTPUT DIR SHOULD BE DELETED " +
+        //    outputDirectory);
+        Io.deleteIfOnlyLabelsWereWritten(outputDirectory);
+        System.exit(1);
     }
 
     public static void main (String args[])
@@ -262,7 +270,7 @@ System.out.println("accel lines lost : " + resultArray[3]);
             System.out.println("Printing lines.get(0) for debug purposes");
             for (String s: lines.get(0))
                 System.out.println(s);
-            System.exit(1);
+            exitCheck();
         }
         // unreachable code, freakin' compiler
         return -1;
