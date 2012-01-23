@@ -49,9 +49,9 @@ speeds = Points(:, 9:11);
 speeds = speeds/norm(speeds); % only interested in angle
 
 for i=1:size(speeds,1)-1
-    angle(i) = atan2(norm(cross(speeds(i,:)',speeds(i+1,:)')),dot(speeds(i,:)',speeds(i+1,:)'));
+    theta(i) = atan2(norm(cross(speeds(i,:)',speeds(i+1,:)')),dot(speeds(i,:)',speeds(i+1,:)'));
 end
-angleVar = var(angle);
+angleVar = var(theta);
     
 
 % return data
