@@ -9,6 +9,10 @@ import java.awt.Rectangle;
 * accelerometer data. It will create additional .csv session files next to the gps
 * files that contain the accelerometer data files.
 *
+* This file has been edited badly to process information about the data by
+* Wrapper.java. This does add some bad stuff and it doesn't even work. Should
+* use an earlier version of this file.
+*
 * Parsed .csv files are dropped in a newly created folder ('deviceX') in the output
 * folder.
 *
@@ -60,7 +64,7 @@ class PreprocessCsvFiles
     ///// (Should) Read these from the config file /////
 
     /** Boundaries to filter resolution in entrypoints per minutes. */
-    private static float lowerBoundresolution = 1; 
+    private static float lowerBoundresolution = 0.2f; 
     private static float upperBoundresolution = 90; 
 
     /** Minimum session time before we want to include it. */
@@ -379,7 +383,7 @@ System.out.println("accel lines lost : " + resultArray[3]);
         long sessionTimeSeconds = Long.valueOf(session.get(session.size() - 1)[1])- 
             Long.valueOf(session.get(0)[1]);
         sessionTimeSeconds = sessionTimeSeconds > 0 ? sessionTimeSeconds : 1;
-        float sessionResolution = (sessionTimeSeconds/session.size())/60;
+        float sessionResolution = (float)((float)session.size()/(sessionTimeSeconds/60));
 
         // large and lengthy enough to call this session a session
         // also check if resolution is alllll right
