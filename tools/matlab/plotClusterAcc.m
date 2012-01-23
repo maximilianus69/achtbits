@@ -8,29 +8,35 @@ afterStartCluster = SessionAccTime >= clusterTime(1);
 beforeEndCluster = SessionAccTime <= clusterTime(2);
 inCluster = afterStartCluster & beforeEndCluster;
 
-% get the data thawt is in cluster
-ClusterAccData = SessionAccData(inCluster, 2:6);
+if sum(inCluster) > 0
 
-% get all time-stamps and find the middle one
-timeEntries = unique(ClusterAccData(:, 1));
-timeToShow = timeEntries(ceil(size(timeEntries, 1)/2));
-isEntryToShow = ClusterAccData == timeToShow; 
+    % get the data that is in cluster
+    ClusterAccData = SessionAccData(inCluster, 2:6);
 
-% get the data of the correct time stamp
-entriesToShow = ClusterAccData(isEntryToShow, 2:5);
+    % get all time-stamps and find the middle one
+    timeEntries = unique(ClusterAccData(:, 1));
+    % amountOfEntries = size(timeEntries, 1);
 
-% plot the data
-x = entriesToShow(:, 1);
+    timeToShow = timeEntries(round(size(timeEntries, 1)/2));
+    isEntryToShow = ClusterAccData == timeToShow; 
 
-hold('on')
-plot(x, entriesToShow(:, 2), 'color', 'red')
+    % get the data of the correct time stamp
+    entriesToShow = ClusterAccData(isEntryToShow, 2:5);
 
-plot(x, entriesToShow(:, 3), 'color', 'green')
+    % plot the data
+    x = entriesToShow(:, 1);
 
-plot(x, entriesToShow(:, 4), 'color', 'blue')
+    hold('on')
+    plot(x, entriesToShow(:, 2), 'color', 'red')
 
-title('accelerometer');
+    plot(x, entriesToShow(:, 3), 'color', 'green')
 
-hold('off')
+    plot(x, entriesToShow(:, 4), 'color', 'blue')
+
+    title('accelerometer');
+
+    hold('off')
+end
+
 end
 
