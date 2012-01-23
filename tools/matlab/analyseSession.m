@@ -23,8 +23,6 @@ peakThres = 0.015;
 
 % find all threshold crossings
 Clusters = findClusters(time, Derivative, peakThres);
-% This puts the very last point as the last in the cluster
-Clusters(size(Clusters, 1), 2) = time(size(time, 1))
 
 % group sequences of small clusters into bigger ones
 Clusters = awesomizeClusters(Clusters, 1200);

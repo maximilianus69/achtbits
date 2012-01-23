@@ -42,5 +42,7 @@ Clusters = [Time(1), Time(PeakPos(1))];
 for i = 1:(size(PeakPos, 1)-1)
     Clusters = [Clusters; Time(PeakPos(i)) Time(PeakPos(i+1))];
 end
+% This puts the very last point as the last in the cluster
+Clusters(size(Clusters, 1), 2) = Time(size(Time, 1));
 
 
