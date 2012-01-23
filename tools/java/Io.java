@@ -12,6 +12,18 @@ public class Io
         return (new File(directory)).mkdir();
     }
 
+    public static void deleteIfOnlyLabelsWereWritten(String outputDirectory)
+    {
+        File outputDir = new File(outputDirectory);
+
+        System.out.println("Dir list length: " + outputDir.list().length);
+
+        // if only labels.txt was written (this should be checked earlier
+        // and not deleted afterwards) delete the folder
+        if ((new File(outputDirectory)).list().length ==  1)
+            (new File(outputDirectory)).delete();
+    }
+
     // {{{ functions to write.
    
     /** Writes an arralyist with accelerometerpoints to file. */ 

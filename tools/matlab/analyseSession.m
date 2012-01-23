@@ -19,7 +19,7 @@ Der = derivative([time Speed]);
 Derivative = Der(:, 2:3);
 
 % Threshold based on different time stamps
-peakThres = 0.015;
+peakThres = 5;
 
 % find all threshold crossings
 Clusters = findClusters(time, Derivative, peakThres);
