@@ -13,7 +13,8 @@ clusterX = ClusterCoordinates(:, 1);
 clusterY = ClusterCoordinates(:, 2);
 
 hold('on')
-axis([min(sessionY)-0.05 max(sessionY)+0.05 min(sessionX)-0.05 max(sessionX)+0.05]);
+margin = 0;
+axis([min(sessionY)-margin max(sessionY)+margin min(sessionX)-margin max(sessionX)+margin]);
 
 geoshow(gca, 'plot/nh_zh_shape/nh_zh_shape.shp', ...
     'LineWidth',  1, ...
