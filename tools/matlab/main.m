@@ -1,4 +1,4 @@
-function [Gps Clusters] = main(fileName)
+function [Gps Clusters] = main(deviceId, session)
     % Wrapper for reading gps coordinates from a csv file, taking the ones above
     % the north sea, and calculating vectors with the direction and speed
     % It uses readgps and makeVectors
@@ -13,7 +13,7 @@ function [Gps Clusters] = main(fileName)
 
 
     addpath('plot');
-    Gps = readgps(fileName);
+    Gps = readgps(deviceId, session);
     Input = getTimeAndSpeed(Gps);
     
     % plot the speed
