@@ -91,8 +91,9 @@ for i = 1:size(Clusters, 1)
     
     % plot accelerometer data
     
-    subplot(5, 7, 5:7)
+    % 
     if size(SessionAccData) == [0 0]
+        subplot(5, 7, 12:14)
         text(0.2, 0.5, 'No Accelerometer data found');
     else        
         plotClusterAcc(clusterTime, SessionAccData);
