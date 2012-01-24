@@ -1,0 +1,55 @@
+\documentclass{beamer}
+
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{enumerate}
+\usepackage{subfigure}
+
+\graphicspath{{images/}}
+
+\title{Acht-Bits \\ \small }
+\author{Sosha Maarten Maarten Jesse}
+\institute{UvA}
+
+\begin{document}
+\maketitle
+
+\begin{frame}{Database \& Tools}
+
+\begin{block}{GPS Data}
+The transmitter collects accelerometer and GPS data. The accelerometer data is very big so we decided to start with only the GPS data.
+\begin{itemize}
+\item Get latitude, longitude and altitude data
+\item Only use points above the North Sea
+\end{itemize}
+\end{block}
+
+\begin{block}{Software}
+We use the following tools:
+\begin{itemize}
+\item Matlab for calculations
+\item Google Earth for visualizing bird flight in 3D (?)
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\begin{frame}{Clusters}
+\begin{block}{Clustering}
+We want our program to detect intervals in which the bird is performing a behaviour; creating clusters of data that are easy to label. 
+To detect clusters we search for \emph{change} in speed and direction, the second order derivative of the location. The plan:
+\begin{itemize}
+\item Calculate the derivative of the speed as a vector
+\item If this vector is above a threshold it is a cluster transition
+\item Areas with unstable vectors also become clusters
+\item Manually label the clusters
+\end{itemize}
+\end{block}
+
+\begin{block}{Learning}
+We then attach features (representations of the GPS data) to each cluster so we can use machine learning to automatically label data.
+\end{block}
+
+\end{frame}
+
+\end{document}
