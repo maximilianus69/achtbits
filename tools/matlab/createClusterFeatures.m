@@ -1,4 +1,4 @@
-    function [ClusterFeatures, ClusterPoints] = createClusterFeatures( Cluster, Data )
+function [ClusterFeatures, ClusterPoints] = createClusterFeatures( Cluster, Data )
 % CREATE_CLUSTER_FEATURES Creates feature vectors for clusters
 %
 % Arguments:
