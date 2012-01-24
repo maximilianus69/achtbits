@@ -27,8 +27,8 @@ function Clusters = findClusters(Time, Derivative, peakThres)
             % IF there is a slowdown, the next i should be 1 (going from 1 to 0):
             NextI = 1;
         elseif(~Peaks(i) && Peaks(i+1))
-            % If we go from - to 1:
-            NewPeaks(i) = 1;
+            % If we go from 0 to 1:
+            NextI = 1;
         elseif(NextI)
             NewPeaks(i) = 1;
             NextI = 0;
