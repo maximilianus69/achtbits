@@ -14,7 +14,7 @@ function [ SessionGpsData AnnotatedClusters ] = annotateSession( deviceId, sessi
 %       - user can input annotation for cluster
 
 behaviourClasses = {'unknown', 'sleeping', 'digesting', 'flying',...
-        'diving', 'trawler'};
+        'diving'};
     
 AnnotatedClusters = [];
     
@@ -36,6 +36,13 @@ mainFigId = figure('Name','Cluster annotation', 'NumberTitle','off', ...
 
 % session info
 % add to seconds: 1199142000
+sessionBeginTime = SessionGpsData(2, 1)*1000 + 1199142000;
+sessionBeginTime = sessionBeginTime/24/3600
+datenum('1/1/1970','mm/dd/yyyy')
+sessionBeginTime = sessionBeginTime + datenum('1/1/1970','mm/dd/yyyy');
+datestr(sessionBeginTime)
+
+% LAYOUT:
 
 % 1 - trajectory
 % 2 - velocity
@@ -72,24 +79,25 @@ for i = 1:size(Clusters, 1)
     SessionCoordinates = SessionGpsData(:, 3:4);
     ClusterCoordinates = ClusterData(:, 3:4);
     
-    subplot(5,7,[1:2 8:9 15:16 22:23])
+    subplot(5,7,[1:2 8:9 15:16]) %22:23
     plotTrajectory(SessionCoordinates, ClusterCoordinates);
+    
+    subplot(5, 7, [22:23 29:30])
+    plotTrajectory(ClusterCoordinates);
     
     % plot data    
     plotClusterData(ClusterData);
     
     % plot accelerometer data
     
+    subplot(5, 7, 24:26)
     if size(SessionAccData) == [0 0]
-        text(100, 100, 'No Accelerometer data found');
-    else
-        subplot(5, 7, 24:26)
+        text(0.2, 0.5, 'No Accelerometer data found');
+    else        
         plotClusterAcc(clusterTime, SessionAccData);
-        subplot(5, 7, 31:33)
-        %subplot(5, 7, 24:26)
     end
     
-    subplot(5,7,29:30)
+    subplot(5,7,31:33)
     
     % show features  
     plotFeatureInfo(ClusterFeatures, behaviourClasses);
