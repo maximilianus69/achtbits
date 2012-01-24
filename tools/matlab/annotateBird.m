@@ -14,6 +14,7 @@ function [ output_args ] = annotateBird( deviceId, annotationType, startSession 
 %       device_DEVICEID_session_SESSIONID_clusterFeatures.csv
 
 addpath('plot');
+format long;
 
 if nargin < 3
     sessionId = 0;
