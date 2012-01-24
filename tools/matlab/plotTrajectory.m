@@ -39,19 +39,19 @@ xDiff = maxX - minX;
 
 yDiffScaled = yDiff*figureRatio;
 
-if xDiff > yDiffScaled
-    % long full
-    % lat scaled to fit figure
-    yMargin = (yDiff * correctionRatio)/2;
-    minY = minY-yMargin;
-    maxY = maxY+yMargin;
-elseif yDiffScaled > xDiff
-    % long scaled to fit figure
-    % lat full
-    xMargin = (xDiff * correctionRatio)/2;
-    minX = minX-xMargin;
-    maxX = maxX+xMargin;
-end
+%if xDiff > yDiffScaled
+%    % long full
+%    % lat scaled to fit figure
+%    yMargin = (yDiff * correctionRatio)/2;
+%    minY = minY-yMargin;
+%    maxY = maxY+yMargin;
+%elseif yDiffScaled > xDiff
+%    % long scaled to fit figure
+%    % lat full
+%    xMargin = (xDiff * correctionRatio)/2;
+%    minX = minX-xMargin;
+%    maxX = maxX+xMargin;
+%end
 
 axis([minY maxY minX maxX]);
 
