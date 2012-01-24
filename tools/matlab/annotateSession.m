@@ -32,15 +32,15 @@ Clusters = analyseSession(SessionGpsData);
 % initiate annotation GUI 
 screenSize = get(0, 'ScreenSize');
 mainFigId = figure('Name','Cluster annotation', 'NumberTitle','off', ...
-    'units','normalized','outerposition',[0 0 1 1]);
+    'units','normalized','outerposition',[0 0.05 1 0.95]);
 
 % session info
 % add to seconds: 1199142000
 sessionBeginTime = SessionGpsData(2, 1)*1000 + 1199142000;
-sessionBeginTime = sessionBeginTime/24/3600
-datenum('1/1/1970','mm/dd/yyyy')
+sessionBeginTime = sessionBeginTime/24/3600;
+datenum('1/1/1970','mm/dd/yyyy');
 sessionBeginTime = sessionBeginTime + datenum('1/1/1970','mm/dd/yyyy');
-datestr(sessionBeginTime)
+datestr(sessionBeginTime);
 
 % LAYOUT:
 
@@ -82,27 +82,28 @@ for i = 1:size(Clusters, 1)
     subplot(5,7,[1:2 8:9 15:16]) %22:23
     plotTrajectory(SessionCoordinates, ClusterCoordinates);
     
-    subplot(5, 7, [22:23 29:30])
+    subplot(5, 7, [3:4 10:11 17:18])
     plotTrajectory(ClusterCoordinates);
     
     % plot data    
-    plotClusterData(ClusterData);
+    subplot(5, 7, 22:25)
+    plotVelAndAcc(ClusterData);
     
     % plot accelerometer data
     
-    subplot(5, 7, 24:26)
+    subplot(5, 7, 5:7)
     if size(SessionAccData) == [0 0]
         text(0.2, 0.5, 'No Accelerometer data found');
     else        
         plotClusterAcc(clusterTime, SessionAccData);
     end
     
-    subplot(5,7,31:33)
+    subplot(5,7,[26:27 33:34])
     
     % show features  
     plotFeatureInfo(ClusterFeatures, behaviourClasses);
 
-    subplot(5,7,[27:28 34:35])
+    subplot(5,7,[28 35])
     
     % get behaviour input
     behaviour = showControls(behaviourClasses);
