@@ -25,6 +25,11 @@ function AwesomeClusters = groupClusters(LameClusters, timeThreshold)
     % array to loop through:
     array = (1:size(Clusters, 1)-1);
 
+    % Boolean that indicates a cluster ended.
+    clusterEnded = 0;
+    % Start of a cluster (needed to check if the start isn't too far from the rest)
+    clusterStart = 1;
+
     % The loop where the awesomizing magic happens!
     for i = array
         % When we have a peak that is relatively far from the current peaks in the chaos cluster,
@@ -32,6 +37,9 @@ function AwesomeClusters = groupClusters(LameClusters, timeThreshold)
         if(((Clusters(i+1) - Clusters(i)) > (averageDifference * differenceThreshold)) && num > numThreshold)
             % TODO: check if the first timestamp is too far away in regards to 
             % average and replace it with 2nd timestamp if necessary
+            if((Clusters(clusterStart+1) - Clusters(clusterStart) < averageDifference * differenceThreshold) && num > numThreshold)
+                AwesomeClusters(j, 1) = Clusters(clusterStart + 1);
+            end
             AwesomeClusters(j, 2) = Clusters(i);
             j = j + 1;
             AwesomeClusters(j, 1) = Clusters(i);
@@ -41,17 +49,23 @@ function AwesomeClusters = groupClusters(LameClusters, timeThreshold)
             % Reinitialize averageDifference and num
             averageDifference = 1000;
             num = 0;
+            clusterStart = i+1;
         % In the case that the difference between two clusters is too small
         % The cluster should not end, the average should be adjusted.
         elseif(Clusters(i+1) - Clusters(i) < timeThreshold) 
-            averageDifference = (num * averageDifference + Diff(i)) / (num + 1)
-            num = num + 1
+            if(i ~= clusterStart)
+                averageDifference = (num * averageDifference + Diff(i)) / (num + 1);
+                num = num + 1
+            end
         % In the case that the difference between two clusters is big enough,
         % we should end the current cluster.
         elseif(Clusters(i+1) - Clusters(i) > timeThreshold)
             % TODO: Also check if the first timestamp is too far away in regards 
             % to average and replace it with 2nd timestamp if necessary
             % The current cluster ending
+            if((Clusters(clusterStart+1) - Clusters(clusterStart) < averageDifference * differenceThreshold) && num > numThreshold)
+                AwesomeClusters(j, 1) = Clusters(clusterStart + 1);
+            end
             AwesomeClusters(j, 2) = Clusters(i);
             j = j + 1;
             AwesomeClusters(j, 1) = Clusters(i);
@@ -61,7 +75,9 @@ function AwesomeClusters = groupClusters(LameClusters, timeThreshold)
             % Reinitialize averageDifference and num
             averageDifference = 1000;
             num = 0;
+            clusterStart = i+1;
         end
+        % If a cluster ended, we should check if the start of the cluster is far away from the current cluster.
     end
     AwesomeClusters(j, 2) = Clusters(size(Clusters, 1))
     % Remove too short clusters
