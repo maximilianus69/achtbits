@@ -79,10 +79,10 @@ function AwesomeClusters = awesomizeClusters(LameClusters, timeThreshold)
         end
         % If a cluster ended, we should check if the start of the cluster is far away from the current cluster.
     end
-    AwesomeClusters(j, 2) = Clusters(size(Clusters, 1))
+    AwesomeClusters(j, 2) = Clusters(size(Clusters, 1));
     % Remove possible double value
     if(AwesomeClusters(size(AwesomeClusters, 1), 1) == AwesomeClusters(size(AwesomeClusters, 1), 2))
-        AwesomeClusters(size(AwesomeClusters, 1), :) = []
+        AwesomeClusters(size(AwesomeClusters, 1), :) = [];
     end
     % Remove too short clusters
     D = AwesomeClusters(:, 2) - AwesomeClusters(:, 1);
@@ -91,7 +91,7 @@ function AwesomeClusters = awesomizeClusters(LameClusters, timeThreshold)
     % Don't delete the last cluster
     DB(size(DB, 1)) = 1;
     AwesomeClusters = AwesomeClusters .* [DB DB];
-    AwesomeClusters(~any(AwesomeClusters,2),:) = []
+    AwesomeClusters(~any(AwesomeClusters,2),:) = [];
 
 
         
