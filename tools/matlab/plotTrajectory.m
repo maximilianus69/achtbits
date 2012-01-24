@@ -53,7 +53,7 @@ yDiffScaled = yDiff*figureRatio;
 %    maxX = maxX+xMargin;
 %end
 
-axis([minY maxY minX maxX]);
+%axis([minY maxY minX maxX]);
 
 geoshow(gca, 'plot/nh_zh_shape/nh_zh_shape.shp',...
     'LineWidth',  1, ...
@@ -65,7 +65,7 @@ geoshow(gca, sessionX, sessionY, ...
 
 if ~hasCluster
     geoshow(gca, sessionX, sessionY, ...
-    'DisplayType',  'point', 'MarkerSize', 3, 'MarkerEdgeColor', 'green');
+    'DisplayType',  'point', 'MarkerSize', 5, 'MarkerEdgeColor', 'r');
 end
 
 if hasCluster
