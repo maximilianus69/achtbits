@@ -122,7 +122,7 @@ for i = 1:size(Clusters, 1)
     if i == 1
         dlmwrite(outputFile, ClusterFeatures);
     else
-        dlmwrite(outputFile, ClusterFeatures, '-append', 'roffset', 0);
+        dlmwrite(outputFile, ClusterFeatures, '-append', 'roffset', 0, 'precision',  '%10f');
     end
 end
 

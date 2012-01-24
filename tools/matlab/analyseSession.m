@@ -8,6 +8,10 @@ function Clusters = analyseSession( SessionData )
 
 % *** maybe add more session analysis?***
 
+% Threshold based on different time stamps
+peakThres = 5;
+% Threshold for time between peaks
+timeThreshold = 1200;
 
 % get time and speed
 time = SessionData(:, 2);
@@ -18,14 +22,12 @@ Der = derivative([time Speed]);
 
 Derivative = Der(:, 2:3);
 
-% Threshold based on different time stamps
-peakThres = 5;
 
 % find all threshold crossings
 Clusters = findClusters(time, Derivative, peakThres);
 
 % group sequences of small clusters into bigger ones
-Clusters = awesomizeClusters(Clusters, 1200);
+Clusters = awesomizeClusters(Clusters, timeThreshold);
 
 end
 
