@@ -55,7 +55,7 @@ function AwesomeClusters = awesomizeClusters(LameClusters, timeThreshold)
         elseif(Clusters(i+1) - Clusters(i) < timeThreshold) 
             if(i ~= clusterStart)
                 averageDifference = (num * averageDifference + Diff(i)) / (num + 1);
-                num = num + 1
+                num = num + 1;
             end
         % In the case that the difference between two clusters is big enough,
         % we should end the current cluster.
@@ -94,7 +94,7 @@ function AwesomeClusters = awesomizeClusters(LameClusters, timeThreshold)
         DB(size(DB, 1)) = 0;
     end
     AwesomeClusters = AwesomeClusters .* [DB DB];
-    AwesomeClusters(~any(AwesomeClusters,2),:) = []
+    AwesomeClusters(~any(AwesomeClusters,2),:) = [];
 
 
         
