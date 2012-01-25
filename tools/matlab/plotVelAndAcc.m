@@ -1,4 +1,4 @@
-function [ output_args ] = plotVelAndAcc( SessionData )
+function [ output_args ] = plotVelAndAcc( SessionData, accPoints )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -15,16 +15,23 @@ timeNorm = (time - beginTime)/60;
 x = timeNorm;
 y = zeros(1, N);
 
+% normalize speed
 for i = 1:N
     y(i) = norm(Speed(i, :));
 end
 
+% plot speed
 plot(x, y, '-s','LineWidth',1, ...
                 'MarkerEdgeColor','k', ...
                 'MarkerFaceColor','auto', ...
                 'MarkerSize',4); 
 
 hold on
+
+sizeAcc = size(accPoints, 1);
+if sizeAcc > 0
+    line([timeNorm(accPoints) timeNorm(accPoints)], [0 max(y)], 'color', 'k')
+end
 
 % find the acceleration
 Der = derivative([time Speed]);
