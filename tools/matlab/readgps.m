@@ -1,4 +1,4 @@
-function SessionGpsData = readGps( deviceId, sessionId )
+function SessionGpsData = readgps( deviceId, sessionId )
 %UNTITLED5 Summary of this function goes here
 %   Detailed explanation goes here
 

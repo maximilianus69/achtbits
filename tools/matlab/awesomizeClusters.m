@@ -3,7 +3,7 @@ function AwesomeClusters = awesomizeClusters(LameClusters, timeThreshold)
     % to find the `chaos' clusters.
     % Input: [startTime, stopTime; startTime2, stopTime2; ...], time thresold
     % Output: Same as input, but with fewer clusters.
-    differenceThreshold = 50;
+    differenceThreshold = 10;
     numThreshold = 10;
     Diff = LameClusters(:, 2) - LameClusters(:, 1);
     DiffBool = Diff > timeThreshold;
