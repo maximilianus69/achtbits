@@ -4,6 +4,10 @@ function out = derivative(coordinates)
     % Output: Matrix with 3d vectors [vec1 ; vec2 ; ...; vec_n]
     % The length of the vectors represent the speed, the direction represents the
     % change of direction     
+    
+    % TODO: This now uses the speed in two directions. Shouldn't we look at the 
+    % absolute speed difference? (As in: the difference in the x-y-speed, not the difference
+    % in the x-speed and y-speed seperately?
     if(size(coordinates,1) < 2)
         out = [coordinates(1,1),0,0];
     else
