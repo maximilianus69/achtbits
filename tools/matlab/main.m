@@ -25,7 +25,7 @@ function [Gps Clusters] = main(deviceId, sessionId)
     Der = derivative(Input);
     % split Der in time and derivative
     time = Der(:, 1);
-    Derivative = Der(:, 2:3);
+    Derivative = Der(:, 2);
 
     Clusters = findClusters(time, Derivative, peakThres);
 
