@@ -2,11 +2,14 @@ function pointsShown = plotClusterAcc( clusterTime, SessionAccData )
 %PLOTCLUSTERACC plots accelerometer data for cluster
 %   Detailed explanation goes here
 
-% finds all timestamps in SessionAccDatam also in cluster 
+pointsShown = [];
+
+% finds all timestamps in SessionAccData also in cluster 
 SessionAccTime = SessionAccData(:, 2);
 afterStartCluster = SessionAccTime >= clusterTime(1);
 beforeEndCluster = SessionAccTime <= clusterTime(2);
 inCluster = afterStartCluster & beforeEndCluster;
+
 
 if sum(inCluster) > 0
 
@@ -51,7 +54,8 @@ if sum(inCluster) > 0
     end
     subplot(5, 7, 19:21)
     plotAcc(SessionAccData, time3);
-
+else
+    text(0.2, 0.5, 'No Accelerometer data found');
 end
 
 end

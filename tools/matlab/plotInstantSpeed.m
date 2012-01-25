@@ -1,6 +1,7 @@
 function out = plotInstantSpeed( SessionGpsData )
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+%PLOT_INSTANT_SPEED Plots velocity vectors of momentary speed
+%
+% SessionGpsData: data as outputted by gpsread
 
 time = SessionGpsData(:,2);
 
@@ -13,7 +14,7 @@ hold on;
 x = timeNorm;
 y = ones(size(SessionGpsData,1),1);
 speedx = SessionGpsData(:,9);
-speedy = SessionGpsData(:,9);
+speedy = SessionGpsData(:,10);
 
 quiver(x, y, speedx, speedy);
 
