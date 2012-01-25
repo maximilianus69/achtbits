@@ -29,7 +29,7 @@ function Clusters = findClusters(Time, Derivative, peakThres)
             NextI = 1;
         elseif(~Peaks(i) && Peaks(i+1))
             % If we go from 0 to 1:
-            NewPeaks(i,:) = 1;
+            NewPeaks(i-1,:) = 1;
         end
     end
 PeakPos = find(NewPeaks);

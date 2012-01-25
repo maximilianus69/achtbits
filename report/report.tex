@@ -4,7 +4,7 @@
 \usepackage{graphicx}
 \usepackage{verbatim}
 \usepackage[all]{xy}
-\usepackage[dutch]{babel}
+\usepackage[english]{babel}
 
 \newcommand{\bits}{BITS}
 % The current value of the timeThreshold given to awesomizeClusters.
@@ -20,6 +20,11 @@ BIrd Tracking System}}
 %\email{mrtndwrd, maarten.inja, jesse.eisses, soshappel@gmail.com}
 \begin{document}
 \maketitle
+\begin{abstract}
+Of course we will have an abstract! But we can't type this yet, because we don't
+know the results. And everybody knows abstracts have spoilers! Also Dumbledore
+gets killed by Snape.
+\end{abstract}
 \section{Introduction}
 % I guess we will introduce the BITS, introduce some other stuff, maybe tell
 % something about learning algorithms in general
@@ -34,8 +39,8 @@ BIrd Tracking System}}
  \subsection{Finding clusters in the data}
  % Describes how we find the peaks/clusters in the data (Maarten de Waard will
  % fill this in)
- This section will discuss how we find clusters in the raw data that has been
- given. This is needed, to annotate these clusters, so we can later on use a
+ This section will discuss how we find clusters in the raw data. 
+ This is needed, to annotate these clusters, so we can later on use a
  learning algorithm on specified parts of the data.
 
  Probably the most important of the GPS data we get from \bits are the X and Y
@@ -50,6 +55,16 @@ BIrd Tracking System}}
  % TODO: Dit figuurtje maken. Ik kom er namelijk net achter dat de derivative
  % misschien niet exact doet wat we willen, omdat het speed1 en speed2 apart van
  % elkaar gebruikt. Een goeie hiervoor is device_535, sessie_000.
+\begin{figure}
+\centering
+\includegraphics[width=.8\textwidth]{speed.pdf}
+\caption{The speed of the bird (above) and the difference in speed (under). As
+you can see, the difference is absolute (because this makes finding peaks
+easier). The difference is some times a bit higher, while the speed does not
+seem to differ at all. This means the bird changed his direction.}
+\label{fig:storyboard}
+\end{figure}
+
  As can be seen, the speed-difference is low on points where the bird is assumed
  to be flying or sitting on the water. In other points the speed differs a lot.
  On these places we can assume that the bird is foraging.
