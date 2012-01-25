@@ -53,7 +53,7 @@ yDiffScaled = yDiff*figureRatio;
 %    maxX = maxX+xMargin;
 %end
 
-%axis([minY maxY minX maxX]);
+axis([minY maxY minX maxX]);
 
 geoshow(gca, 'plot/nh_zh_shape/nh_zh_shape.shp',...
     'LineWidth',  1, ...
