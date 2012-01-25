@@ -28,6 +28,7 @@ plot(x, y, '-s','LineWidth',1, ...
 
 hold on
 
+% draw lines at each point that is plotted as accelero
 sizeAcc = size(accPoints, 1);
 if sizeAcc > 0
     line([timeNorm(accPoints) timeNorm(accPoints)], [0 max(y)], 'color', 'k')

@@ -29,18 +29,15 @@ SessionAccData = readAcc(deviceId, sessionId);
 % find clusters
 Clusters = analyseSession(SessionGpsData);
 
+dateTimeStart = timestampToDateTime(SessionGpsData(1, 2));
+%text(0.5, 0.5, dateTimeStart);
+
 % initiate annotation GUI 
 screenSize = get(0, 'ScreenSize');
-mainFigId = figure('Name','Cluster annotation', 'NumberTitle','off', ...
+mainFigId = figure('Name',strcat('Cluster annotation, session start: ', dateTimeStart), 'NumberTitle','off', ...
     'units','normalized','outerposition',[0 0.05 1 0.95]);
 
-% session info
-% add to seconds: 1199142000
-sessionBeginTime = SessionGpsData(2, 1)*1000 + 1199142000;
-sessionBeginTime = sessionBeginTime/24/3600;
-datenum('1/1/1970','mm/dd/yyyy');
-sessionBeginTime = sessionBeginTime + datenum('1/1/1970','mm/dd/yyyy');
-datestr(sessionBeginTime);
+
 
 % LAYOUT:
 
