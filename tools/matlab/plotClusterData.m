@@ -20,8 +20,7 @@ Derivative = Der(:, 2:3);
 % plot all the clusters
 
 subplot(5, 7, 10:14);
-plotSecondDerivative('acceleration', Derivative, timeDer);
-
+plotSecondDerivative('acceleration', Derivative, timeDer)
 
 beginTime = time(1);
 time = (time - beginTime)/60;

@@ -88,9 +88,12 @@ for i = 1:size(Clusters, 1)
     % plot data    
     subplot(5, 7, 22:25)
     plotVelAndAcc(ClusterData);
+        
+    % plot instantanious speed vectors
+    subplot(5, 7, 29:32);
+    plotInstantSpeed(ClusterData);
     
     % plot accelerometer data
-    
     subplot(5, 7, 5:7)
     if size(SessionAccData) == [0 0]
         text(0.2, 0.5, 'No Accelerometer data found');
@@ -109,7 +112,7 @@ for i = 1:size(Clusters, 1)
     behaviour = showControls(behaviourClasses);
     
     previousClusterClass = behaviour;
-    
+        
     % add row to output
     ClusterFeatures = [ClusterFeatures behaviour];
     AnnotatedClusters = [AnnotatedClusters; ClusterFeatures behaviour];
@@ -122,7 +125,7 @@ for i = 1:size(Clusters, 1)
     if i == 1
         dlmwrite(outputFile, ClusterFeatures);
     else
-        dlmwrite(outputFile, ClusterFeatures, '-append', 'roffset', 0);
+        dlmwrite(outputFile, ClusterFeatures, '-append', 'roffset', 0, 'precision',  '%10f');
     end
 end
 

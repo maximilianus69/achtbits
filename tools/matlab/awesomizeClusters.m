@@ -35,8 +35,6 @@ function AwesomeClusters = awesomizeClusters(LameClusters, timeThreshold)
         % When we have a peak that is relatively far from the current peaks in the chaos cluster,
         % we should end this cluster.
         if(((Clusters(i+1) - Clusters(i)) > (averageDifference * differenceThreshold)) && num > numThreshold)
-            % TODO: check if the first timestamp is too far away in regards to 
-            % average and replace it with 2nd timestamp if necessary
             if((Clusters(clusterStart+1) - Clusters(clusterStart) < averageDifference * differenceThreshold) && num > numThreshold)
                 AwesomeClusters(j, 1) = Clusters(clusterStart + 1);
             end
@@ -60,8 +58,6 @@ function AwesomeClusters = awesomizeClusters(LameClusters, timeThreshold)
         % In the case that the difference between two clusters is big enough,
         % we should end the current cluster.
         elseif(Clusters(i+1) - Clusters(i) > timeThreshold)
-            % TODO: Also check if the first timestamp is too far away in regards 
-            % to average and replace it with 2nd timestamp if necessary
             % The current cluster ending
             if((Clusters(clusterStart+1) - Clusters(clusterStart) < averageDifference * differenceThreshold) && num > numThreshold)
                 AwesomeClusters(j, 1) = Clusters(clusterStart + 1);
