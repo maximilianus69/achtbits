@@ -1,6 +1,8 @@
 function out = train( deviceId, method )
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+%TRAIN perform machine learning on data
+%
+% deviceId: string with the annotated device id
+% method: learning method (TODO)
 
 
 % Get indices of needed features,
