@@ -1,4 +1,4 @@
-function [ output_args ] = plotClusterAcc( clusterTime, SessionAccData )
+function pointsShown = plotClusterAcc( clusterTime, SessionAccData )
 %PLOTCLUSTERACC plots accelerometer data for cluster
 %   Detailed explanation goes here
 
@@ -22,18 +22,24 @@ if sum(inCluster) > 0
         time1 = timeEntries(1);
         time2 = 0;
         time3 = timeEntries(3);
+        pointsShown = [1 3];
     elseif amountOfEntries == 3
         time1 = timeEntries(1);
         time2 = timeEntries(2);
         time3 = timeEntries(3);
+        pointsShown = [1 2 3];
     elseif amountOfEntries == 4
         time1 = timeEntries(2);
         time2 = 0;
         time3 = timeEntries(3);
+        pointsShown = [2 3];
     else
         time1 = timeEntries(2);
-        time2 = timeEntries(round(amountOfEntries/2));
-        time3 = timeEntries(amountOfEntries-1);
+        middle = round(amountOfEntries/2);
+        time2 = timeEntries(middle);
+        penultimate = amountOfEntries-1;
+        time3 = timeEntries(penultimate);
+        pointsShown = [2 middle penultimate];
     end
     
     subplot(5, 7, 5:7)

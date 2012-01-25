@@ -79,27 +79,28 @@ for i = 1:size(Clusters, 1)
     SessionCoordinates = SessionGpsData(:, 3:4);
     ClusterCoordinates = ClusterData(:, 3:4);
     
-    subplot(5,7,[1:2 8:9 15:16]) %22:23
+    subplot(5,7,[1:2 8:9 15:16])
     plotTrajectory(SessionCoordinates, ClusterCoordinates);
     
     subplot(5, 7, [3:4 10:11 17:18])
     plotTrajectory(ClusterCoordinates);
     
-    % plot data    
-    subplot(5, 7, 22:25)
-    plotVelAndAcc(ClusterData);
-        
-    % plot instantanious speed vectors
-    subplot(5, 7, 29:32);
-    plotInstantSpeed(ClusterData);
-    
     % plot accelerometer data
     subplot(5, 7, 5:7)
     if size(SessionAccData) == [0 0]
         text(0.2, 0.5, 'No Accelerometer data found');
+        accPoints = [];
     else        
-        plotClusterAcc(clusterTime, SessionAccData);
+        accPoints = plotClusterAcc(clusterTime, SessionAccData);
     end
+    
+    % plot velocity and acceleration   
+    subplot(5, 7, 22:25)
+    plotVelAndAcc(ClusterData, accPoints);
+        
+    % plot instantanious speed vectors
+    subplot(5, 7, 29:32);
+    plotInstantSpeed(ClusterData);
     
     subplot(5,7,[26:27 33:34])
     
