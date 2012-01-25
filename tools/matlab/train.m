@@ -1,4 +1,4 @@
-function out = train( deviceId, method )
+function out = train( deviceId )
 %TRAIN perform machine learning on data
 %
 % deviceId: string with the annotated device id
