@@ -6,7 +6,7 @@ function [Gps Clusters] = main(deviceId, sessionId)
     % Threshold based on different time stamps, used for findClusters, determines
     % what datapoints becomes peaks?
     %peakThres = 2*10^(-5);
-    peakThres = 5;
+    peakThres = 4;
 
     % Threshold used for awesomizeClusters, determines peaks in a range become one? 
     timeThres = 1200;
