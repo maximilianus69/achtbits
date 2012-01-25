@@ -17,7 +17,7 @@ function [Gps Clusters] = main(deviceId, sessionId)
     
     % plot the speed
     fig = figure(1);
-    set(fig,'units','normalized','outerposition',[0 0 1 1]);
+    %set(fig,'units','normalized','outerposition',[0 0 1 1]);
 
     subplot(3,1,1);
     plotSecondDerivative('velocity', Input(:, 2:3), Input(:, 1));
