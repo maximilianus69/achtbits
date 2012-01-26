@@ -14,7 +14,7 @@ function [ SessionGpsData AnnotatedClusters ] = annotateSession( deviceId, sessi
 %       - user can input annotation for cluster
 
 behaviourClasses = {'unknown', 'sleeping', 'digesting', 'flying',...
-        'diving'};
+        'diving', 'bad cluster'};
     
 AnnotatedClusters = [];
     
@@ -30,13 +30,11 @@ SessionAccData = readAcc(deviceId, sessionId);
 Clusters = analyseSession(SessionGpsData);
 
 dateTimeStart = timestampToDateTime(SessionGpsData(1, 2));
-%text(0.5, 0.5, dateTimeStart);
 
 % initiate annotation GUI 
 screenSize = get(0, 'ScreenSize');
 mainFigId = figure('Name',strcat('Cluster annotation, session start: ', dateTimeStart), 'NumberTitle','off', ...
-    'units','normalized','outerposition',[0 0.05 1 0.95]);
-
+    'units','normalized','outerposition',[0 0.05 1 0.95], 'Position', [0 0 1 1]);
 
 
 % LAYOUT:
@@ -77,10 +75,13 @@ for i = 1:size(Clusters, 1)
     ClusterCoordinates = ClusterData(:, 3:4);
     
     subplot(5,7,[1:2 8:9 15:16])
+    % subplot('Position',[0 0.95 0.1 0.1])
     plotTrajectory(SessionCoordinates, ClusterCoordinates);
+    title('Session trajectory');
     
     subplot(5, 7, [3:4 10:11 17:18])
     plotTrajectory(ClusterCoordinates);
+    title('Cluster trajectroy');
     
     % plot accelerometer data
     subplot(5, 7, 5:7)
@@ -101,13 +102,16 @@ for i = 1:size(Clusters, 1)
     
     subplot(5,7,[26:27 33:34])
     
+    
     % show features  
     plotFeatureInfo(ClusterFeatures, behaviourClasses);
 
-    subplot(5,7,[28 35])
+    % subplot(5,7,[28 35])
     
     % get behaviour input
-    behaviour = showControls(behaviourClasses);
+    %behaviour = showControls(behaviourClasses);
+
+    behaviour = menu('choose a class', behaviourClasses);
     
     previousClusterClass = behaviour;
         
