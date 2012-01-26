@@ -22,38 +22,43 @@ if sum(inCluster) > 0
     amountOfEntries = size(timeEntries, 1);
     
     if amountOfEntries == 2
-        time1 = timeEntries(1);
-        time2 = 0;
-        time3 = timeEntries(3);
-        pointsShown = [1 3];
+        first = 1;
+        second = 0;
+        third = 3;
     elseif amountOfEntries == 3
-        time1 = timeEntries(1);
-        time2 = timeEntries(2);
-        time3 = timeEntries(3);
-        pointsShown = [1 2 3];
+        first = 1;
+        second = 2;
+        third = 3;
     elseif amountOfEntries == 4
-        time1 = timeEntries(2);
-        time2 = 0;
-        time3 = timeEntries(3);
-        pointsShown = [2 3];
+        first = 2;
+        second = 0;
+        third = 3;
     else
-        time1 = timeEntries(2);
-        middle = round(amountOfEntries/2);
-        time2 = timeEntries(middle);
-        penultimate = amountOfEntries-1;
-        time3 = timeEntries(penultimate);
-        pointsShown = [2 middle penultimate];
+        first = 2;
+        second = round(amountOfEntries/2);
+        third = amountOfEntries-1;
     end
+    
+    pointsShown = [first second third];
     
     subplot(5, 7, 5:7)
-    plotAcc(SessionAccData, time1);
+    plotAcc(SessionAccData, timeEntries(first));
+    title(strcat('Accelerometer of point ', num2str(first)));
     
     subplot(5, 7, 12:14)
-    if time2 ~= 0
-        plotAcc(SessionAccData, time2);
+    if second ~= 0
+        plotAcc(SessionAccData, timeEntries(second));
+        title(strcat('Accelerometer of point ', num2str(second)));
     end
+    
     subplot(5, 7, 19:21)
-    plotAcc(SessionAccData, time3);
+    plotAcc(SessionAccData, timeEntries(third));
+    title(strcat('Accelerometer of point ', num2str(first)));
+    
+    
+    % axis([0 60 -1 1]);
+    % set(gca(), 'XLimMode', 'manual');
+    % plot(SessionAccData(:, 3));
 else
     text(0.2, 0.5, 'No Accelerometer data found');
 end
