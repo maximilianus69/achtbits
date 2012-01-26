@@ -20,7 +20,7 @@ Speed = SessionData(:, 6:7);
 % find the acceleration
 Der = derivative([time Speed]);
 
-Derivative = Der(:, 2:3);
+Derivative = Der(:, 2);
 
 
 % find all threshold crossings

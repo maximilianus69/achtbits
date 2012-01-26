@@ -85,7 +85,9 @@ function AwesomeClusters = awesomizeClusters(LameClusters, timeThreshold)
     % A cluster should be 10 minutes minimum
     DB = D > 600;
     % Don't delete the last cluster
-    DB(size(DB, 1)) = 1;
+    if(~isempty(DB))
+        DB(size(DB, 1)) = 1;
+    end
     AwesomeClusters = AwesomeClusters .* [DB DB];
     AwesomeClusters(~any(AwesomeClusters,2),:) = [];
 

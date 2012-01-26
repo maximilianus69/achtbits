@@ -14,33 +14,38 @@ function Clusters = findClusters(Time, Derivative, peakThres)
 %   use these points to determine start and end time of a period
         
     % Create length by 1 array of normals
-    for i = 1:size(Derivative, 1)
-        Normals(i, 1) = norm(Derivative(i, :));
-    end
-    
-    Peaks = Normals > peakThres;
-    NewPeaks = zeros(size(Peaks));
+    Derivative
+    UpPeaks = Derivative > peakThres
+    DownPeaks = (Derivative < (-peakThres))
+    NewPeaks = zeros(size(UpPeaks));
     NextI = 0;
 
-    for i = 1:(size(Peaks, 1)-1)
+    for i = 1:(size(UpPeaks, 1)-1)
         if(NextI)
-            NewPeaks(i,:) = 1;
+            NewPeaks(i,:) = 1
             NextI = 0;
         end
-        if(Peaks(i) && ~Peaks(i+1))
-            % IF there is a slowdown, the next i should be 1 (going from 1 to 0):
+        % If we speed up, this i should be 1
+        if(UpPeaks(i))
             NextI = 1;
-        elseif(~Peaks(i) && Peaks(i+1))
-            % If we go from 0 to 1:
-            NewPeaks(i,:) = 1;
+        % IF there is a slowdown, the next i should be 1 (going from 1 to 0):
+        elseif(DownPeaks(i))
+            NewPeaks(i, :) = 1;
         end
     end
+
 PeakPos = find(NewPeaks);
-Clusters = [Time(1), Time(PeakPos(1))];
-for i = 1:(size(PeakPos, 1)-1)
-    Clusters = [Clusters; Time(PeakPos(i)) Time(PeakPos(i+1))];
+Clusters = [];
+if(~isempty(PeakPos))
+    Clusters = [Time(1), Time(PeakPos(1))];
+    for i = 1:(size(PeakPos, 1)-1)
+        Clusters = [Clusters; Time(PeakPos(i)) Time(PeakPos(i+1))];
+    end
+    % This puts the very last point as the last in the cluster
+    Clusters = [Clusters; Time(PeakPos(size(PeakPos, 1))) Time(size(Time, 1))];
+else
+    Clusters = [Time(1), Time(size(Time, 1))];
 end
-% This puts the very last point as the last in the cluster
-Clusters(size(Clusters, 1), 2) = Time(size(Time, 1));
+
 
 
