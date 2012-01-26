@@ -93,14 +93,14 @@ for i = 1:size(Clusters, 1)
     end
     
     % plot velocity and acceleration   
-    subplot(5, 7, 22:25)
+    subplot(5, 7, 22:26)
     plotVelAndAcc(ClusterData, accPoints);
         
     % plot instantanious speed vectors
-    subplot(5, 7, 29:32);
+    subplot(5, 7, 29:33);
     plotInstantSpeed(ClusterData);
     
-    subplot(5,7,[26:27 33:34])
+    subplot(5,7,[27:28 34:35])
     
     
     % show features  

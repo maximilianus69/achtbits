@@ -6,6 +6,9 @@ function [] = plotTrajectory( SessionCoordinates, ClusterCoordinates )
 
 % open a new figure and make sure its clear
 
+set(gca, 'XTickLabel', '');
+set(gca, 'YTickLabel', '');
+
 if nargin < 2
     ClusterCoordinates = [];
     hasCluster = false;
@@ -21,7 +24,7 @@ if hasCluster
     clusterY = ClusterCoordinates(:, 2);
 end
 
-hold('on')
+
 
 cur = gca();
 
@@ -54,6 +57,7 @@ elseif yDiffScaled > xDiff
 end
 
 axis([minY maxY minX maxX]);
+hold('on')
 
 geoshow(gca, 'plot/nh_zh_shape/nh_zh_shape.shp',...
     'LineWidth',  1, ...
@@ -62,6 +66,8 @@ geoshow(gca, 'plot/nh_zh_shape/nh_zh_shape.shp',...
 geoshow(gca, sessionX, sessionY, ...
     'LineWidth',  2, ...
     'color', 'b');
+
+geoshow(gca, sessionX(1), sessionY(1), 'DisplayType',  'point', 'MarkerSize', 10, 'MarkerEdgeColor', 'g')
 
 if ~hasCluster
     geoshow(gca, sessionX, sessionY, ...
@@ -73,6 +79,10 @@ if hasCluster
         'LineWidth', 2,  ...
         'color', 'g');
 end
+
+
+geoshow(gca, sessionX(1), sessionY(1), 'DisplayType',  'point', 'Marker', 'square', 'MarkerSize', 10, 'MarkerEdgeColor', 'g')
+
 
 hold('off')
 
