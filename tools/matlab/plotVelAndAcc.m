@@ -37,7 +37,7 @@ end
 % find the acceleration
 Der = derivative([time Speed]);
 timeDer = Der(:, 1);
-Derivative = Der(:, 2);
+Derivative = abs(Der(:, 2));
 
 timeOffset = (timeNorm(2) - timeNorm(1))/2;
 beginTime = timeDer(1);

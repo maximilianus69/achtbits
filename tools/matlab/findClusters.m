@@ -14,15 +14,14 @@ function Clusters = findClusters(Time, Derivative, peakThres)
 %   use these points to determine start and end time of a period
         
     % Create length by 1 array of normals
-    Derivative
     UpPeaks = Derivative > peakThres
-    DownPeaks = (Derivative < (-peakThres))
+    DownPeaks = (Derivative < (-peakThres));
     NewPeaks = zeros(size(UpPeaks));
     NextI = 0;
 
     for i = 1:(size(UpPeaks, 1)-1)
         if(NextI)
-            NewPeaks(i,:) = 1
+            NewPeaks(i,:) = 1;
             NextI = 0;
         end
         % If we speed up, this i should be 1
@@ -36,6 +35,7 @@ function Clusters = findClusters(Time, Derivative, peakThres)
 
 PeakPos = find(NewPeaks);
 Clusters = [];
+size(Time)
 if(~isempty(PeakPos))
     Clusters = [Time(1), Time(PeakPos(1))];
     for i = 1:(size(PeakPos, 1)-1)
