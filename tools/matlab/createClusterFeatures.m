@@ -8,8 +8,9 @@ function [ClusterFeatures, ClusterPoints] = createClusterFeatures( Cluster, Data
 % Returns:
 %   Array of features of this cluster
 %   format: 
-%   [startTime(s), endTime(s), duration(s), avgSpeed(m/s), ...
-%       heightDiff(m), grndDist(km), totDist(km), angleVar(rad)]
+%   [startTime(s),  endTime(s),   duration(s), avgSpeed(m/s), ...
+%    heightDiff(m), grndDist(km), totDist(km), angleVar(rad), ...
+%    distDiff(m),   resolution(min/dat)]
 
 startTime = Cluster(1);
 endTime = Cluster(2);
@@ -53,10 +54,15 @@ for i=1:size(speeds,1)-1
 end
 angleVar = var(theta);
     
+% calculate the difference between totDist and grndDist
+distDiff = abs(totDist - grndDist);
+
+% calculate resolution in datapoints per minute
+resolution = size(ClusterPoints,1)/(duration/60);
 
 % return data
 ClusterFeatures = ...
-    [startTime, endTime, duration, avgSpeed, heightDiff, grndDist, totDist, angleVar];
+    [startTime, endTime, duration, avgSpeed, heightDiff, grndDist, totDist, angleVar, distDiff, resolution];
 
 end
 
