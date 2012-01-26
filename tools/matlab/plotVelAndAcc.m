@@ -36,7 +36,7 @@ end
 % find the acceleration
 Der = derivative([time Speed]);
 timeDer = Der(:, 1);
-Derivative = Der(:, 2:3);
+Derivative = Der(:, 2);
 
 timeOffset = (timeNorm(2) - timeNorm(1))/2;
 beginTime = timeDer(1);
@@ -44,11 +44,11 @@ timeNorm = ((timeDer - beginTime)/60) + timeOffset;
 
 N = size(timeNorm,1);
 x = timeNorm;
-y = zeros(1, N);
+y = Derivative;
 
-for i = 1:N
-    y(i) = norm(Derivative(i, :));
-end
+%for i = 1:N
+%    y(i) = norm(Derivative(i, :));
+%end
 
 plot(x, y, '-s','LineWidth',1, ...
                 'Color', 'r', ...
