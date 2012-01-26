@@ -5,33 +5,22 @@ function out = train( deviceId )
 % method: learning method (TODO)
 
 
-% Get indices of needed features,
-%   format: 
-%   [startTime(s),  endTime(s),   duration(s), avgSpeed(m/s),   ...
-%    heightDiff(m), grndDist(km), totDist(km), angleVar(rad),   ...
-%    distDiff(m),   resolution(min/dat),       previousCluster, ...
-%    annotation]
-neededFeatures = [3 4 5 6 7 8 9 10 11 12];
+Features = createFeatureMatrix(deviceId);
 
-% prepare data
-folderPath = strcat('../annotatedData/real/device_', deviceId);
-inputFilePrefix = strcat('/device_', deviceId, '_session_');
+svmtrain(Features(:,1:end-1), [ones(size(Features,1)-1,1);8]);
 
-sessionId = 0;
-sessionFilePath = strcat(folderPath, inputFilePrefix, ...
-    sprintf('%03d', sessionId), '_clusterFeatures.csv');
-TrainingData = [];
+featureNames = {'duration', 'avgSpeed',   ...
+    'heightDiff', 'grndDist', 'totDist', 'angleVar',       'previousCluster'};
+classNames = {'diving', 'flying', 'digesting', 'sleeping', 'unknown'};
 
-while exist(sessionFilePath, 'file') == 2
-    % read in data
-    SessionClusters = dlmread(sessionFilePath, ',');
-    TrainingData = [TrainingData; SessionClusters(:,neededFeatures)];
-    
-    sessionId = sessionId + 1;
-    sessionFilePath = strcat(folderPath, inputFilePrefix, sprintf('%03d', sessionId), '_clusterFeatures.csv');
+Names = cell(size(Features,1),1);
+for i=1:size(Features,1)
+    Names(i) = classNames(Features(i,end));
+    classNames(Features(i,end));
 end
 
-out = TrainingData;
+Features(:,3)
+t = classregtree(Features(:,1:end-1), Names, 'names',featureNames);
+view(t);
 
 end
-

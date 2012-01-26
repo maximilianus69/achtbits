@@ -10,7 +10,7 @@ function [ClusterFeatures, ClusterPoints] = createClusterFeatures( Cluster, Data
 %   format: 
 %   [startTime(s),  endTime(s),   duration(s), avgSpeed(m/s), ...
 %    heightDiff(m), grndDist(km), totDist(km), angleVar(rad), ...
-%    distDiff(m),   resolution(min/dat)]
+%    distDiff(m),   resoanlution(min/dat)]
 
 startTime = Cluster(1);
 endTime = Cluster(2);
