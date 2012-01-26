@@ -68,5 +68,7 @@ else
     sprintf(strcat('the folder ', folderPath, 'could not be found'))
 end
 
+close all;
+
 end
 
