@@ -101,15 +101,11 @@ for i = 1:size(Clusters, 1)
     plotInstantSpeed(ClusterData);
     
     subplot(5,7,[27:28 34:35])
-    
-    
+     
     % show features  
     plotFeatureInfo(ClusterFeatures, behaviourClasses);
-
-    % subplot(5,7,[28 35])
     
     % get behaviour input
-    %behaviour = showControls(behaviourClasses);
 
     behaviour = menu('choose a class', behaviourClasses);
     

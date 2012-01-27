@@ -10,7 +10,6 @@ afterStartCluster = SessionAccTime >= clusterTime(1);
 beforeEndCluster = SessionAccTime <= clusterTime(2);
 inCluster = afterStartCluster & beforeEndCluster;
 
-
 if sum(inCluster) > 0
 
     % get the data that is in cluster
