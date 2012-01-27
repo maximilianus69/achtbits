@@ -24,7 +24,7 @@ if sum(inCluster) > 0
     if amountOfEntries == 2
         first = 1;
         second = 0;
-        third = 3;
+        third = 2;
     elseif amountOfEntries == 3
         first = 1;
         second = 2;
