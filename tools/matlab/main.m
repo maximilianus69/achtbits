@@ -9,7 +9,7 @@ function [Gps Clusters] = main(deviceId, sessionId)
     peakThres = 7;
 
     % Threshold used for awesomizeClusters, determines peaks in a range become one? 
-    timeThres = 1200;
+    timeThres = 1500;
 
     addpath('plot');
     Gps = readgps(deviceId, sessionId);
