@@ -12,9 +12,13 @@ timeNorm = (time - beginTime)/60;
 hold on;
 
 x = timeNorm;
-y = ones(size(SessionGpsData,1),1);
+y = zeros(size(SessionGpsData,1),1);
 speedx = SessionGpsData(:,9);
 speedy = SessionGpsData(:,10);
+
+% this line makes scaling of the axis equal so the arrows dont get
+% deformed, but it also breaks the alignment of timestamps with other plots
+axis equal;
 
 quiver(x, y, speedx, speedy);
 
