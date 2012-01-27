@@ -87,7 +87,9 @@ function AwesomeClusters = awesomizeClusters(LameClusters, timeThreshold)
     DB = D > 800;
     % Don't delete the first and last cluster
     if(~isempty(DB))
-        DB(1) = 1;
+        if(AwesomeClusters(1, 1) ~= AwesomeClusters(1, 2))
+            DB(1) = 1;
+        end
         DB(size(DB, 1)) = 1;
     end
     AwesomeClusters = AwesomeClusters .* [DB DB];
