@@ -6,21 +6,19 @@ function out = train( deviceId )
 
 
 Features = createFeatureMatrix(deviceId);
-
 svmtrain(Features(:,1:end-1), [ones(size(Features,1)-1,1);8]);
 
 featureNames = {'duration', 'avgSpeed',   ...
     'heightDiff', 'grndDist', 'totDist', 'angleVar',       'previousCluster'};
-classNames = {'diving', 'flying', 'digesting', 'sleeping', 'unknown'};
+behaviourClasses = {'unknown', 'sleeping', 'digesting', 'flying',...
+        'diving', 'bad cluster'};
 
 Names = cell(size(Features,1),1);
 for i=1:size(Features,1)
-    Names(i) = classNames(Features(i,end));
-    classNames(Features(i,end));
+    Names(i) = behaviourClasses(Features(i,end)); 
 end
 
-Features(:,3)
-t = classregtree(Features(:,1:end-1), Names, 'names',featureNames);
+t = classregtree(Features(:,1:end-1), Names, 'categorical', [size(Features,2)-1], 'names', featureNames);
 view(t);
 
 end

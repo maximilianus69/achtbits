@@ -7,11 +7,11 @@ function out = createFeatureMatrix( deviceId )
 
 % Get indices of needed features,
 %   format: 
-%   [startTime(s),  endTime(s),   duration(s), avgSpeed(m/s),   ...
+%   [i, startTime(s),  endTime(s),   duration(s), avgSpeed(m/s),   ...
 %    heightDiff(m), grndDist(km), totDist(km), angleVar(rad),   ...
 %    distDiff(m),   resolution(min/dat),       previousCluster, ...
 %    annotation]
-neededFeatures = [3:10];
+neededFeatures = [4:11];
 
 % prepare data
 folderPath = strcat('../annotatedData/real/device_', deviceId);
@@ -30,7 +30,6 @@ while exist(sessionFilePath, 'file') == 2
     sessionId = sessionId + 1;
     sessionFilePath = strcat(folderPath, inputFilePrefix, sprintf('%03d', sessionId), '_clusterFeatures.csv');
 end
-
 out = TrainingData;
 
 end
