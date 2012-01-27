@@ -66,7 +66,7 @@ for i = 1:size(Clusters, 1)
     % get cluster features and data
     clusterTime = Clusters(i, :);
     [ClusterFeatures ClusterData] = ...
-        createClusterFeatures(clusterTime, SessionGpsData);
+        createClusterFeatures(clusterTime, SessionGpsData, SessionAccData);
     
     ClusterFeatures = [i ClusterFeatures previousClusterClass];
     
