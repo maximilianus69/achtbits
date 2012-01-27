@@ -39,7 +39,11 @@ if sum(inCluster) > 0
         third = amountOfEntries-1;
     end
     
-    pointsShown = [first second third];
+    if second == 0
+        pointsShown = [first third];
+    else
+        pointsShown = [first second third];
+    end
     
     subplot(5, 7, 5:7)
     plotAcc(SessionAccData, timeEntries(first));
@@ -53,12 +57,8 @@ if sum(inCluster) > 0
     
     subplot(5, 7, 19:21)
     plotAcc(SessionAccData, timeEntries(third));
-    title(strcat('Accelerometer of point ', num2str(first)));
+    title(strcat('Accelerometer of point ', num2str(third)));
     
-    
-    % axis([0 60 -1 1]);
-    % set(gca(), 'XLimMode', 'manual');
-    % plot(SessionAccData(:, 3));
 else
     text(0.2, 0.5, 'No Accelerometer data found');
 end
