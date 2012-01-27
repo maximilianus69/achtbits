@@ -9,7 +9,7 @@ function AwesomeClusters = awesomizeClusters(LameClusters, timeThreshold)
     DiffBool = Diff > timeThreshold;
     % Create structured clusters with only one column
     Clusters = LameClusters(:, 1);
-    Clusters(size(Clusters, 1)+1) = LameClusters(size(LameClusters, 1), 2);
+    Clusters(size(Clusters, 1)+1, :) = LameClusters(size(LameClusters, 1), 2)
     
     % Initialize relevant loop values
     % Counter for output values
@@ -76,7 +76,7 @@ function AwesomeClusters = awesomizeClusters(LameClusters, timeThreshold)
         % If a cluster ended, we should check if the start of the cluster is far away from the current cluster.
     end
     % Make it not forget the first and last value
-    AwesomeClusters(j, 2) = Clusters(size(Clusters, 2))
+    AwesomeClusters(j, 2) = Clusters(size(Clusters, 1))
     % Remove possible double value
     if(AwesomeClusters(size(AwesomeClusters, 1), 1) == AwesomeClusters(size(AwesomeClusters, 1), 2))
         AwesomeClusters(size(AwesomeClusters, 1), :) = [];
