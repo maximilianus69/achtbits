@@ -9,7 +9,7 @@ function AwesomeClusters = awesomizeClusters(LameClusters, timeThreshold)
     DiffBool = Diff > timeThreshold;
     % Create structured clusters with only one column
     Clusters = LameClusters(:, 1);
-    Clusters(size(Clusters, 1)) = LameClusters(size(LameClusters, 1), 2);
+    Clusters(size(Clusters, 1)+1) = LameClusters(size(LameClusters, 1), 2);
     
     % Initialize relevant loop values
     % Counter for output values
@@ -35,7 +35,7 @@ function AwesomeClusters = awesomizeClusters(LameClusters, timeThreshold)
         % When we have a peak that is relatively far from the current peaks in the chaos cluster,
         % we should end this cluster.
         if(((Clusters(i+1) - Clusters(i)) > (averageDifference * differenceThreshold)) && num > numThreshold)
-            if((Clusters(clusterStart+1) - Clusters(clusterStart) < averageDifference * differenceThreshold) && num > numThreshold)
+            if((Clusters(clusterStart+1) - Clusters(clusterStart) < averageDifference * differenceThreshold) && num > numThreshold && clusterStart > 1)
                 AwesomeClusters(j, 1) = Clusters(clusterStart + 1);
             end
             AwesomeClusters(j, 2) = Clusters(i);
@@ -59,7 +59,7 @@ function AwesomeClusters = awesomizeClusters(LameClusters, timeThreshold)
         % we should end the current cluster.
         elseif(Clusters(i+1) - Clusters(i) > timeThreshold)
             % The current cluster ending
-            if((Clusters(clusterStart+1) - Clusters(clusterStart) < averageDifference * differenceThreshold) && num > numThreshold)
+            if((Clusters(clusterStart+1) - Clusters(clusterStart) < averageDifference * differenceThreshold) && num > numThreshold && clusterStart > 1)
                 AwesomeClusters(j, 1) = Clusters(clusterStart + 1);
             end
             AwesomeClusters(j, 2) = Clusters(i);
@@ -75,7 +75,8 @@ function AwesomeClusters = awesomizeClusters(LameClusters, timeThreshold)
         end
         % If a cluster ended, we should check if the start of the cluster is far away from the current cluster.
     end
-    AwesomeClusters(j, 2) = Clusters(size(Clusters, 1));
+    % Make it not forget the first and last value
+    AwesomeClusters(j, 2) = Clusters(size(Clusters, 2))
     % Remove possible double value
     if(AwesomeClusters(size(AwesomeClusters, 1), 1) == AwesomeClusters(size(AwesomeClusters, 1), 2))
         AwesomeClusters(size(AwesomeClusters, 1), :) = [];
@@ -83,7 +84,7 @@ function AwesomeClusters = awesomizeClusters(LameClusters, timeThreshold)
     % Remove too short clusters
     D = AwesomeClusters(:, 2) - AwesomeClusters(:, 1);
     % A cluster should be 10 minutes minimum
-    DB = D > 600;
+    DB = D > 800;
     % Don't delete the first and last cluster
     if(~isempty(DB))
         DB(1) = 1;
