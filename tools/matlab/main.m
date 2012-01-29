@@ -3,6 +3,10 @@ function [Gps Clusters] = main(deviceId, sessionId)
     % the north sea, and calculating vectors with the direction and speed
     % It uses readgps and makeVectors
 
+
+    histogramSizeSeconds = 900;
+    timestampStep = 150;
+
     % Threshold based on different time stamps, used for findClusters, determines
     % what datapoints becomes peaks?
     %peakThres = 2*10^(-5);
@@ -17,7 +21,7 @@ function [Gps Clusters] = main(deviceId, sessionId)
     
     % plot the speed
     fig = figure(1);
-    set(fig,'units','normalized','outerposition',[0 0 1 1]);
+    %set(fig,'units','normalized','outerposition',[0 0 1 1]);
     
     
     % Calculate the current speed from x_speed and y_speed
@@ -33,7 +37,10 @@ function [Gps Clusters] = main(deviceId, sessionId)
     %time = Der(:, 1);
     %Derivative = Der(:, 2);
 
-    [newTime, newSpeed] = interpolate(Input(:, 1), Speed, 150, 'pchip');
+    [newTime, newSpeed] = interpolate(Input(:, 1), Speed, timestampStep, 'pchip');
+    
+    histogramCompare(newTime, newSpeed, histogramSizeSeconds, timestampStep);
+
 
     %Clusters = findClusters(time, Derivative, peakThres);
 
