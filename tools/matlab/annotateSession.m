@@ -66,7 +66,7 @@ for i = 1:size(Clusters, 1)
     % get cluster features and data
     clusterTime = Clusters(i, :);
     [ClusterFeatures ClusterData] = ...
-        createClusterFeatures(clusterTime, SessionGpsData);
+        createClusterFeatures(clusterTime, SessionGpsData, SessionAccData);
     
     ClusterFeatures = [i ClusterFeatures previousClusterClass];
     
@@ -101,15 +101,11 @@ for i = 1:size(Clusters, 1)
     plotInstantSpeed(ClusterData);
     
     subplot(5,7,[27:28 34:35])
-    
-    
+     
     % show features  
     plotFeatureInfo(ClusterFeatures, behaviourClasses);
-
-    % subplot(5,7,[28 35])
     
     % get behaviour input
-    %behaviour = showControls(behaviourClasses);
 
     behaviour = menu('choose a class', behaviourClasses);
     

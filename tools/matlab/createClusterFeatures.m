@@ -1,4 +1,4 @@
-function [ClusterFeatures, ClusterPoints] = createClusterFeatures( Cluster, Data )
+function [ClusterFeatures, ClusterPoints] = createClusterFeatures( Cluster, GpsData, AccData )
 % CREATE_CLUSTER_FEATURES Creates feature vectors for clusters
 %
 % Arguments:
@@ -10,18 +10,18 @@ function [ClusterFeatures, ClusterPoints] = createClusterFeatures( Cluster, Data
 %   format: 
 %   [startTime(s),  endTime(s),   duration(s), avgSpeed(m/s), ...
 %    heightDiff(m), grndDist(km), totDist(km), angleVar(rad), ...
-%    distDiff(m),   resoanlution(min/dat)]
+%    distDiff(m),   resolution(dat/min)]
 
 startTime = Cluster(1);
 endTime = Cluster(2);
 duration = endTime - startTime;
 
 % find start and end indices of the clusters
-first = find(Data(:,2) == startTime);
-last = find(Data(:,2) == endTime);
+first = find(GpsData(:,2) == startTime);
+last = find(GpsData(:,2) == endTime);
 
 % data points inside cluster
-Points = Data(first:last, :);
+Points = GpsData(first:last, :);
 ClusterPoints = Points;
 
 % calculate avg speed

@@ -6,8 +6,8 @@ function [] = plotTrajectory( SessionCoordinates, ClusterCoordinates )
 
 % open a new figure and make sure its clear
 
-set(gca, 'XTickLabel', '');
-set(gca, 'YTickLabel', '');
+%set(gca, 'XTickLabel', '');
+%set(gca, 'YTickLabel', '');
 
 if nargin < 2
     ClusterCoordinates = [];
@@ -16,15 +16,13 @@ else
     hasCluster = true;
 end
 
-sessionX = SessionCoordinates(:, 1);
-sessionY = SessionCoordinates(:, 2);
+sessionX = SessionCoordinates(:, 2);
+sessionY = SessionCoordinates(:, 1);
 
 if hasCluster
-    clusterX = ClusterCoordinates(:, 1);
-    clusterY = ClusterCoordinates(:, 2);
+    clusterX = ClusterCoordinates(:, 2);
+    clusterY = ClusterCoordinates(:, 1);
 end
-
-
 
 cur = gca();
 
@@ -56,33 +54,45 @@ elseif yDiffScaled > xDiff
    maxX = maxX+xMargin;
 end
 
-axis([minY maxY minX maxX]);
+axis([minX maxX minY maxY]);
+%axis([minX maxX minY maxY]);
 hold('on')
 
+% plot the map
 geoshow(gca, 'plot/nh_zh_shape/nh_zh_shape.shp',...
     'LineWidth',  1, ...
     'FaceColor', [1.0 0.9 0.5], ...
     'EdgeColor', [0.5 0.5 0.5]);
-geoshow(gca, sessionX, sessionY, ...
-    'LineWidth',  2, ...
+
+% show session trajectory
+geoshow(gca, sessionY, sessionX, ...
+    'LineWidth',  1, ...
     'color', 'b');
 
-geoshow(gca, sessionX(1), sessionY(1), 'DisplayType',  'point', 'MarkerSize', 10, 'MarkerEdgeColor', 'g')
-
-if ~hasCluster
-    geoshow(gca, sessionX, sessionY, ...
-    'DisplayType',  'point', 'MarkerSize', 5, 'MarkerEdgeColor', 'r');
+if hasCluster
+    markerSize = 1;
+else
+    markerSize = 5; 
 end
 
+%if ~hasCluster
+    geoshow(gca, sessionY, sessionX, ...
+    'DisplayType',  'point', 'MarkerSize', markerSize, 'MarkerEdgeColor', 'r');
+%end
+
 if hasCluster
-    geoshow(gca, clusterX, clusterY, ...
-        'LineWidth', 2,  ...
+    geoshow(gca, clusterY, clusterX, ...
+        'LineWidth', 1,  ...
         'color', 'g');
 end
 
+if hasCluster
+    geoshow(gca, sessionY(1), sessionX(1), 'DisplayType',  'point', 'Marker', 'square', 'MarkerSize', 10, 'MarkerEdgeColor', 'r')
+    geoshow(gca, clusterY(1), clusterX(1), 'DisplayType',  'point', 'Marker', 'square', 'MarkerSize', 5, 'MarkerEdgeColor', 'g')
+else
+    geoshow(gca, sessionY(1), sessionX(1), 'DisplayType',  'point', 'Marker', 'square', 'MarkerSize', 10, 'MarkerEdgeColor', 'g')
 
-geoshow(gca, sessionX(1), sessionY(1), 'DisplayType',  'point', 'Marker', 'square', 'MarkerSize', 10, 'MarkerEdgeColor', 'g')
-
+end
 
 hold('off')
 

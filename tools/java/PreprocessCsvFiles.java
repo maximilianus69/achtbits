@@ -481,7 +481,7 @@ System.out.println("accel lines lost : " + resultArray[3]);
     }
 
     /** Returns a timestamp if the string is a date time, the same string otherwise. */
-    private static String stringToTimestamp(String s)
+    public static String stringToTimestamp(String s)
     {
         try
         {

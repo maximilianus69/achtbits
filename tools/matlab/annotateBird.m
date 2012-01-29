@@ -3,10 +3,12 @@ function [ output_args ] = annotateBird( deviceId, annotationType, startSession 
 %   INPUT:
 %   deviceId - ID number of the device as a string
 %   annotationType - determines if annotation is test ('test' or 'real')
+%                       (this is used to determine the target directory)
 %   startSession(optional, default:0) - ID of starting session, integer 
 %   
 %   checks if there are sessions for this device
 %   loops through all sessions and calls annotateSession
+%
 %   writes to file:
 %   
 %   clusterFeatures - features and class per cluster (row)
