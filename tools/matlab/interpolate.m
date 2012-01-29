@@ -25,5 +25,5 @@ function [newTimeStamps newSpeedVector] = interpolate(timeStamps, speedVector, t
         end
     end
 
-    newTimeStamps = (timeStamps(1):timeStep:timeStamps(size(timeStamps, 1)))'
-    newSpeedVector = interp1(timeStamps, speedVector, newTimeStamps, method)
+    newTimeStamps = (timeStamps(1):timeStep:timeStamps(size(timeStamps, 1)))';
+    newSpeedVector = interp1(timeStamps, speedVector, newTimeStamps, method);
