@@ -9,7 +9,7 @@ function [m1Course, m2Course, m3Course] = histogramCompare(interpolatedTimestamp
 %   timestampStep, the amount of seconds between each timestamp
 %
 % OUT: 
-%   3 vectors that describe how well each model fits the session at a certain point (is as long as the session - histogramSizeSeconds). 
+%   3 vectors that describe how well each model fits the session at a certain point (is as long as the session - histogramSizeSeconds). 1, 2 and 3 represent the models. 4, 5, 6 represent the timestamps that belong to these courses.
 
 
 dataPointsPerHist = histogramSizeSeconds/timestampStep;
