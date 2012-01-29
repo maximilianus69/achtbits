@@ -26,9 +26,9 @@ m2Hist = createTrainingHist('diving', bins, histogramSizeSeconds, timestampStep)
 m3Hist = createTrainingHist('floating', bins, histogramSizeSeconds, timestampStep);
 
 
-m1Course = zeros(size(interpolatedTimestamps)-dataPointsPerHist, 1);
-m2Course = zeros(size(interpolatedTimestamps)-dataPointsPerHist, 1);
-m3Course = zeros(size(interpolatedTimestamps)-dataPointsPerHist, 1);
+m1Course = zeros(size(interpolatedTimestamps)-dataPointsPerHist, 2);
+m2Course = zeros(size(interpolatedTimestamps)-dataPointsPerHist, 2);
+m3Course = zeros(size(interpolatedTimestamps)-dataPointsPerHist, 2);
 
 
 
@@ -37,18 +37,19 @@ for x = (dataPointsPerHist/2) + 1 : size(interpolatedTimestamps) - dataPointsPer
     speedsOfMoment = interpolatedSpeeds(x-dataPointsPerHist/2:x+dataPointsPerHist/2);
     histOfMoment = histc(speedsOfMoment, bins);
     % compare hists
-    m1Dif = sum(abs(histOfMoment .- m1Hist));
-    m2Dif = sum(abs(histOfMoment .- m2Hist));
-    m3Dif = sum(abs(histOfMoment .- m3Hist));
+    m1Dif = sum(abs(histOfMoment - m1Hist));
+    m2Dif = sum(abs(histOfMoment - m2Hist));
+    m3Dif = sum(abs(histOfMoment - m3Hist));
 
     % safe! (in percentage corresponding to) 
-    m1Course(x-dataPointsPerHist/2) = 100 - ((m1Dif / (dataPointsPerHist*2)) * 100);
-    m2Course(x-dataPointsPerHist/2) = 100 - ((m2Dif / (dataPointsPerHist*2)) * 100);
-    m3Course(x-dataPointsPerHist/2) = 100 - ((m3Dif / (dataPointsPerHist*2)) * 100); 
+    m1Course(x-dataPointsPerHist/2, 1) = 100 - ((m1Dif / (dataPointsPerHist*2)) * 100);
+    m1Course(x-dataPointsPerHist/2, 2) = interpolatedTimestamps(x);
+    m2Course(x-dataPointsPerHist/2, 1) = 100 - ((m2Dif / (dataPointsPerHist*2)) * 100);
+    m2Course(x-dataPointsPerHist/2, 2) = interpolatedTimestamps(x);
+    m3Course(x-dataPointsPerHist/2, 1) = 100 - ((m3Dif / (dataPointsPerHist*2)) * 100); 
+    m3Course(x-dataPointsPerHist/2, 2) = interpolatedTimestamps(x);
 
 end
-
-
 
 
 
