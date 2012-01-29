@@ -20,10 +20,14 @@ dataPointsPerHist = histogramSizeSeconds/timestampStep;
 bins = [0, 5, 10, 20, 40, 60, 120];
 bins ./ 3.6;
 
+% Create the histograms from the model here
+m1Speeds = zeros(dataPointsPerHist, 1); % chillin'
+m2Speeds = ones(dataPointsPerHist, 1); % crazy ass?
+m3Speeds = ones(dataPointsPerHist, 1) .* 30; % flyin' 
 
-m1Hist = createTrainingHist('flying', bins, histogramSizeSeconds, timestampStep);
-m2Hist = createTrainingHist('diving', bins, histogramSizeSeconds, timestampStep);
-m3Hist = createTrainingHist('floating', bins, histogramSizeSeconds, timestampStep);
+m1Hist = histc(m1Speeds, bins);
+m2Hist = histc(m2Speeds, bins);
+m3Hist = histc(m3Speeds, bins);
 
 
 m1Course = zeros(size(interpolatedTimestamps)-dataPointsPerHist, 2);
@@ -41,6 +45,9 @@ for x = (dataPointsPerHist/2) + 1 : size(interpolatedTimestamps) - dataPointsPer
     m2Dif = sum(abs(histOfMoment - m2Hist));
     m3Dif = sum(abs(histOfMoment - m3Hist));
 
+    m1Dif
+    %(m1Dif / (dataPointsPerHist*2)) * 100
+   
     % safe! (in percentage corresponding to) 
     m1Course(x-dataPointsPerHist/2, 1) = 100 - ((m1Dif / (dataPointsPerHist*2)) * 100);
     m1Course(x-dataPointsPerHist/2, 2) = interpolatedTimestamps(x);
@@ -53,6 +60,7 @@ end
 
 
 
+plot(m2Course)
 
 
 
