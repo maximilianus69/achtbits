@@ -18,26 +18,33 @@ function [Gps Clusters] = main(deviceId, sessionId)
     % plot the speed
     fig = figure(1);
     set(fig,'units','normalized','outerposition',[0 0 1 1]);
-
-    subplot(3,1,1);
-    plotSecondDerivative('velocity', Input(:, 2:3), Input(:, 1));
     
-    Der = derivative(Input);
+    
+    % Calculate the current speed from x_speed and y_speed
+    for i = 1:size(Input, 1)
+        Speed(i, :) = norm(Input(i, 2:3));
+    end
+    subplot(3,1,1);
+    % plotSecondDerivative('velocity', Input(:, 2:3), Input(:, 1));
+    plotSecondDerivative2('velocity', Speed, Input(:,1));
+    
+    %Der = derivative(Input);
     % split Der in time and derivative
-    time = Der(:, 1);
-    Derivative = Der(:, 2);
+    %time = Der(:, 1);
+    %Derivative = Der(:, 2);
 
-    Clusters = findClusters(time, Derivative, peakThres);
+    [newTime, newSpeed] = interpolate(Input(:, 1), Speed, 150, 'pchip');
+
+    %Clusters = findClusters(time, Derivative, peakThres);
 
     % plot all the clusters
     subplot(3,1,2);
-    plotSecondDerivative2('acceleration and clusters', Derivative, time,...
-        [Clusters(:, 1); Clusters(:, 2)]);
+    plotSecondDerivative2('acceleration and clusters', newSpeed, newTime);
 
-    % group sequences of small clusters into bigger ones
-    Clusters = awesomizeClusters(Clusters, timeThres);
-    
-    % plot the new clusters
-    subplot(3,1,3);
-    plotSecondDerivative2('acceleration and grouped clusters', Derivative,...
-        time, [Clusters(:, 1); Clusters(:, 2)]);
+%    % group sequences of small clusters into bigger ones
+%    Clusters = awesomizeClusters(Clusters, timeThres);
+%    
+%    % plot the new clusters
+%    subplot(3,1,3);
+%    plotSecondDerivative2('acceleration and grouped clusters', Derivative,...
+%        time, [Clusters(:, 1); Clusters(:, 2)]);
