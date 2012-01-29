@@ -8,8 +8,8 @@ function plotAcc(Accel, timeStamp)
     hold on
     
     plot(Accel(:, 3), Accel(:, 4), 'LineWidth',1, 'color', 'r'); 
-    plot(Accel(:, 3), Accel(:, 5), 'LineWidth',1, 'color', 'g'); 
-    plot(Accel(:, 3), Accel(:, 6), 'LineWidth',1, 'color', 'b'); 
+    plot(Accel(:, 3), Accel(:, 5), 'LineWidth',1, 'color', 'b'); 
+    plot(Accel(:, 3), Accel(:, 6), 'LineWidth',1, 'color', 'g'); 
     
     hold off
 

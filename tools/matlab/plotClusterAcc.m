@@ -10,7 +10,6 @@ afterStartCluster = SessionAccTime >= clusterTime(1);
 beforeEndCluster = SessionAccTime <= clusterTime(2);
 inCluster = afterStartCluster & beforeEndCluster;
 
-
 if sum(inCluster) > 0
 
     % get the data that is in cluster
@@ -23,7 +22,7 @@ if sum(inCluster) > 0
     
     if amountOfEntries == 2
         first = 1;
-        second = 0;
+        second = 2;
         third = 2;
     elseif amountOfEntries == 3
         first = 1;
@@ -31,7 +30,7 @@ if sum(inCluster) > 0
         third = 3;
     elseif amountOfEntries == 4
         first = 2;
-        second = 0;
+        second = 2;
         third = 3;
     else
         first = 2;
