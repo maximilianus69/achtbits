@@ -39,7 +39,7 @@ function [Gps Clusters] = main(deviceId, sessionId)
 
     [newTime, newSpeed] = interpolate(Input(:, 1), Speed, timestampStep, 'pchip');
     
-    histogramCompare(newTime, newSpeed, histogramSizeSeconds, timestampStep);
+    [m1Course, m2Course, m3Course] = histogramCompare(newTime, newSpeed, histogramSizeSeconds, timestampStep);
 
 
     %Clusters = findClusters(time, Derivative, peakThres);
