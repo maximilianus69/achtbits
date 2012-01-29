@@ -121,7 +121,7 @@ for i = 1:size(Clusters, 1)
         sprintf('%03d', sessionId), '_clusterFeatures.csv');
     
     if i == 1
-        dlmwrite(outputFile, ClusterFeatures);
+        dlmwrite(outputFile, ClusterFeatures, 'precision', '%10f');
     else
         dlmwrite(outputFile, ClusterFeatures, '-append', 'roffset', 0, 'precision',  '%10f');
     end
