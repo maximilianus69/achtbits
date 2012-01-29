@@ -16,21 +16,25 @@ dataPointsPerHist = histogramSizeSeconds/timestampStep;
 
 
 % the bins to create the histograms with. Edges in now km/h
-bins = [0, 2, 4, 6, 8, 10, 14, 18, 22, 30, 38, 45, 60, 90, 9001]; 
+%bins = [0, 2, 4, 6, 8, 10, 14, 18, 22, 30, 38, 45, 60, 90, 9001]; 
+bins = [0, 5, 10, 20, 40, 60, 120];
+bins ./ 3.6;
 
 % Create the histograms from the model here
 m1Speeds = zeros(dataPointsPerHist, 1); % chillin'
 m2Speeds = ones(dataPointsPerHist, 1); % crazy ass?
 m3Speeds = ones(dataPointsPerHist, 1) .* 30; % flyin' 
 
-m1Hist = histc(m1Speeds, bins); 
-m2Hist = histc(m2Speeds, bins); 
-m3Hist = histc(m3Speeds, bins); 
+m1Hist = histc(m1Speeds, bins);
+m2Hist = histc(m2Speeds, bins);
+m3Hist = histc(m3Speeds, bins);
 
 
 m1Course = zeros(size(interpolatedTimestamps)-dataPointsPerHist, 1);
 m2Course = zeros(size(interpolatedTimestamps)-dataPointsPerHist, 1);
 m3Course = zeros(size(interpolatedTimestamps)-dataPointsPerHist, 1);
+
+
 
 for x = (dataPointsPerHist/2) + 1 : size(interpolatedTimestamps) - dataPointsPerHist/2
     % create histogram of moment
@@ -42,18 +46,18 @@ for x = (dataPointsPerHist/2) + 1 : size(interpolatedTimestamps) - dataPointsPer
     m3Dif = sum(abs(histOfMoment .- m3Hist));
 
     m1Dif
-    (m1Dif / (dataPointsPerHist*2)) * 100
+    %(m1Dif / (dataPointsPerHist*2)) * 100
    
     % safe! (in percentage corresponding to) 
-    m1Course(x-dataPointsPerHist/2) = (m1Dif / (dataPointsPerHist*2)) * 100;
-    m2Course(x-dataPointsPerHist/2) = (m2Dif / (dataPointsPerHist*2)) * 100;
-    m3Course(x-dataPointsPerHist/2) = (m3Dif / (dataPointsPerHist*2)) * 100; 
+    m1Course(x-dataPointsPerHist/2) = 100 - ((m1Dif / (dataPointsPerHist*2)) * 100);
+    m2Course(x-dataPointsPerHist/2) = 100 - ((m2Dif / (dataPointsPerHist*2)) * 100);
+    m3Course(x-dataPointsPerHist/2) = 100 - ((m3Dif / (dataPointsPerHist*2)) * 100); 
 
 end
 
 
 
-plot(m3Course)
+plot(m2Course)
 
 
 
