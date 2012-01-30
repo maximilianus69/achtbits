@@ -12,7 +12,7 @@ function [Gps Clusters] = main(deviceId, sessionId)
     Input = getTimeAndSpeed(Gps);
     
     % plot the speed
-    fig = figure(1);
+    fig = figure('Name', strcat('device:  ', deviceId, ', session ID:  ', int2str(sessionId)));
     %set(fig,'units','normalized','outerposition',[0 0 1 1]);
     
     
