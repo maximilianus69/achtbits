@@ -5,15 +5,7 @@ function [Gps Clusters] = main(deviceId, sessionId)
 
 
     histogramSizeSeconds = 900;
-    timestampStep = 150;
-
-    % Threshold based on different time stamps, used for findClusters, determines
-    % what datapoints becomes peaks?
-    %peakThres = 2*10^(-5);
-    peakThres = 7;
-
-    % Threshold used for awesomizeClusters, determines peaks in a range become one? 
-    timeThres = 1500;
+    timestampStep = 100;
 
     addpath('plot');
     Gps = readgps(deviceId, sessionId);
@@ -47,5 +39,8 @@ function [Gps Clusters] = main(deviceId, sessionId)
     timestamps = (timestamps - timestamps(1) + histogramSizeSeconds/2) ./ 60;
     
     subplot(3, 1, 3);
+    plotSecondDerivative2('', NewSpeed, NewTime);
+    hold on
     plotHists(m1Course, m2Course, m3Course, timestamps);
+    hold off
 
