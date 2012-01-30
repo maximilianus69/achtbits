@@ -23,15 +23,14 @@ m2Hist = createTrainingHist('flying', bins, histogramSizeSeconds, timestampStep)
 m3Hist = createTrainingHist('diving', bins, histogramSizeSeconds, timestampStep);
 
 dataPointsPerHist = sum(m1Hist);
-halvedDataPointsPerHist = round(dataPointsPerHist/2)
+halvedDataPointsPerHist = floor(dataPointsPerHist/2);
 
 m1Course = zeros(size(interpolatedTimestamps, 1)-dataPointsPerHist, 1);
 m2Course = zeros(size(interpolatedTimestamps, 1)-dataPointsPerHist, 1);
 m3Course = zeros(size(interpolatedTimestamps, 1)-dataPointsPerHist, 1);
 
-
-timestamps = interpolatedTimestamps(halvedDataPointsPerHist:size(interpolatedTimestamps, 1)-halvedDataPointsPerHist);
-
+% added this minus 1 @ random, could also remove that 1 from the beginning 
+timestamps = interpolatedTimestamps(halvedDataPointsPerHist:size(interpolatedTimestamps, 1)-halvedDataPointsPerHist - 1); 
 
 
 for x = halvedDataPointsPerHist + 1 : size(interpolatedTimestamps) - halvedDataPointsPerHist 
@@ -39,8 +38,6 @@ for x = halvedDataPointsPerHist + 1 : size(interpolatedTimestamps) - halvedDataP
     speedsOfMoment = interpolatedSpeeds(x-halvedDataPointsPerHist:x+halvedDataPointsPerHist);
     histOfMoment = histc(speedsOfMoment, bins);
     % compare hists
-    sum(histOfMoment)
-    sum(m1Hist)
     m1Dif = sum(abs(histOfMoment - m1Hist));
     m2Dif = sum(abs(histOfMoment - m2Hist));
     m3Dif = sum(abs(histOfMoment - m3Hist));
@@ -50,8 +47,6 @@ for x = halvedDataPointsPerHist + 1 : size(interpolatedTimestamps) - halvedDataP
     m2Course(x-halvedDataPointsPerHist, 1) = 100 - ((m2Dif / (dataPointsPerHist*2)) * 100);
     m3Course(x-halvedDataPointsPerHist, 1) = 100 - ((m3Dif / (dataPointsPerHist*2)) * 100); 
 end
-
-
 
 
 
