@@ -1,4 +1,4 @@
-function [ SessionGpsData AnnotatedClusters ] = annotateSession( deviceId, sessionId, outputPath)
+function output = annotateSession( deviceId, sessionId, outputPath )
 %ANNOTATESESSION a tool to annote the clusters of a session
 %
 %   INPUT:
@@ -13,10 +13,13 @@ function [ SessionGpsData AnnotatedClusters ] = annotateSession( deviceId, sessi
 %       - plot data of cluster
 %       - user can input annotation for cluster
 
+annotatedData = [];
+
+output = 'continue';
+run = true;
+
 behaviourClasses = {'unknown', 'sleeping', 'digesting', 'flying',...
         'diving', 'bad cluster'};
-    
-AnnotatedClusters = [];
     
 % read the session data from input file
 SessionGpsData = readgps(deviceId, sessionId);
@@ -32,26 +35,25 @@ Clusters = analyseSession(SessionGpsData);
 dateTimeStart = timestampToDateTime(SessionGpsData(1, 2));
 
 % initiate annotation GUI 
-screenSize = get(0, 'ScreenSize');
+
 mainFigId = figure('Name',strcat('Cluster annotation, session start: ', dateTimeStart), 'NumberTitle','off', ...
-    'units','normalized','outerposition',[0 0.05 1 0.95], 'Position', [0 0 1 1]);
+    'units','normalized','outerposition',[0 0.05 1 0.95], 'DeleteFcn', {@exitTool});
 
 
 % LAYOUT:
 
-% 1 - trajectory
-% 2 - velocity
-% 3 - acceleration
-% 4 - height
-% 5 - accelero?
+% 1 - session trajectory
+% 2 - cluster trajectory
+% 3 - velocity and acceleration
+% 4 - instantanious speed
+% 5 - accelerometer data
 % 6 - features
-% 7 - input (clickable)
 %
-% [1 1 2 2 2 2 2]
-% [1 1 3 3 3 3 3]
-% [1 1 4 4 4 4 4]
-% [1 1 5 5 5 7 7]
-% [6 6 6 6 6 7 7]
+% [1 1 2 2 5 5 5]
+% [1 1 2 2 5 5 5]
+% [1 1 2 2 5 5 5]
+% [3 3 3 3 3 6 6]
+% [4 4 4 4 4 6 6]
 
 % set previousClusterClass to unknown
 previousClusterClass = 1;
@@ -60,9 +62,17 @@ previousClusterClass = 1;
 %   find the data and features
 %   plot the trajectory, data and features
 %   ask for user input (behaviour-class)
-for i = 1:size(Clusters, 1)
+
+i = 1;
+amountOfClusters = size(Clusters, 1);
+
+while i <= amountOfClusters
     clf %clearfigure
     
+    run
+    if ~run
+        return
+    end
     % get cluster features and data
     clusterTime = Clusters(i, :);
     [ClusterFeatures ClusterData] = ...
@@ -74,11 +84,12 @@ for i = 1:size(Clusters, 1)
     SessionCoordinates = SessionGpsData(:, 3:4);
     ClusterCoordinates = ClusterData(:, 3:4);
     
+    % plot session trajectory
     subplot(5,7,[1:2 8:9 15:16])
-    % subplot('Position',[0 0.95 0.1 0.1])
     plotTrajectory(SessionCoordinates, ClusterCoordinates);
     title('Session trajectory');
     
+    % plot cluster trajectory
     subplot(5, 7, [3:4 10:11 17:18])
     plotTrajectory(ClusterCoordinates);
     title('Cluster trajectroy');
@@ -105,27 +116,94 @@ for i = 1:size(Clusters, 1)
     % show features  
     plotFeatureInfo(ClusterFeatures, behaviourClasses);
     
-    % get behaviour input
-
-    behaviour = menu('choose a class', behaviourClasses);
+    % show control
+    hp = uipanel('Position', [0 0 0.1 0.6], 'Title', 'control');
+    hbgc = uibuttongroup('Parent', hp, 'Title', 'options', 'Position', [0 0.7 1 0.3]);
+    uicontrol('Parent', hbgc, 'Style', 'pushbutton', 'String', 'Back', ...
+        'Callback', {@previousCluster}, 'Position', [10 10 100 30])
+    uicontrol('Parent', hbgc, 'Style', 'pushbutton', 'String', 'Exit', ...
+        'Callback', {@exitTool}, 'Position', [10 50 100 30])
     
-    previousClusterClass = behaviour;
-        
-    % add row to output
-    ClusterFeatures = [ClusterFeatures behaviour];
-    AnnotatedClusters = [AnnotatedClusters; ClusterFeatures behaviour];
+    hbg = uibuttongroup('Parent', hp, 'Title', 'classes', 'Position', [0 0 1 0.7]);
     
-    % write features to file
+    %[hbgL hbgB hbgW hbgH] = get(hbg, 'Position');
+    %buttonL = hbgW/10
     
-    outputFile = strcat(outputPath, '/device_', deviceId, '_session_', ...
-        sprintf('%03d', sessionId), '_clusterFeatures.csv');
+    uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'unknown', ...
+        'Callback', {@updateBehaviour, 1}, 'Position', [10 10 100 30])
+    uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Sleeping', ...
+        'Callback', {@updateBehaviour, 2}, 'Position', [10 50 100 30])
+    uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Digesting', ...
+        'Callback', {@updateBehaviour, 3}, 'Position', [10 90 100 30])
+    uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Flying', ...
+        'Callback', {@updateBehaviour, 4}, 'Position', [10 130 100 30])
+    uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Hunting', ...
+        'Callback', {@updateBehaviour, 5}, 'Position', [10 170 100 30])
+    uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Bad cluster', ...
+        'Callback', {@updateBehaviour, 6}, 'Position', [10 210 100 30])
     
-    if i == 1
-        dlmwrite(outputFile, ClusterFeatures, 'precision', '%10f');
-    else
-        dlmwrite(outputFile, ClusterFeatures, '-append', 'roffset', 0, 'precision',  '%10f');
-    end
+    uiwait
+    
+    % behaviour = menu('choose a class', behaviourClasses);    
+    
 end
+
+    function exitTool(~, ~)
+        
+        outputFile = strcat(outputPath, '/device_', deviceId, '_session_', ...
+            sprintf('%03d', sessionId), '_clusterFeatures.csv');
+
+        dlmwrite(outputFile, annotatedData, 'precision', '%10f');
+        
+%         if i == 1
+%             dlmwrite(outputFile, ClusterFeatures, 'precision', '%10f');
+%         else
+%             dlmwrite(outputFile, ClusterFeatures, '-append', 'roffset', 0, 'precision',  '%10f');
+%         end
+        
+        %close all
+        
+        %uiresume
+        output = 'stop';
+        run = false;
+        uiresume
+        
+    end
+
+    function previousCluster(~, ~)
+        
+        annotatedData = annotatedData(1:end, :);
+        if i > 1
+            i = i - 1;
+        end
+        
+        uiresume
+    end
+
+    function updateBehaviour(src, eventData, behaviour)
+
+        previousClusterClass = behaviour;
+
+        % add row to output
+        ClusterFeatures = [ClusterFeatures behaviour];
+
+        annotatedData = [annotatedData; ClusterFeatures];
+        
+%        % write features to file
+
+%         outputFile = strcat(outputPath, '/device_', deviceId, '_session_', ...
+%             sprintf('%03d', sessionId), '_clusterFeatures.csv');
+% 
+%         if i == 1
+%             dlmwrite(outputFile, ClusterFeatures, 'precision', '%10f');
+%         else
+%             dlmwrite(outputFile, ClusterFeatures, '-append', 'roffset', 0, 'precision',  '%10f');
+%         end
+
+        uiresume;
+
+        i = i + 1;
+    end
 
 close all;
 
