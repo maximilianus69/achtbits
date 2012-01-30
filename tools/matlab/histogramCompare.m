@@ -27,22 +27,32 @@ angleHistEntries = 0;
 binsSpeed = [0, 5, 10, 20, 40, 60, 120];
 binsSpeed ./ 3.6;
 
-binsAngle = [0, 5, 10, 30, 60, 180, 360], 
+binsAngle = [0, 5, 10, 30, 60, 180, 360];
 
 
-m1HistSpeed = createTrainingHist('floating', binsSpeed, histogramSizeSeconds, timestampStep) .* speedFactor;
-m2HistSpeed = createTrainingHist('flying', binsSpeed, histogramSizeSeconds, timestampStep) .* speedFactor;
-m3HistSpeed = createTrainingHist('diving', binsSpeed, histogramSizeSeconds, timestampStep) .* speedFactor;
-speedHistEntries = sum(m1HistSpeed);
+m1HistSpeed = createTrainingHist('floating', binsSpeed, histogramSizeSeconds, timestampStep);
+m2HistSpeed = createTrainingHist('flying', binsSpeed, histogramSizeSeconds, timestampStep);
+m3HistSpeed = createTrainingHist('diving', binsSpeed, histogramSizeSeconds, timestampStep);
 
-%m1HistAngle =
-%m2HistAngle
-%m3HistAngle
-angleHistEntries = sum(m1HistAngle);
-
-dataPointsPerHist = sum(m1Hist);
+% calculate data points for looping over session
+dataPointsPerHist = sum(m1HistSpeed);
 halvedDataPointsPerHist = floor(dataPointsPerHist/2);
 odd = mod(dataPointsPerHist, 2) == 0;
+
+% take into account the speed factor
+m1HistSpeed .* speedFactor;
+m2HistSpeed .* speedFactor;
+m3HistSpeed .* speedFactor;
+
+speedHistEntries = sum(m1HistSpeed);
+
+% TODO: create real histograms from models here
+m1HistAngle = ones(10, 1) .* angleFactor;
+m2HistAngle = ones(10, 1) .* angleFactor;
+m3HistAngle = ones(10, 1) .* angleFactor;
+
+angleHistEntries = sum(m1HistAngle);
+
 
 m1Course = zeros(size(interpolatedTimestamps, 1)-dataPointsPerHist, 1);
 m2Course = zeros(size(interpolatedTimestamps, 1)-dataPointsPerHist, 1);
@@ -60,18 +70,19 @@ for x = halvedDataPointsPerHist + 1 : size(interpolatedTimestamps) - halvedDataP
 
     % create histogram of moment for angle 
     xSpeedsOfMoment = interpolatedXSpeed(x-halvedDataPointsPerHist:x+halvedDataPointsPerHist-odd);
-    ySpeedsOfMoment = interpolatedYSpeed(y-halvedDataPointsPerHist:y+halvedDataPointsPerHist-odd);
+    ySpeedsOfMoment = interpolatedYSpeed(x-halvedDataPointsPerHist:x+halvedDataPointsPerHist-odd);
 
     % calculate the total rotation of the bird in degrees of this piece of flight
-    totalVar = zeros(size(xSpeedsOfMoment) - 1);
+    totalVar = zeros(size(xSpeedsOfMoment));
     for i = 1:size(xSpeedsOfMoment, 1) - 1
         u = [xSpeedsOfMoment(i) ySpeedsOfMoment(i)];
         v = [xSpeedsOfMoment(i+1) ySpeedsOfMoment(i+1)];
-        CosTheta = dot(u,v)/(norm(u)*norm(v));
-        totalVar(i) = acos(CosTheta)*180/pi;
+        cosTheta = dot(u,v)/(norm(u)*norm(v));
+        totalVar(i) = acos(cosTheta)*180/pi;
     end
-        
-    histOfMomentAngle = histc(totalVar, binsAngle):
+       
+    size(totalVar) 
+    histOfMomentAngle = histc(totalVar, binsAngle);
     histOfMomentAngle .* angleFactor;
     
    
