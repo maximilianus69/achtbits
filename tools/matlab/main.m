@@ -44,7 +44,7 @@ function [Gps Clusters] = main(deviceId, sessionId)
    
     [m1Course, m2Course, m3Course, timestamps] = histogramCompare(NewTime, NewSpeed, histogramSizeSeconds, timestampStep);
 
-    timestamps = (timestamps - timestamps(1)) ./ 60;
+    timestamps = (timestamps - timestamps(1) + histogramSizeSeconds/2) ./ 60;
     
     subplot(3, 1, 3);
     plotHists(m1Course, m2Course, m3Course, timestamps);
