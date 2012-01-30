@@ -10,7 +10,7 @@ function [Gps Clusters] = main(deviceId, sessionId)
     addpath('plot');
     Gps = readgps(deviceId, sessionId);
     Input = getTimeAndSpeed(Gps);
-    InstSpeed = abs(Gps(:, 9:10))
+    InstSpeed = abs(Gps(:, 9:10));
     Time = Input(:, 1);
     Time = (Time - Time(1)) ./60;
     
@@ -42,16 +42,16 @@ function [Gps Clusters] = main(deviceId, sessionId)
     subplot(3, 1, 2);
     % Get interpolated values
     [NewTime, NewSpeed] = interpolate(Input(:, 1), Speed, timestampStep, 'pchip');
-    [NewXTime, NewXSpeed] = interpolate(Input(:, 1), InstSpeed(:, 1), timestampStep, 'pchip');
-    [NewYTime, NewYSpeed] = interpolate(Input(:, 1), InstSpeed(:, 2), timestampStep, 'pchip');
+    [NewXTime, NewXSpeed] = interpolate(Input(:, 1), InstSpeed(:, 1), timestampStep, 'pchip')
+    [NewYTime, NewYSpeed] = interpolate(Input(:, 1), InstSpeed(:, 2), timestampStep, 'pchip')
 
     plotSecondDerivative('Interpolated', NewSpeed, NewTime);
     hold on
-    plotSecondDerivative('Interpolated', NewXSpeed, NewXTime);
-    plotSecondDerivative('Interpolated', NewYSpeed, NewYTime);
+    plot((NewXTime- NewXTime(1))./60, NewXSpeed, 'color', 'r');
+    plot((NewYTime- NewYTime(1))./60, NewYSpeed, 'color', 'b');
     hold off
    
-    [m1Course, m2Course, m3Course, timestamps] = histogramCompare(NewTime, NewSpeed, histogramSizeSeconds, timestampStep);
+    [m1Course, m2Course, m3Course, timestamps] = histogramCompare(NewTime, NewSpeed,NewXSpeed, NewYSpeed, histogramSizeSeconds, timestampStep);
 
     timestamps = (timestamps - timestamps(1) + histogramSizeSeconds/2) ./ 60;
     
