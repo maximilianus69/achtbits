@@ -17,11 +17,9 @@ function HNormData = normalizeHeight( Data )
 h = Data(:,5); % height data
 t = Data(:,2); % time data
 
-% not needed for now...
+% TODO: remove code below when not needed anymore
 %hDiff = h(2:end) - h(1:end-1); % differences between heights
 %tDiff = t(2:end) - t(1:end-1); % passed times between heights
-
-% not needed for now...
 %hDerv = hDiff ./ tDiff; % derivative of height to time
 
 % find outliers

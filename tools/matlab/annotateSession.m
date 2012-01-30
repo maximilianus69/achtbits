@@ -27,7 +27,7 @@ SessionGpsData = readgps(deviceId, sessionId);
 % read accelerometer data from file
 SessionAccData = readAcc(deviceId, sessionId);
 
-%SessionGpsData = normalizeHeight(SessionGpsData);
+SessionGpsData = normalizeHeight(SessionGpsData);
 
 % find clusters
 Clusters = analyseSession(SessionGpsData);
