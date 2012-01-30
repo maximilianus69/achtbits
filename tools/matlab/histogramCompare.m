@@ -40,6 +40,7 @@ for x = halvedDataPointsPerHist + 1 : size(interpolatedTimestamps) - halvedDataP
     histOfMoment = histc(speedsOfMoment, bins);
     % compare hists
     sum(histOfMoment)
+    sum(m1Hist)
     m1Dif = sum(abs(histOfMoment - m1Hist));
     m2Dif = sum(abs(histOfMoment - m2Hist));
     m3Dif = sum(abs(histOfMoment - m3Hist));
