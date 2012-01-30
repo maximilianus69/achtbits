@@ -24,7 +24,8 @@ m2Hist = createTrainingHist('flying', bins, histogramSizeSeconds, timestampStep)
 m3Hist = createTrainingHist('diving', bins, histogramSizeSeconds, timestampStep);
 
 dataPointsPerHist = sum(m1Hist);
-halvedDataPointsPerHist = dataPointsPerHist/2;
+halvedDataPointsPerHist = floor(dataPointsPerHist/2);
+odd = mod(dataPointsPerHist, 2) == 0;
 
 m1Course = zeros(size(interpolatedTimestamps, 1)-dataPointsPerHist, 1);
 m2Course = zeros(size(interpolatedTimestamps, 1)-dataPointsPerHist, 1);
@@ -36,7 +37,7 @@ timestamps = interpolatedTimestamps(halvedDataPointsPerHist:size(interpolatedTim
 
 for x = halvedDataPointsPerHist + 1 : size(interpolatedTimestamps) - halvedDataPointsPerHist 
     % create histogram of moment
-    speedsOfMoment = interpolatedSpeeds(floor(x-halvedDataPointsPerHist):floor(x+halvedDataPointsPerHist));
+    speedsOfMoment = interpolatedSpeeds(x-halvedDataPointsPerHist:x+halvedDataPointsPerHist - odd);
     histOfMoment = histc(speedsOfMoment, bins);
 
     % compare hists
