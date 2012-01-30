@@ -29,9 +29,8 @@ m1Course = zeros(size(interpolatedTimestamps, 1)-dataPointsPerHist, 1);
 m2Course = zeros(size(interpolatedTimestamps, 1)-dataPointsPerHist, 1);
 m3Course = zeros(size(interpolatedTimestamps, 1)-dataPointsPerHist, 1);
 
-
-timestamps = interpolatedTimestamps(halvedDataPointsPerHist:size(interpolatedTimestamps, 1)-halvedDataPointsPerHist - 1);
-
+% added this minus 1 @ random, could also remove that 1 from the beginning 
+timestamps = interpolatedTimestamps(halvedDataPointsPerHist:size(interpolatedTimestamps, 1)-halvedDataPointsPerHist - 1); 
 
 
 for x = halvedDataPointsPerHist + 1 : size(interpolatedTimestamps) - halvedDataPointsPerHist 
