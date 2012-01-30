@@ -42,10 +42,10 @@ function [Gps Clusters] = main(deviceId, sessionId)
     [m1Course, m2Course, m3Course, timestamps] = histogramCompare(newTime, newSpeed, histogramSizeSeconds, timestampStep);
 
     timestamps = (timestamps - timestamps(1)) ./ 60;
-  
-    % m1 flying red
-    % m2 diving green
-    % m3 chillin blue
+
+    % m1 chillin red 
+    % m2 flying green
+    % m3 diving blue
     plot(timestamps, m1Course, '-s', ...
                 'LineWidth',1, ...
                 'color','r', ...
