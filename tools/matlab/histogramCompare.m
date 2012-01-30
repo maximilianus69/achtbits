@@ -25,7 +25,7 @@ m3Hist = createTrainingHist('diving', bins, histogramSizeSeconds, timestampStep)
 
 dataPointsPerHist = sum(m1Hist);
 halvedDataPointsPerHist = floor(dataPointsPerHist/2);
-odd = mod(dataPointsPerHist, 2) == 0
+odd = mod(dataPointsPerHist, 2) == 0;
 
 m1Course = zeros(size(interpolatedTimestamps, 1)-dataPointsPerHist, 1);
 m2Course = zeros(size(interpolatedTimestamps, 1)-dataPointsPerHist, 1);
