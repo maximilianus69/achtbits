@@ -1,4 +1,4 @@
-function Hist = createTrainingHist(type, bins, length, timeStep)
+function [SpeedHist, AngleHist] = createTrainingHist(type, bins, length, timeStep)
     % CREATETRAININGHIST: Creates a histogram of one of the following types:
     % 'flying', 'diving', 'floating'
     % Input: 
@@ -22,12 +22,15 @@ function Hist = createTrainingHist(type, bins, length, timeStep)
     Data = dlmread(file, ',');
     Input = getTimeAndSpeed(Data);
     
-    % Get time and speed
+    % Get time and speeds
     Time = Input(:, 1);
     Time = Time - Time(1);
     for i = 1:size(Input, 1)
         Speed(i, :) = norm(Input(i, 2:3));
     end
+    InstSpeed = Gps(:, 9:10);
+    
+
 
     % Interpolate
     [RealTime RealSpeed] = interpolate(Time, Speed, timeStep);
@@ -48,12 +51,25 @@ function Hist = createTrainingHist(type, bins, length, timeStep)
         % And RealSpeed
         RealSpeed((round(length/timeStep)+2):size(RealSpeed, 1), :) = [];
     end
+    
+
+    totalVar = zeros(size(InstSpeeds, 1) - 1);
+    % Create angle histogram
+    for i = 1:size(InstSpeed, 1) - 1
+        u = [InstSpeed(i, 1) InstSpeed(i, 2)];
+        v = [InstSpeed(i+1, 1) InstSpeed(i+1, 2)];
+        cosTheta = dot(u,v)/(norm(u)*norm(v));
+        totalVar(i) = acos(cosTheta)*180/pi;
+    end
+
+    AngleHist = histc(totalVar, binsAngle);
+    AngleHist .* angleFactor;
 
     %subplot(2,1,1);
     %plot(RealTime, RealSpeed);
     %subplot(2, 1, 2);
-    Hist = histc(RealSpeed, bins);
-    %bar(bins, Hist);
+    SpeedHist = histc(RealSpeed, bins);
+    %bar(bins, SpeedHist);
     % hist(RealSpeed, bins);
 
 

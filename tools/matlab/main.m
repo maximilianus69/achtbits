@@ -10,7 +10,7 @@ function [Gps Clusters] = main(deviceId, sessionId)
     addpath('plot');
     Gps = readgps(deviceId, sessionId);
     Input = getTimeAndSpeed(Gps);
-    InstSpeed = abs(Gps(:, 9:10));
+    InstSpeed = Gps(:, 9:10);
     Time = Input(:, 1);
     Time = (Time - Time(1)) ./60;
     
@@ -27,8 +27,8 @@ function [Gps Clusters] = main(deviceId, sessionId)
     % plotSecondDerivative('velocity', Input(:, 2:3), Input(:, 1));
     plotSecondDerivative2('velocity', Speed, Input(:,1));
     hold on
-    plot(Time, InstSpeed(:, 1), 'color', 'r'); 
-    plot(Time, InstSpeed(:, 2), 'color', 'b'); 
+    plot(Time, abs(InstSpeed(:, 1)), 'color', 'r'); 
+    plot(Time, abs(InstSpeed(:, 2)), 'color', 'b'); 
     hold off
 
 
@@ -42,8 +42,8 @@ function [Gps Clusters] = main(deviceId, sessionId)
     subplot(3, 1, 2);
     % Get interpolated values
     [NewTime, NewSpeed] = interpolate(Input(:, 1), Speed, timestampStep, 'pchip');
-    [NewXTime, NewXSpeed] = interpolate(Input(:, 1), InstSpeed(:, 1), timestampStep, 'pchip');
-    [NewYTime, NewYSpeed] = interpolate(Input(:, 1), InstSpeed(:, 2), timestampStep, 'pchip');
+    [NewXTime, NewXSpeed] = interpolate(Input(:, 1), abs(InstSpeed(:, 1)), timestampStep, 'pchip');
+    [NewYTime, NewYSpeed] = interpolate(Input(:, 1), abs(InstSpeed(:, 2)), timestampStep, 'pchip');
 
     plotSecondDerivative('Interpolated', NewSpeed, NewTime);
     hold on
