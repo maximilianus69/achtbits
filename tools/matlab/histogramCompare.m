@@ -1,4 +1,4 @@
-function [m1Course, m2Course, m3Course] = histogramCompare(interpolatedTimestamps, interpolatedSpeeds, histogramSizeSeconds, timestampStep)
+function [m1Course, m2Course, m3Course, timestamps] = histogramCompare(interpolatedTimestamps, interpolatedSpeeds, histogramSizeSeconds, timestampStep)
 % compares 3 histogram models with each point in a session and returns, in percentages,
 % how well the models fit over the course of the flight. 
 %
@@ -26,9 +26,10 @@ m2Hist = createTrainingHist('diving', bins, histogramSizeSeconds, timestampStep)
 m3Hist = createTrainingHist('floating', bins, histogramSizeSeconds, timestampStep);
 
 
-m1Course = zeros(size(interpolatedTimestamps)-dataPointsPerHist, 2);
-m2Course = zeros(size(interpolatedTimestamps)-dataPointsPerHist, 2);
-m3Course = zeros(size(interpolatedTimestamps)-dataPointsPerHist, 2);
+m1Course = zeros(size(interpolatedTimestamps)-dataPointsPerHist, 1);
+m2Course = zeros(size(interpolatedTimestamps)-dataPointsPerHist, 1);
+m3Course = zeros(size(interpolatedTimestamps)-dataPointsPerHist, 1);
+timestamps = interpolatedTimestamps(1 + dataPointsPerHist/2:size(interpolatedTimestamps)-dataPointsPerHist/2);
 
 
 
@@ -43,14 +44,9 @@ for x = (dataPointsPerHist/2) + 1 : size(interpolatedTimestamps) - dataPointsPer
 
     % safe! (in percentage corresponding to) 
     m1Course(x-dataPointsPerHist/2, 1) = 100 - ((m1Dif / (dataPointsPerHist*2)) * 100);
-    m1Course(x-dataPointsPerHist/2, 2) = interpolatedTimestamps(x);
     m2Course(x-dataPointsPerHist/2, 1) = 100 - ((m2Dif / (dataPointsPerHist*2)) * 100);
-    m2Course(x-dataPointsPerHist/2, 2) = interpolatedTimestamps(x);
     m3Course(x-dataPointsPerHist/2, 1) = 100 - ((m3Dif / (dataPointsPerHist*2)) * 100); 
-    m3Course(x-dataPointsPerHist/2, 2) = interpolatedTimestamps(x);
-
 end
-
 
 
 
