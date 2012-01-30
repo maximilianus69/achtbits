@@ -31,11 +31,15 @@ function [SpeedHist, AngleHist] = createTrainingHist(type, binsSpeed, binsAngle,
         Speed(i, :) = norm(Input(i, 2:3));
     end
     InstSpeed = Data(:, 9:10);
+
+
     
 
 
     % Interpolate
     [RealTime RealSpeed] = interpolate(Time, Speed, timeStep);
+    [RealXTime RealXSpeed] = interpolate(Time, Data(:, 9), timeStep);
+    [RealYTime RealYSpeed] = interpolate(Time, Data(:, 10), timeStep);
 
 
     % Take length minutes of the Input vector
@@ -57,9 +61,9 @@ function [SpeedHist, AngleHist] = createTrainingHist(type, binsSpeed, binsAngle,
 
     %totalVar = zeros(size(InstSpeed, 1) - 1);
     % Create angle histogram
-    for i = 1:size(InstSpeed, 1) - 1
-        u = [InstSpeed(i, 1) InstSpeed(i, 2)];
-        v = [InstSpeed(i+1, 1) InstSpeed(i+1, 2)];
+    for i = 1:size(RealXSpeed, 1) - 1
+        u = [RealXSpeed(i) RealYSpeed(i)];
+        v = [RealXSpeed(i+1) RealYSpeed(i+1)];
         cosTheta = dot(u,v)/(norm(u)*norm(v));
         totalVar(i, :) = acos(cosTheta)*180/pi;
     end
