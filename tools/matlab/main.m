@@ -39,8 +39,11 @@ function [Gps Clusters] = main(deviceId, sessionId)
     timestamps = (timestamps - timestamps(1) + histogramSizeSeconds/2) ./ 60;
     
     subplot(3, 1, 3);
-    plotSecondDerivative2('', NewSpeed, NewTime);
+    % To plot the right width
+    NewTime = (NewTime - NewTime(1)) ./ 60;
+    plot(NewTime, NewSpeed, 'color', 'w'); 
     hold on
+    % Plot the actual values
     plotHists(m1Course, m2Course, m3Course, timestamps);
     hold off
 
