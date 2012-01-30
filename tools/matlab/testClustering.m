@@ -3,9 +3,13 @@ function result = testClustering()
 % to be troublesome cases. Every exception should be shown with those
 % values. 
 
-main('344', 5);
-pause;
-main('344', 9);
-pause;
-main('344', 12);
+for x = 1:15
+    main('344', x);
+    uiwait;
+end
+%main('344', 5);
+%pause;
+%main('344', 9);
+%pause;
+%main('344', 12);
 %pause;
