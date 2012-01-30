@@ -76,7 +76,6 @@ for x = halvedDataPointsPerHist + 1 : size(interpolatedTimestamps) - halvedDataP
         totalVar(i) = acos(cosTheta)*180/pi;
     end
        
-    size(totalVar) 
     histOfMomentAngle = histc(totalVar, binsAngle);
     histOfMomentAngle .* angleFactor;
     
