@@ -1,4 +1,4 @@
-function plotHists(floating, diving, flying, timestamps)
+function plotHists(floating, flying, diving, timestamps)
     % PLOTHISTS: Plots three histograms, the fist one for floating, the second for
     % flying, the third for diving.
     % 
