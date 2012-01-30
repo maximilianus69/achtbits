@@ -18,6 +18,7 @@ function [m1Course, m2Course, m3Course, timestamps] = histogramCompare(interpola
 bins = [0, 5, 10, 20, 40, 60, 120];
 bins ./ 3.6;
 
+
 m1Hist = createTrainingHist('floating', bins, histogramSizeSeconds, timestampStep);
 m2Hist = createTrainingHist('flying', bins, histogramSizeSeconds, timestampStep);
 m3Hist = createTrainingHist('diving', bins, histogramSizeSeconds, timestampStep);
@@ -37,6 +38,7 @@ for x = halvedDataPointsPerHist + 1 : size(interpolatedTimestamps) - halvedDataP
     % create histogram of moment
     speedsOfMoment = interpolatedSpeeds(x-halvedDataPointsPerHist:x+halvedDataPointsPerHist);
     histOfMoment = histc(speedsOfMoment, bins);
+
     % compare hists
     m1Dif = sum(abs(histOfMoment - m1Hist));
     m2Dif = sum(abs(histOfMoment - m2Hist));
