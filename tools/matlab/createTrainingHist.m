@@ -49,13 +49,11 @@ function Hist = createTrainingHist(type, bins, length, timeStep)
         RealSpeed((round(length/timeStep)+2):size(RealSpeed, 1), :) = [];
     end
 
-    size(RealSpeed)
-
-    subplot(2,1,1);
-    plot(RealTime, RealSpeed);
-    subplot(2, 1, 2);
+    %subplot(2,1,1);
+    %plot(RealTime, RealSpeed);
+    %subplot(2, 1, 2);
     Hist = histc(RealSpeed, bins);
-    bar(bins, Hist);
+    %bar(bins, Hist);
     % hist(RealSpeed, bins);
 
 

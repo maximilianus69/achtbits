@@ -37,41 +37,15 @@ function [Gps Clusters] = main(deviceId, sessionId)
     %time = Der(:, 1);
     %Derivative = Der(:, 2);
 
-    [newTime, newSpeed] = interpolate(Input(:, 1), Speed, timestampStep, 'pchip');
+    [NewTime, NewSpeed] = interpolate(Input(:, 1), Speed, timestampStep, 'pchip');
+
+    subplot(3, 1, 2);
+    plotSecondDerivative('Interpolated', NewSpeed, NewTime);
    
-    [m1Course, m2Course, m3Course, timestamps] = histogramCompare(newTime, newSpeed, histogramSizeSeconds, timestampStep);
+    [m1Course, m2Course, m3Course, timestamps] = histogramCompare(NewTime, NewSpeed, histogramSizeSeconds, timestampStep);
 
     timestamps = (timestamps - timestamps(1)) ./ 60;
+    
+    subplot(3, 1, 3);
+    plotHists(m1Course, m2Course, m3Course, timestamps);
 
-    % m1 chillin red 
-    % m2 flying green
-    % m3 diving blue
-    plot(timestamps, m1Course, '-s', ...
-                'LineWidth',1, ...
-                'color','r', ...
-                'MarkerSize',4); 
-    hold on;
-    plot(timestamps, m2Course, '-s', ...
-                'LineWidth',1, ...
-                'color','g', ...
-                'MarkerSize',4); 
-
-    plot(timestamps, m3Course, '-s', ...
-                'LineWidth',1, ...
-                'color','b', ...
-                'MarkerSize',4); 
-
-
-    %Clusters = findClusters(time, Derivative, peakThres);
-
-    % plot all the clusters
-    subplot(3,1,2);
-    plotSecondDerivative2('acceleration and clusters', newSpeed, newTime);
-
-%    % group sequences of small clusters into bigger ones
-%    Clusters = awesomizeClusters(Clusters, timeThres);
-%    
-%    % plot the new clusters
-%    subplot(3,1,3);
-%    plotSecondDerivative2('acceleration and grouped clusters', Derivative,...
-%        time, [Clusters(:, 1); Clusters(:, 2)]);
