@@ -1,4 +1,4 @@
-function [ output_args ] = annotateBird( deviceId, annotationType, startSession )
+function [ output_args ] = annotateBird( deviceId, annotationType, startSessionId )
 %ANNOTATEBIRD starts annotation of all sessions of given device
 %   INPUT:
 %   deviceId - ID number of the device as a string
@@ -21,7 +21,7 @@ format long;
 if nargin < 3
     sessionId = 0;
 else
-    sessionId = startSession;
+    sessionId = startSessionId;
 end
 
 
@@ -56,7 +56,12 @@ if type  == 7
     while exist(sessionFilePath) == 2
         
         sprintf(strcat('starting annotation for session_', sprintf('%03d', sessionId)));
-        annotateSession(deviceId, sessionId, outputDeviceFolder);
+        output = annotateSession(deviceId, sessionId, outputDeviceFolder);
+        
+        if strcmp(output, 'stop')
+            close all
+            return
+        end
         
         sessionId = sessionId + 1;
         
