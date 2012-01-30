@@ -18,7 +18,7 @@ function Hist = createTrainingHist(type, bins, length, timeStep)
     end
     
     % Get the data
-    file = strcat(type, 'Example.csv');
+    file = strcat('examples/', type, 'Example.csv');
     Data = dlmread(file, ',');
     Input = getTimeAndSpeed(Data);
     
