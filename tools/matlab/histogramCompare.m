@@ -1,27 +1,44 @@
-function [m1Course, m2Course, m3Course, timestamps] = histogramCompare(interpolatedTimestamps, interpolatedSpeeds, histogramSizeSeconds, timestampStep)
+function [m1Course, m2Course, m3Course, timestamps] = histogramCompare(interpolatedTimestamps, interpolatedSpeeds, interpolatedXSpeed, interpolatedYSpeed, histogramSizeSeconds, timestampStep)
 % compares 3 histogram models with each point in a session and returns, in percentages,
 % how well the models fit over the course of the flight. 
 %
 % IN: 
 %   interpolatedTimestamps, a vector of timestamps with each timestamp being timestampStep seconds apart from the next timestamp. 
 %   interpolatedSpeeds, a vector of speeds that describe a birds speed in a session at a timestamp from interpolatedTimestamps. 
+%   interpolatedXSpeed, the interpolated instantaneous x speed
+%   interpolatedYSpeed, the interpolated instantaneous y speed
 %   histogramSizeSeconds, the length of the histogram in seconds to work with
 %   timestampStep, the amount of seconds between each timestamp
 %
 % OUT: 
 %   3 vectors for the course of floating, flying and diving + 1 vector with the timestamps
 
+% ability to weigh speed or angles differently from each other
+speedFactor = 1;
+angleFactor = 1;
+
+% how many bins are in which histogram?
+speedHistEntries = 0;
+angleHistEntries = 0;
 
 
 % the bins to create the histograms with. Edges in now km/h
-%bins = [1, 2, 4, 6, 8, 10, 14, 18, 22, 30, 38, 45, 60, 90, 9001]; 
-bins = [0, 5, 7, 10, 15, 20, 120];
-bins ./ 3.6;
+%bins = [0, 2, 4, 6, 8, 10, 14, 18, 22, 30, 38, 45, 60, 90, 9001]; 
+binsSpeed = [0, 5, 10, 20, 40, 60, 120];
+binsSpeed ./ 3.6;
+
+binsAngle = [0, 5, 10, 30, 60, 180, 360], 
 
 
-m1Hist = createTrainingHist('floating', bins, histogramSizeSeconds, timestampStep);
-m2Hist = createTrainingHist('flying', bins, histogramSizeSeconds, timestampStep);
-m3Hist = createTrainingHist('diving', bins, histogramSizeSeconds, timestampStep);
+m1HistSpeed = createTrainingHist('floating', binsSpeed, histogramSizeSeconds, timestampStep) .* speedFactor;
+m2HistSpeed = createTrainingHist('flying', binsSpeed, histogramSizeSeconds, timestampStep) .* speedFactor;
+m3HistSpeed = createTrainingHist('diving', binsSpeed, histogramSizeSeconds, timestampStep) .* speedFactor;
+speedHistEntries = sum(m1HistSpeed);
+
+%m1HistAngle =
+%m2HistAngle
+%m3HistAngle
+angleHistEntries = sum(m1HistAngle);
 
 dataPointsPerHist = sum(m1Hist);
 halvedDataPointsPerHist = floor(dataPointsPerHist/2);
@@ -36,19 +53,41 @@ timestamps = interpolatedTimestamps(halvedDataPointsPerHist:size(interpolatedTim
 
 
 for x = halvedDataPointsPerHist + 1 : size(interpolatedTimestamps) - halvedDataPointsPerHist 
-    % create histogram of moment
-    speedsOfMoment = interpolatedSpeeds(x-halvedDataPointsPerHist:x+halvedDataPointsPerHist - odd);
-    histOfMoment = histc(speedsOfMoment, bins);
+    % create histogram of moment (speed)
+    speedsOfMoment = interpolatedSpeeds(x-halvedDataPointsPerHist:x+halvedDataPointsPerHist - odd);  
+    histOfMomentSpeed = histc(speedsOfMoment, binsSpeed);
+    histOfMomentSpeed .* speedFactor;
 
+    % create histogram of moment for angle 
+    xSpeedsOfMoment = interpolatedXSpeed(x-halvedDataPointsPerHist:x+halvedDataPointsPerHist-odd);
+    ySpeedsOfMoment = interpolatedYSpeed(y-halvedDataPointsPerHist:y+halvedDataPointsPerHist-odd);
+
+    % calculate the total rotation of the bird in degrees of this piece of flight
+    totalVar = zeros(size(xSpeedsOfMoment) - 1);
+    for i = 1:size(xSpeedsOfMoment, 1) - 1
+        u = [xSpeedsOfMoment(i) ySpeedsOfMoment(i)];
+        v = [xSpeedsOfMoment(i+1) ySpeedsOfMoment(i+1)];
+        CosTheta = dot(u,v)/(norm(u)*norm(v));
+        totalVar(i) = acos(CosTheta)*180/pi;
+    end
+        
+    histOfMomentAngle = histc(totalVar, binsAngle):
+    histOfMomentAngle .* angleFactor;
+    
+   
     % compare hists
-    m1Dif = sum(abs(histOfMoment - m1Hist));
-    m2Dif = sum(abs(histOfMoment - m2Hist));
-    m3Dif = sum(abs(histOfMoment - m3Hist));
+    m1DifSpeed = sum(abs(histOfMomentSpeed - m1HistSpeed));
+    m2DifSpeed = sum(abs(histOfMomentSpeed - m2HistSpeed));
+    m3DifSpeed = sum(abs(histOfMomentSpeed - m3HistSpeed));
+
+    m1DifAngle = sum(abs(histOfMomentAngle - m1HistAngle));
+    m2DifAngle = sum(abs(histOfMomentAngle - m2HistAngle));
+    m3DifAngle = sum(abs(histOfMomentAngle - m3HistAngle));
 
     % safe! (in percentage corresponding to) 
-    m1Course(x-halvedDataPointsPerHist, 1) = 100 - ((m1Dif / (dataPointsPerHist*2)) * 100);
-    m2Course(x-halvedDataPointsPerHist, 1) = 100 - ((m2Dif / (dataPointsPerHist*2)) * 100);
-    m3Course(x-halvedDataPointsPerHist, 1) = 100 - ((m3Dif / (dataPointsPerHist*2)) * 100); 
+    m1Course(x-halvedDataPointsPerHist, 1) = 100 - (((m1DifSpeed + m1DifAngle) / ((speedHistEntries+angleHistEntries)*2)) * 100);
+    m2Course(x-halvedDataPointsPerHist, 1) = 100 - (((m2DifSpeed + m2DifAngle) / ((speedHistEntries+angleHistEntries)*2)) * 100);
+    m3Course(x-halvedDataPointsPerHist, 1) = 100 - (((m3DifSpeed + m3DifAngle) / ((speedHistEntries+angleHistEntries)*2)) * 100);
 end
 
 
