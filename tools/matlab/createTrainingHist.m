@@ -1,18 +1,20 @@
-function [SpeedHist, AngleHist] = createTrainingHist(type, bins, length, timeStep)
+function [SpeedHist, AngleHist] = createTrainingHist(type, binsSpeed, binsAngle, length, timeStep)
     % CREATETRAININGHIST: Creates a histogram of one of the following types:
     % 'flying', 'diving', 'floating'
     % Input: 
     %       type: the type of example you want to use. There should be an example file
     %             with the name <type>Example.csv 'flying, 'diving' or 'floating'
-    %       bins: An array of bins that you want to make your histogram with
+    %       binsSpeed: An array of binsSpeed that you want to make your histogram with
     %       length (optional): the time (in seconds) this histogram should take, defaults to 1200 seconds
     %               which is 20 minutes.
     %       timeStep (optional): The time that should be between two points, in seconds. Defaults to 
     %               150 seconds (2.5 minutes).
+    % Output:
+    %       two histograms, one of the current speeds and one of the current angle differences
 
-    if(nargin < 4)
+    if(nargin < 6)
         timeStep = 150;
-        if(nargin < 3)
+        if(nargin < 4)
             length = 1200;
         end
     end
@@ -28,7 +30,7 @@ function [SpeedHist, AngleHist] = createTrainingHist(type, bins, length, timeSte
     for i = 1:size(Input, 1)
         Speed(i, :) = norm(Input(i, 2:3));
     end
-    InstSpeed = Gps(:, 9:10);
+    InstSpeed = Data(:, 9:10);
     
 
 
@@ -53,7 +55,7 @@ function [SpeedHist, AngleHist] = createTrainingHist(type, bins, length, timeSte
     end
     
 
-    totalVar = zeros(size(InstSpeeds, 1) - 1);
+    totalVar = zeros(size(InstSpeed, 1) - 1);
     % Create angle histogram
     for i = 1:size(InstSpeed, 1) - 1
         u = [InstSpeed(i, 1) InstSpeed(i, 2)];
@@ -63,14 +65,14 @@ function [SpeedHist, AngleHist] = createTrainingHist(type, bins, length, timeSte
     end
 
     AngleHist = histc(totalVar, binsAngle);
-    AngleHist .* angleFactor;
+    %AngleHist .* angleFactor;
 
     %subplot(2,1,1);
     %plot(RealTime, RealSpeed);
     %subplot(2, 1, 2);
-    SpeedHist = histc(RealSpeed, bins);
-    %bar(bins, SpeedHist);
-    % hist(RealSpeed, bins);
+    SpeedHist = histc(RealSpeed, binsSpeed);
+    %bar(binsSpeed, SpeedHist);
+    % hist(RealSpeed, binsSpeed);
 
 
     

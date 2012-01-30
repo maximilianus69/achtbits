@@ -29,10 +29,10 @@ binsSpeed ./ 3.6;
 
 binsAngle = [0, 5, 10, 30, 60, 180, 360];
 
-
-m1HistSpeed = createTrainingHist('floating', binsSpeed, histogramSizeSeconds, timestampStep);
-m2HistSpeed = createTrainingHist('flying', binsSpeed, histogramSizeSeconds, timestampStep);
-m3HistSpeed = createTrainingHist('diving', binsSpeed, histogramSizeSeconds, timestampStep);
+% create real histograms from models
+[m1HistSpeed m1HistAngle] = createTrainingHist('floating', binsSpeed, binsAngle, histogramSizeSeconds, timestampStep);
+[m2HistSpeed m2HistAngle] = createTrainingHist('flying', binsSpeed, binsAngle, histogramSizeSeconds, timestampStep);
+[m3HistSpeed m3HistAngle] = createTrainingHist('diving', binsSpeed, binsAngle, histogramSizeSeconds, timestampStep);
 
 % calculate data points for looping over session
 dataPointsPerHist = sum(m1HistSpeed);
@@ -45,11 +45,6 @@ m2HistSpeed .* speedFactor;
 m3HistSpeed .* speedFactor;
 
 speedHistEntries = sum(m1HistSpeed);
-
-% TODO: create real histograms from models here
-m1HistAngle = ones(10, 1) .* angleFactor;
-m2HistAngle = ones(10, 1) .* angleFactor;
-m3HistAngle = ones(10, 1) .* angleFactor;
 
 angleHistEntries = sum(m1HistAngle);
 
