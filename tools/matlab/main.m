@@ -5,7 +5,7 @@ function [Gps Clusters] = main(deviceId, sessionId)
 
 
     histogramSizeSeconds = 900;
-    timestampStep = 100;
+    timestampStep = 150;
 
     addpath('plot');
     Gps = readgps(deviceId, sessionId);
