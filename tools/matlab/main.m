@@ -10,10 +10,13 @@ function [Gps Clusters] = main(deviceId, sessionId)
     addpath('plot');
     Gps = readgps(deviceId, sessionId);
     Input = getTimeAndSpeed(Gps);
+    InstSpeed = abs(Gps(:, 9:10))
+    Time = Input(:, 1);
+    Time = (Time - Time(1)) ./60;
     
     % plot the speed
     fig = figure('Name', strcat('device:  ', deviceId, ', session ID:  ', int2str(sessionId)));
-    %set(fig,'units','normalized','outerposition',[0 0 1 1]);
+    set(fig,'units','normalized','outerposition',[0 0 1 1]);
     
     
     % Calculate the current speed from x_speed and y_speed
@@ -23,6 +26,12 @@ function [Gps Clusters] = main(deviceId, sessionId)
     subplot(3,1,1);
     % plotSecondDerivative('velocity', Input(:, 2:3), Input(:, 1));
     plotSecondDerivative2('velocity', Speed, Input(:,1));
+    hold on
+    plot(Time, InstSpeed(:, 1)); 
+    plot(Time, InstSpeed(:, 2)); 
+    hold off
+
+
     
     %Der = derivative(Input);
     % split Der in time and derivative

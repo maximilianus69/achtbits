@@ -14,8 +14,8 @@ function [m1Course, m2Course, m3Course, timestamps] = histogramCompare(interpola
 
 
 % the bins to create the histograms with. Edges in now km/h
-%bins = [0, 2, 4, 6, 8, 10, 14, 18, 22, 30, 38, 45, 60, 90, 9001]; 
-bins = [0, 5, 10, 20, 40, 60, 120];
+%bins = [1, 2, 4, 6, 8, 10, 14, 18, 22, 30, 38, 45, 60, 90, 9001]; 
+bins = [0, 5, 7, 10, 15, 20, 120];
 bins ./ 3.6;
 
 
