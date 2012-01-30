@@ -2,7 +2,8 @@ function frequency = fourierOnAcc(AccData, timeStamp)
     % FOURIERONACC uses the accellerometer data to plot the fourier
     % analisys. 
     % (now returns maximum as frequency)
-    % Input: [iD, timeStamp, entry, x, y, z]
+    % Input: AccData = [iD, timeStamp, entry, x, y, z]
+    %        timeStamp = the time stamp you want to access the accellerometerdata from.
     
     % Turn off the warning when there are no peaks found
     warning('off', 'signal:findpeaks:noPeaks');
