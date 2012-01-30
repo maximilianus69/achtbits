@@ -38,8 +38,28 @@ function [Gps Clusters] = main(deviceId, sessionId)
     %Derivative = Der(:, 2);
 
     [newTime, newSpeed] = interpolate(Input(:, 1), Speed, timestampStep, 'pchip');
-    
-    [m1Course, m2Course, m3Course] = histogramCompare(newTime, newSpeed, histogramSizeSeconds, timestampStep);
+   
+    [m1Course, m2Course, m3Course, timestamps] = histogramCompare(newTime, newSpeed, histogramSizeSeconds, timestampStep);
+
+    timestamps = (timestamps - timestamps(1)) ./ 60;
+  
+    % m1 flying red
+    % m2 diving green
+    % m3 chillin blue
+    plot(timestamps, m1Course, '-s', ...
+                'LineWidth',1, ...
+                'color','r', ...
+                'MarkerSize',4); 
+    hold on;
+    plot(timestamps, m2Course, '-s', ...
+                'LineWidth',1, ...
+                'color','g', ...
+                'MarkerSize',4); 
+
+    plot(timestamps, m3Course, '-s', ...
+                'LineWidth',1, ...
+                'color','b', ...
+                'MarkerSize',4); 
 
 
     %Clusters = findClusters(time, Derivative, peakThres);
