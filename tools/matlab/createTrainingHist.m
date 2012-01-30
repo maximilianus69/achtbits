@@ -18,7 +18,7 @@ function Hist = createTrainingHist(type, bins, length, timeStep)
     end
     
     % Get the data
-    file = strcat(type, 'Example.csv');
+    file = strcat('examples/', type, 'Example.csv');
     Data = dlmread(file, ',');
     Input = getTimeAndSpeed(Data);
     
@@ -28,11 +28,15 @@ function Hist = createTrainingHist(type, bins, length, timeStep)
     for i = 1:size(Input, 1)
         Speed(i, :) = norm(Input(i, 2:3));
     end
+
+    % Interpolate
     [RealTime RealSpeed] = interpolate(Time, Speed, timeStep);
+
+
     % Take length minutes of the Input vector
 
     % If the example file is too short
-    while (size(RealSpeed, 1) < length/timeStep)
+    while (size(RealSpeed, 1) <= length/timeStep)
         RealTime = [RealTime ; (RealTime + RealTime(size(RealTime, 1)) + timeStep)];
         RealSpeed = [RealSpeed;RealSpeed];
     end
@@ -45,11 +49,13 @@ function Hist = createTrainingHist(type, bins, length, timeStep)
         RealSpeed((round(length/timeStep)+2):size(RealSpeed, 1), :) = [];
     end
 
-    %subplot(2,1,1);
-    %plot(RealTime, RealSpeed);
-    %subplot(2, 1, 2);
+    size(RealSpeed)
+
+    subplot(2,1,1);
+    plot(RealTime, RealSpeed);
+    subplot(2, 1, 2);
     Hist = histc(RealSpeed, bins);
-    %bar(bins, Hist);
+    bar(bins, Hist);
     % hist(RealSpeed, bins);
 
 
