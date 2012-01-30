@@ -42,8 +42,8 @@ function [Gps Clusters] = main(deviceId, sessionId)
     subplot(3, 1, 2);
     % Get interpolated values
     [NewTime, NewSpeed] = interpolate(Input(:, 1), Speed, timestampStep, 'pchip');
-    [NewXTime, NewXSpeed] = interpolate(Input(:, 1), InstSpeed(:, 1), timestampStep, 'pchip')
-    [NewYTime, NewYSpeed] = interpolate(Input(:, 1), InstSpeed(:, 2), timestampStep, 'pchip')
+    [NewXTime, NewXSpeed] = interpolate(Input(:, 1), InstSpeed(:, 1), timestampStep, 'pchip');
+    [NewYTime, NewYSpeed] = interpolate(Input(:, 1), InstSpeed(:, 2), timestampStep, 'pchip');
 
     plotSecondDerivative('Interpolated', NewSpeed, NewTime);
     hold on
