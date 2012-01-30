@@ -18,7 +18,8 @@ for i=1:size(Features,1)
     Names(i) = behaviourClasses(Features(i,end)); 
 end
 
-t = classregtree(Features(:,1:end-1), Names, 'categorical', [size(Features,2)-1], 'names', featureNames);
+categorial = [7];
+t = classregtree(Features(:,1:end-1), Names, 'categorical', categorial, 'names', featureNames);
 view(t);
 
 end
