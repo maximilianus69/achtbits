@@ -16,6 +16,12 @@ startTime = Cluster(1);
 endTime = Cluster(2);
 duration = endTime - startTime;
 
+% get fourier analysis
+AccData(1:10,:)
+if size(AccData) ~= [0 0]
+    fourierOnAcc(AccData, startTime)
+end
+
 % find start and end indices of the clusters
 first = find(GpsData(:,2) == startTime);
 last = find(GpsData(:,2) == endTime);
