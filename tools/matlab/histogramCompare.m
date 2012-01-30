@@ -24,7 +24,7 @@ angleHistEntries = 0;
 
 % the bins to create the histograms with. Edges in now km/h
 %bins = [0, 2, 4, 6, 8, 10, 14, 18, 22, 30, 38, 45, 60, 90, 9001]; 
-binsSpeed = [0, 5, 10, 20, 40, 60, 120];
+binsSpeed = [0, 1, 2, 4, 5, 10, 20, 40, 60, 120];
 binsSpeed ./ 3.6;
 
 binsAngle = [0, 5, 10, 30, 60, 180, 360];
@@ -84,13 +84,13 @@ for x = halvedDataPointsPerHist + 1 : size(interpolatedTimestamps) - halvedDataP
     m1DifSpeed = sum(abs(histOfMomentSpeed - m1HistSpeed));
     m2DifSpeed = sum(abs(histOfMomentSpeed - m2HistSpeed));
     m3DifSpeed = sum(abs(histOfMomentSpeed - m3HistSpeed));
-
-    m1DifAngle = sum(abs(histOfMomentAngle - m1HistAngle));
+    
+    %m1DifAngle = sum(abs(histOfMomentAngle - m1HistAngle));
     m2DifAngle = sum(abs(histOfMomentAngle - m2HistAngle));
     m3DifAngle = sum(abs(histOfMomentAngle - m3HistAngle));
 
     % safe! (in percentage corresponding to) 
-    m1Course(x-halvedDataPointsPerHist, 1) = 100 - (((m1DifSpeed + m1DifAngle) / ((speedHistEntries+angleHistEntries)*2)) * 100);
+    m1Course(x-halvedDataPointsPerHist, 1) = 100 - (((m1DifSpeed) / ((speedHistEntries)*2)) * 100);
     m2Course(x-halvedDataPointsPerHist, 1) = 100 - (((m2DifSpeed + m2DifAngle) / ((speedHistEntries+angleHistEntries)*2)) * 100);
     m3Course(x-halvedDataPointsPerHist, 1) = 100 - (((m3DifSpeed + m3DifAngle) / ((speedHistEntries+angleHistEntries)*2)) * 100);
 end

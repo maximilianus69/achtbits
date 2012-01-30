@@ -75,8 +75,7 @@ function [SpeedHist, AngleHist] = createTrainingHist(type, binsSpeed, binsAngle,
         totalVar(i, :) = acos(cosTheta)*180/pi;
     end
     
-    totalVar = totalVar
-    AngleHist = histc(totalVar, binsAngle)
+    AngleHist = histc(totalVar, binsAngle);
     %AngleHist .* angleFactor;
 
     %subplot(2,1,1);

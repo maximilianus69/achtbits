@@ -1,4 +1,4 @@
-function [Gps Clusters] = main(deviceId, sessionId)
+function [Max Index] = main(deviceId, sessionId)
     % Wrapper for reading gps coordinates from a csv file, taking the ones above
     % the north sea, and calculating vectors with the direction and speed
     % It uses readgps and makeVectors
@@ -6,6 +6,8 @@ function [Gps Clusters] = main(deviceId, sessionId)
 
     histogramSizeSeconds = 900;
     timestampStep = 150;
+    % Initialize the half of the window. In the loop we will look back and forth by this size
+    halfWindowSize = 3
 
     addpath('plot');
     Gps = readgps(deviceId, sessionId);
@@ -62,5 +64,43 @@ function [Gps Clusters] = main(deviceId, sessionId)
     hold on
     % Plot the actual values
     plotHists(m1Course, m2Course, m3Course, timestamps);
-    hold off
+        
+    [Max Index] = max([m1Course m2Course m3Course]');
+    % Class will be a N by 1 vector containing the classes
+    Class = [];
+    Class(:, 1)= timestamps(halfWindowSize:size(timestamps, 1)-halfWindowSize- 1); 
+
+    for i = halfWindowSize + 1:size(Index, 2) - halfWindowSize
+        Class(i-halfWindowSize, 2) = mode(Index(i-halfWindowSize:i+halfWindowSize));
+    end
+    Class = Class
+
+    % This will contain the cluster beginning time stamps
+    Clusters(1, 1) = timestamps(1, 1);
+    % Simple loop finding differences between classified instances:
+    
+    % Variable determining the current class and if it differs
+    currentClass = 0
+    % Variable determining cluster index
+    j = 2;
+    for i = 1:size(Class, 1)
+        if(Class(i, 2) ~= currentClass)
+            currentClass = Class(i, 2);
+            Clusters(j, 1) = Class(i, 1);
+            j = j+1;
+        elseif(Class(i, 2) == currentClass)
+            % Do nothing?
+        end
+    end
+    Clusters
+
+    plotSecondDerivative2('Clusters?', NewSpeed, NewTime, Clusters);
+
+
+    
+
+
+
+
+
 
