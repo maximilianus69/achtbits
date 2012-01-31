@@ -36,7 +36,7 @@ dateTimeStart = timestampToDateTime(SessionGpsData(1, 2));
 
 % initiate annotation GUI 
 
-mainFigId = figure('Name',strcat('Cluster annotation, session start: ', dateTimeStart), 'NumberTitle','off', ...
+mainFigId = figure('Name',strcat('Cluster annotation, session ', sprintf('%03d', sessionId),', start: ', dateTimeStart), 'NumberTitle','off', ...
     'units','normalized','outerposition',[0 0.05 1 0.90], 'DeleteFcn', {@exitTool, false});
 
 
@@ -129,35 +129,38 @@ while i <= amountOfClusters
     
     % show control
     hp = uipanel('Position', [0 0 0.1 1], 'Title', 'control');
+    
+    % text(0, 0, strcat('Session: ', sprintf('%03d', sessionId)));
+    
     % hpPosNorm = get(hp, 'Position')
     set(hp, 'Units', 'pixels');
     hpPos = get(hp, 'Position');
     set(hp, 'Units', 'normalized');
     buttonWidthMargin = hpPos(3)/20;
-    buttonWidth = hpPos(3) - hpPos(3)/10;
+    buttonWidth = hpPos(3) - hpPos(3)/10 - 4;
     
-    hbgc = uibuttongroup('Parent', hp, 'Title', 'options', 'Position', [0 0.6 1 0.4]);
+    hbgc = uibuttongroup('Parent', hp, 'Title', 'options', 'Position', [0 0.5 1 0.3]);
     uicontrol('Parent', hbgc, 'Style', 'pushbutton', 'String', 'Back', ...
-        'Callback', {@previousCluster}, 'Position', [buttonWidthMargin 10 buttonWidth 30])
+        'Callback', {@previousCluster}, 'Position', [buttonWidthMargin 130 buttonWidth 30])
     uicontrol('Parent', hbgc, 'Style', 'pushbutton', 'String', 'Exit', ...
-        'Callback', {@exitTool, true}, 'Position', [10 50 100 30])
+        'Callback', {@exitTool, true}, 'Position', [buttonWidthMargin 90 buttonWidth 30])
     uicontrol('Parent', hbgc, 'Style', 'pushbutton', 'String', 'Zoom', ...
-        'Callback', {@zoomSession}, 'Position', [10 90 100 30])
+        'Callback', {@zoomSession}, 'Position', [buttonWidthMargin 10 buttonWidth 30])
     
-    hbg = uibuttongroup('Parent', hp, 'Title', 'classes', 'Position', [0 0 1 0.6]);
+    hbg = uibuttongroup('Parent', hp, 'Title', 'classes', 'Position', [0 0 1 0.5]);
     
     uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'unknown', ...
-        'Callback', {@updateBehaviour, 1}, 'Position', [10 10 100 30])
+        'Callback', {@updateBehaviour, 1}, 'Position', [buttonWidthMargin 10 buttonWidth 30])
     uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Sleeping', ...
-        'Callback', {@updateBehaviour, 2}, 'Position', [10 50 100 30])
+        'Callback', {@updateBehaviour, 2}, 'Position', [buttonWidthMargin 50 buttonWidth 30])
     uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Digesting', ...
-        'Callback', {@updateBehaviour, 3}, 'Position', [10 90 100 30])
+        'Callback', {@updateBehaviour, 3}, 'Position', [buttonWidthMargin 90 buttonWidth 30])
     uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Flying', ...
-        'Callback', {@updateBehaviour, 4}, 'Position', [10 130 100 30])
+        'Callback', {@updateBehaviour, 4}, 'Position', [buttonWidthMargin 130 buttonWidth 30])
     uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Hunting', ...
-        'Callback', {@updateBehaviour, 5}, 'Position', [10 170 100 30])
+        'Callback', {@updateBehaviour, 5}, 'Position', [buttonWidthMargin 170 buttonWidth 30])
     uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Bad cluster', ...
-        'Callback', {@updateBehaviour, 6}, 'Position', [10 210 100 30])
+        'Callback', {@updateBehaviour, 6}, 'Position', [buttonWidthMargin 210 buttonWidth 30])
     
     uiwait
     
