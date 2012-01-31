@@ -34,8 +34,6 @@ binsAngle = [0, 5, 10, 30, 60, 180, 360];
 [m2HistSpeed m2HistAngle] = createTrainingHist('flying', binsSpeed, binsAngle, histogramSizeSeconds, timestampStep);
 [m3HistSpeed m3HistAngle] = createTrainingHist('diving', binsSpeed, binsAngle, histogramSizeSeconds, timestampStep);
 
-m1HistAngle
-
 % calculate data points for looping over session
 dataPointsPerHist = sum(m1HistSpeed);
 halvedDataPointsPerHist = floor(dataPointsPerHist/2);
