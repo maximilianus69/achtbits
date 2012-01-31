@@ -60,25 +60,31 @@ function [Max Index] = main(deviceId, sessionId)
     [Max Index] = max([m1Course m2Course m3Course]');
     % Class will be a N by 1 vector containing the classes
     Class = [];
-    Class(:, 1)= timestamps(halfWindowSize:size(timestamps, 1)-halfWindowSize- 1); 
+    Class(:, 1)= timestamps(halfWindowSize:size(timestamps, 1)-halfWindowSize- 1) + histogramSizeSeconds/2; 
 
     for i = halfWindowSize + 1:size(Index, 2) - halfWindowSize
         Class(i-halfWindowSize, 2) = mode(Index(i-halfWindowSize:i+halfWindowSize));
     end
 
-    Clusters = completeClusters(timestamps, Class(2, :), 1200);
+    Clusters = simpleFindClusters(Class, 1200);
 
-    %% For plotting purposes:
-    %Clusters(:, 1) = timestamps(1:9:size(timestamps));
-    %Clusters(:, 2) = timestamps(3:9:size(timestamps));
 
-    subplot(3, 1, 1);
     Clusters
+    subplot(3, 1, 2);
+    hold on
+    PlotClusters = (Clusters - Input(1, 1))./60;
+    for p = 1:length(Clusters(:, 1))
+        line([PlotClusters(p, 1), PlotClusters(p, 1)], [0 max(Speed)], 'Color', 'r');
+        line([PlotClusters(p, 2), PlotClusters(p, 2)], [0 max(Speed)], 'Color', 'c');
+    end
+    hold off
+
     Clusters = interpolatedToRealTimestamp(Clusters, Input(:, 1));
     Clusters
+    subplot(3, 1, 1);
 
     % for plotting purposes:
-    Clusters = (Clusters - Clusters(1, 1))./60;
+    Clusters = (Clusters - Input(1, 1))./60;
     hold on 
 
     
