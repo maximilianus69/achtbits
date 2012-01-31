@@ -1,4 +1,4 @@
-function [] = plotTrajectory( SessionCoordinates, ClusterCoordinates )
+function [] = plotTrajectory( SessionCoordinates, ClusterCoordinates, sessionZoom )
 %PLOTTRAJECTORY Plots a trajectory on a map
 %   INPUT:
 %   time - an Nx1 vector of time-stamps
@@ -15,6 +15,13 @@ if nargin < 2
 else
     hasCluster = true;
 end
+
+if nargin < 3
+    zoom = false;
+else
+    zoom = sessionZoom;
+end
+    
 
 sessionX = SessionCoordinates(:, 2);
 sessionY = SessionCoordinates(:, 1);
@@ -53,7 +60,7 @@ elseif yDiffScaled > xDiff
    minX = minX-xMargin;
    maxX = maxX+xMargin;
 end
-if hasCluster
+if hasCluster && ~zoom
     axis([3 5 53.3-(2*figureRatio) 53.3]);
 else
     axis([minX maxX minY maxY]);

@@ -66,7 +66,7 @@ previousClusterClass = 1;
 i = 1;
 amountOfClusters = size(Clusters, 1);
 
-annotatedData = zeros(amountOfClusters, 13);
+annotatedData = [];
 annotatedTrajectory = [];
 
 while i <= amountOfClusters
@@ -129,16 +129,22 @@ while i <= amountOfClusters
     
     % show control
     hp = uipanel('Position', [0 0 0.1 1], 'Title', 'control');
+    % hpPosNorm = get(hp, 'Position')
+    set(hp, 'Units', 'pixels');
+    hpPos = get(hp, 'Position');
+    set(hp, 'Units', 'normalized');
+    buttonWidthMargin = hpPos(3)/20;
+    buttonWidth = hpPos(3) - hpPos(3)/10;
+    
     hbgc = uibuttongroup('Parent', hp, 'Title', 'options', 'Position', [0 0.6 1 0.4]);
     uicontrol('Parent', hbgc, 'Style', 'pushbutton', 'String', 'Back', ...
-        'Callback', {@previousCluster}, 'Position', [10 10 100 30])
+        'Callback', {@previousCluster}, 'Position', [buttonWidthMargin 10 buttonWidth 30])
     uicontrol('Parent', hbgc, 'Style', 'pushbutton', 'String', 'Exit', ...
         'Callback', {@exitTool, true}, 'Position', [10 50 100 30])
+    uicontrol('Parent', hbgc, 'Style', 'pushbutton', 'String', 'Zoom', ...
+        'Callback', {@zoomSession}, 'Position', [10 90 100 30])
     
     hbg = uibuttongroup('Parent', hp, 'Title', 'classes', 'Position', [0 0 1 0.6]);
-    
-    %[hbgL hbgB hbgW hbgH] = get(hbg, 'Position');
-    %buttonL = hbgW/10
     
     uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'unknown', ...
         'Callback', {@updateBehaviour, 1}, 'Position', [10 10 100 30])
@@ -156,7 +162,18 @@ while i <= amountOfClusters
     uiwait
     
 end
-        
+    
+    function zoomSession(~, ~)
+        subplot(5,7,[1:2 8:9 15:16])
+        hold on
+        plotTrajectory(SessionCoordinates, ClusterCoordinates, true);
+        if i > 1
+            annotatedTrajectories(annotatedTrajectory);
+        end
+        title('Session trajectory');
+        hold off
+    end
+
     function exitTool(~, ~, exitAll)
         
         outputFile = strcat(outputPath, '/device_', deviceId, '_session_', ...
@@ -194,7 +211,7 @@ end
         % add row to output
         ClusterFeatures = [ClusterFeatures behaviour];
 
-        annotatedData(i, :) = ClusterFeatures;
+        annotatedData = [annotatedData; ClusterFeatures];
         
         clusterPoints = size(ClusterCoordinates, 1);
         
