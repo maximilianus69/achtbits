@@ -169,8 +169,8 @@ end
 
     function previousCluster(~, ~)
         
-        annotatedData = annotatedData(1:end, :);
         if i > 1
+            annotatedData = annotatedData(1:end-1, :);
             i = i - 1;
         end
         
