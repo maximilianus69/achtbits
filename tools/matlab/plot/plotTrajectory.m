@@ -17,7 +17,7 @@ else
 end
 
 if nargin < 3
-    zoom = false;
+    zoom = true;
 else
     zoom = sessionZoom;
 end
