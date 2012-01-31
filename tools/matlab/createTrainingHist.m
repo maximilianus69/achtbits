@@ -12,7 +12,7 @@ function [SpeedHist, AngleHist] = createTrainingHist(type, binsSpeed, binsAngle,
     % Output:
     %       two histograms, one of the current speeds and one of the current angle differences
 
-    if(nargin < 6)
+    if(nargin < 5)
         timeStep = 150;
         if(nargin < 4)
             length = 1200;
@@ -83,7 +83,10 @@ function [SpeedHist, AngleHist] = createTrainingHist(type, binsSpeed, binsAngle,
     %subplot(2, 1, 2);
     SpeedHist = histc(RealSpeed, binsSpeed);
     %bar(binsSpeed, SpeedHist);
-    % hist(RealSpeed, binsSpeed);
+    figure
+     hist(totalVar, binsAngle);
+     xlabel('Angle (deg)')
+     title('Histogram of the angle of the bird during a GPS fix')
 
 
     
