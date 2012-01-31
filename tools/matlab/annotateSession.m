@@ -37,7 +37,7 @@ dateTimeStart = timestampToDateTime(SessionGpsData(1, 2));
 % initiate annotation GUI 
 
 mainFigId = figure('Name',strcat('Cluster annotation, session start: ', dateTimeStart), 'NumberTitle','off', ...
-    'units','normalized','outerposition',[0 0.05 1 0.95], 'DeleteFcn', {@exitTool});
+    'units','normalized','outerposition',[0 0.05 1 0.95], 'DeleteFcn', {@exitTool, false});
 
 
 % LAYOUT:
@@ -68,11 +68,12 @@ amountOfClusters = size(Clusters, 1);
 
 while i <= amountOfClusters
     clf %clearfigure
-    
-    run
+
+    % check if exit is prompted
     if ~run
         return
     end
+    
     % get cluster features and data
     clusterTime = Clusters(i, :);
     [ClusterFeatures ClusterData] = ...
@@ -122,7 +123,7 @@ while i <= amountOfClusters
     uicontrol('Parent', hbgc, 'Style', 'pushbutton', 'String', 'Back', ...
         'Callback', {@previousCluster}, 'Position', [10 10 100 30])
     uicontrol('Parent', hbgc, 'Style', 'pushbutton', 'String', 'Exit', ...
-        'Callback', {@exitTool}, 'Position', [10 50 100 30])
+        'Callback', {@exitTool, true}, 'Position', [10 50 100 30])
     
     hbg = uibuttongroup('Parent', hp, 'Title', 'classes', 'Position', [0 0 1 0.7]);
     
@@ -144,11 +145,9 @@ while i <= amountOfClusters
     
     uiwait
     
-    % behaviour = menu('choose a class', behaviourClasses);    
-    
 end
-
-    function exitTool(~, ~)
+        
+    function exitTool(~, ~, exitAll)
         
         outputFile = strcat(outputPath, '/device_', deviceId, '_session_', ...
             sprintf('%03d', sessionId), '_clusterFeatures.csv');
@@ -160,12 +159,10 @@ end
 %         else
 %             dlmwrite(outputFile, ClusterFeatures, '-append', 'roffset', 0, 'precision',  '%10f');
 %         end
-        
-        %close all
-        
-        %uiresume
-        output = 'stop';
-        run = false;
+        if exitAll
+            output = 'stop';   
+            run = false;
+        end
         uiresume
         
     end
@@ -180,7 +177,7 @@ end
         uiresume
     end
 
-    function updateBehaviour(src, eventData, behaviour)
+    function updateBehaviour(~, ~, behaviour)
 
         previousClusterClass = behaviour;
 
@@ -188,17 +185,6 @@ end
         ClusterFeatures = [ClusterFeatures behaviour];
 
         annotatedData = [annotatedData; ClusterFeatures];
-        
-%        % write features to file
-
-%         outputFile = strcat(outputPath, '/device_', deviceId, '_session_', ...
-%             sprintf('%03d', sessionId), '_clusterFeatures.csv');
-% 
-%         if i == 1
-%             dlmwrite(outputFile, ClusterFeatures, 'precision', '%10f');
-%         else
-%             dlmwrite(outputFile, ClusterFeatures, '-append', 'roffset', 0, 'precision',  '%10f');
-%         end
 
         uiresume;
 
