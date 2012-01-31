@@ -9,9 +9,9 @@ function Clusters = analyseSession( SessionData )
     % *** maybe add more session analysis?***
 
     histogramSizeSeconds = 900;
-    timestampStep = 100;
+    timestampStep = 150;
     % Initialize the half of the window. In the loop we will look back and forth by this size
-    halfWindowSize = 3;
+    halfWindowSize = 2;
     
     % Get the time and instantaneous speed
     Time = SessionData(:, 2);
