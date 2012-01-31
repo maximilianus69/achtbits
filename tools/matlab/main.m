@@ -7,7 +7,7 @@ function [Max Index] = main(deviceId, sessionId)
     histogramSizeSeconds = 900;
     timestampStep = 150;
     % Initialize the half of the window. In the loop we will look back and forth by this size
-    halfWindowSize = 3
+    halfWindowSize = 3;
 
     addpath('plot');
     Gps = readgps(deviceId, sessionId);
@@ -33,14 +33,6 @@ function [Max Index] = main(deviceId, sessionId)
     plot(Time, abs(InstSpeed(:, 2)), 'color', 'b'); 
     hold off
 
-
-    
-    %Der = derivative(Input);
-    % split Der in time and derivative
-    %time = Der(:, 1);
-    %Derivative = Der(:, 2);
-
-
     subplot(3, 1, 2);
     % Get interpolated values
     [NewTime, NewSpeed] = interpolate(Input(:, 1), Speed, timestampStep, 'pchip');
@@ -55,7 +47,7 @@ function [Max Index] = main(deviceId, sessionId)
    
     [m1Course, m2Course, m3Course, timestamps] = histogramCompare(NewTime, NewSpeed,NewXSpeed, NewYSpeed, histogramSizeSeconds, timestampStep);
 
-    timestamps = (timestamps - timestamps(1) + histogramSizeSeconds/2) ./ 60;
+    PlotTimestamps = (timestamps - timestamps(1) + histogramSizeSeconds/2) ./ 60;
     
     subplot(3, 1, 3);
     % To plot the right width
@@ -63,7 +55,7 @@ function [Max Index] = main(deviceId, sessionId)
     plot(NewTime, NewSpeed, 'color', 'w'); 
     hold on
     % Plot the actual values
-    plotHists(m1Course, m2Course, m3Course, timestamps);
+    plotHists(m1Course, m2Course, m3Course, PlotTimestamps);
         
     [Max Index] = max([m1Course m2Course m3Course]');
     % Class will be a N by 1 vector containing the classes
@@ -73,35 +65,30 @@ function [Max Index] = main(deviceId, sessionId)
     for i = halfWindowSize + 1:size(Index, 2) - halfWindowSize
         Class(i-halfWindowSize, 2) = mode(Index(i-halfWindowSize:i+halfWindowSize));
     end
-    Class = Class
 
-    % This will contain the cluster beginning time stamps
-    Clusters(1, 1) = timestamps(1, 1);
-    % Simple loop finding differences between classified instances:
-    
-    % Variable determining the current class and if it differs
-    currentClass = 0
-    % Variable determining cluster index
-    j = 2;
-    for i = 1:size(Class, 1)
-        if(Class(i, 2) ~= currentClass)
-            currentClass = Class(i, 2);
-            Clusters(j, 1) = Class(i, 1);
-            j = j+1;
-        elseif(Class(i, 2) == currentClass)
-            % Do nothing?
-        end
-    end
+    % Clusters = maartensAwesomeCode(Class);
+
+    % For plotting purposes:
+    Clusters(:, 1) = timestamps(1:9:size(timestamps));
+    Clusters(:, 2) = timestamps(3:9:size(timestamps));
+
+    subplot(3, 1, 1);
     Clusters
+    Clusters = interpolatedToRealTimestamp(Clusters, Input(:, 1));
+    Clusters
+
+    % for plotting purposes:
+    Clusters = (Clusters - Clusters(1, 1))./60;
+    hold on 
+
     
-    decoy = zeros(size(timestamps));
-    decoy(1) = 100;
+    for p = 1:length(Clusters(:, 1))
+        line([Clusters(p, 1), Clusters(p, 1)], [0 max(Speed)], 'Color', 'r');
+        line([Clusters(p, 2), Clusters(p, 2)], [0 max(Speed)], 'Color', 'c');
+    end
 
-    plotSecondDerivative2('Clusters?', decoy, (timestamps).*60 - histogramSizeSeconds, Clusters.*60);
 
-
-    
-
+    hold off
 
 
 
