@@ -23,9 +23,13 @@ last = find(SessionGpsData(:,2) == endTime);
 
 % data points inside cluster
 Points = SessionGpsData(first:last, :);
+if size(Points,1) < 2
+	print 'ERROR: Cluster is too small, or has no points in session!';
+	return;
+end
 ClusterPoints = Points;
 
-% if there is acc data try to fetch fourier features
+% if there is acc data try to add fourier features
 if size(SessionAccData) ~= [0 0]
 	% extract part of accelerometer data inside cluster
 	sessionAccTime = SessionAccData(:,2);
@@ -50,6 +54,7 @@ end
 dt = Points(2:end,2) - Points(1:end-1,2);
 if ~isempty(dt(dt < 0))
     print 'ERROR: the timestamps are non-sequential!';
+    return;
 end
 
 % calculate avg speed

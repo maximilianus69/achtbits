@@ -13,7 +13,7 @@ function output = annotateSession( deviceId, sessionId, outputPath )
 %       - plot data of cluster
 %       - user can input annotation for cluster
 
-annotatedData = [];
+
 
 output = 'continue';
 run = true;
@@ -37,7 +37,7 @@ dateTimeStart = timestampToDateTime(SessionGpsData(1, 2));
 % initiate annotation GUI 
 
 mainFigId = figure('Name',strcat('Cluster annotation, session start: ', dateTimeStart), 'NumberTitle','off', ...
-    'units','normalized','outerposition',[0 0.05 1 0.95], 'DeleteFcn', {@exitTool, false});
+    'units','normalized','outerposition',[0 0.05 1 0.90], 'DeleteFcn', {@exitTool, false});
 
 
 % LAYOUT:
@@ -66,6 +66,9 @@ previousClusterClass = 1;
 i = 1;
 amountOfClusters = size(Clusters, 1);
 
+annotatedData = zeros(amountOfClusters, 13);
+annotatedTrajectory = [];
+
 while i <= amountOfClusters
     clf %clearfigure
 
@@ -84,16 +87,23 @@ while i <= amountOfClusters
     % plot trajectory
     SessionCoordinates = SessionGpsData(:, 3:4);
     ClusterCoordinates = ClusterData(:, 3:4);
-    
+      
     % plot session trajectory
     subplot(5,7,[1:2 8:9 15:16])
+    hold on
     plotTrajectory(SessionCoordinates, ClusterCoordinates);
+    if i > 1
+        annotatedTrajectories(annotatedTrajectory);
+    end
     title('Session trajectory');
+    hold off
     
     % plot cluster trajectory
     subplot(5, 7, [3:4 10:11 17:18])
+    hold on
     plotTrajectory(ClusterCoordinates);
     title('Cluster trajectroy');
+    hold off
     
     % plot accelerometer data
     subplot(5, 7, 5:7)
@@ -118,14 +128,14 @@ while i <= amountOfClusters
     plotFeatureInfo(ClusterFeatures, behaviourClasses);
     
     % show control
-    hp = uipanel('Position', [0 0 0.1 0.6], 'Title', 'control');
-    hbgc = uibuttongroup('Parent', hp, 'Title', 'options', 'Position', [0 0.7 1 0.3]);
+    hp = uipanel('Position', [0 0 0.1 1], 'Title', 'control');
+    hbgc = uibuttongroup('Parent', hp, 'Title', 'options', 'Position', [0 0.6 1 0.4]);
     uicontrol('Parent', hbgc, 'Style', 'pushbutton', 'String', 'Back', ...
         'Callback', {@previousCluster}, 'Position', [10 10 100 30])
     uicontrol('Parent', hbgc, 'Style', 'pushbutton', 'String', 'Exit', ...
         'Callback', {@exitTool, true}, 'Position', [10 50 100 30])
     
-    hbg = uibuttongroup('Parent', hp, 'Title', 'classes', 'Position', [0 0 1 0.7]);
+    hbg = uibuttongroup('Parent', hp, 'Title', 'classes', 'Position', [0 0 1 0.6]);
     
     %[hbgL hbgB hbgW hbgH] = get(hbg, 'Position');
     %buttonL = hbgW/10
@@ -184,7 +194,15 @@ end
         % add row to output
         ClusterFeatures = [ClusterFeatures behaviour];
 
-        annotatedData = [annotatedData; ClusterFeatures];
+        annotatedData(i, :) = ClusterFeatures;
+        
+        clusterPoints = size(ClusterCoordinates, 1);
+        
+        temp = zeros(clusterPoints, 4);
+        temp(1:clusterPoints, 1) = ClusterFeatures(1);
+        temp(:, 2:3) = ClusterCoordinates;
+        temp(1:clusterPoints, 4) = behaviour;
+        annotatedTrajectory = [annotatedTrajectory;temp];
 
         uiresume;
 
