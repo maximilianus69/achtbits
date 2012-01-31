@@ -93,8 +93,11 @@ function [Max Index] = main(deviceId, sessionId)
         end
     end
     Clusters
+    
+    decoy = zeros(size(timestamps));
+    decoy(1) = 100;
 
-    plotSecondDerivative2('Clusters?', timestamps, (timestamps).*60 - histogramSizeSeconds, Clusters.*60);
+    plotSecondDerivative2('Clusters?', decoy, (timestamps).*60 - histogramSizeSeconds, Clusters.*60);
 
 
     
