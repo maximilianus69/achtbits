@@ -66,11 +66,11 @@ function [Max Index] = main(deviceId, sessionId)
         Class(i-halfWindowSize, 2) = mode(Index(i-halfWindowSize:i+halfWindowSize));
     end
 
-    % Clusters = maartensAwesomeCode(Class);
+    Clusters = completeClusters(timestamps, Class(2, :), 1200);
 
-    % For plotting purposes:
-    Clusters(:, 1) = timestamps(1:9:size(timestamps));
-    Clusters(:, 2) = timestamps(3:9:size(timestamps));
+    %% For plotting purposes:
+    %Clusters(:, 1) = timestamps(1:9:size(timestamps));
+    %Clusters(:, 2) = timestamps(3:9:size(timestamps));
 
     subplot(3, 1, 1);
     Clusters
