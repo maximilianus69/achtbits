@@ -24,11 +24,11 @@ if hasCluster
     clusterY = ClusterCoordinates(:, 1);
 end
 
-cur = gca();
-
-pos = get(cur, 'Position');
+set(gca, 'Units', 'pixels')
+pos = get(gca, 'Position');
 figureRatio = pos(4)/pos(3); %width/height
 correctionRatio = pos(3)/pos(4);
+set(gca, 'Units', 'normalized')
 
 minY = min(sessionY);
 maxY = max(sessionY);
@@ -53,13 +53,16 @@ elseif yDiffScaled > xDiff
    minX = minX-xMargin;
    maxX = maxX+xMargin;
 end
-
-axis([minX maxX minY maxY]);
+if hasCluster
+    axis([3 5 53.3-(2*figureRatio) 53.3]);
+else
+    axis([minX maxX minY maxY]);
+end
 %axis([minX maxX minY maxY]);
-hold('on')
+% hold('on')
 
 % plot the map
-geoshow(gca, 'plot/nh_zh_shape/nh_zh_shape.shp',...
+geoshow(gca, 'plot/nl_shape/netherlands_land.shp',...
     'LineWidth',  1, ...
     'FaceColor', [1.0 0.9 0.5], ...
     'EdgeColor', [0.5 0.5 0.5]);
@@ -94,7 +97,7 @@ else
 
 end
 
-hold('off')
+% hold('off')
 
 end
 

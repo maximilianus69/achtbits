@@ -10,7 +10,7 @@ function [TrainingData, labels] = createFeatureMatrix( deviceId )
 
 labels = {'duration','avg_speed','height_diff','grnd_dist','tot_dist', ...
 		'angle_var','dist_diff','resolution','fx','fy','fz', ...
-		'prev_cluster','annotation'};
+		'prev_cluster'};
 
 % The indices of the features to extract from cluster data
 % Cluster format: 
@@ -32,7 +32,7 @@ TrainingData = [];
 
 while exist(sessionFilePath, 'file') == 2
     % read in data
-    SessionClusters = dlmread(sessionFilePath, ',')
+    SessionClusters = dlmread(sessionFilePath, ',');
     TrainingData = [TrainingData; SessionClusters(:,neededFeatures)];
     
     % update filepath to next session
