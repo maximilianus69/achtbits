@@ -1,4 +1,4 @@
-function [clustersTimestampsStart, clustersTimestampsEnd] = completeClusters(timetamps, labels, minimumClusterLengthSeconds)
+function [clustersTimestampsStart, clustersTimestampsEnd] = completeClusters(timestamps, labels, minimumClusterLengthSeconds)
 % Creates a N x 2 matrix with start time - end time tuples of found clusters
 %
 % There are a couple of cases:
@@ -20,9 +20,11 @@ function [clustersTimestampsStart, clustersTimestampsEnd] = completeClusters(tim
 %   a vector with timestamps that indicate a beginning of a cluster
 %   a vector with timestamps that indicate an ending of a cluster
 
+labels = labels
 
 % finding timestamps of unprocessed clusters
-clusterBordersTimestamps(1, :) = [timestamps(1) 1];
+clusterBordersTimestamps(1, 1) = timestamps(1);
+clusterBordersTimestamps(1, 2) = 1;
 clusterCount = 2;
 oldLabel = labels(1);
 for x = 2:size(labels, 1)
@@ -30,29 +32,34 @@ for x = 2:size(labels, 1)
     if oldLabel ~=  labels(x)
         clusterBordersTimestamps(clusterCount, :) = [timestamps(x) x];
         clusterCount = clusterCount + 1;
-        oldLabel = labls(x); 
+        oldLabel = labels(x); 
     end
 end
+
+
+clusterBordersTimestamps
+
+%currentCluster = 1;
+%oldLabel = labels(1);
+%clustersTimestampsStart(1, :) = timestamps(1);
+%%clustersTimestampsEnd;
+%
+%for x = 2:size(labels, 1)
+%    % case 1
+%    if oldLabel ~=  labels(x)
+%        oldLabel = labls(x); 
+%    end
+%end
+
 
 
 currentCluster = 1;
-oldLabel = labels(1);
-clustersTimestampsStart(1, :) = timetamps(1);
-%clustersTimestampsEnd;
-
-for x = 2:size(labels, 1)
-    % case 1
-    if oldLabel ~=  labels(x)
-        oldLabel = labls(x); 
-    end
-end
-
-
-
-
+clustersTimestampsStart(1, :) = timestamps(1);
+clustersTimestampsEnd(1, :) = timestamps(size(timestamps, 1));
 clusterCount = 1;
+
 for x = 1:size(clusterBordersTimestamps, 1) - 2
-    if clustersTimestampsStart(x, 1) > 0 
+    %if clustersTimestampsStart(x, 1) > 0 % <- what is this? 
         clustersTimestampsStart(clusterCount) = clusterBordersTimestamps(x, 1);
         % if a cluster is too short
         if (clusterBordersTimestamps(x + 1, 1) - clusterBordersTimestamps(x, 1)) < minimumClusterLengthSeconds 
@@ -73,11 +80,17 @@ for x = 1:size(clusterBordersTimestamps, 1) - 2
                     lowerIndex = clusterBordersTimestamps(x, 2);
                     upperIndex = clusterBordersTimestamps(x + 1, 2);
                     middleIndex = round(upperIndex - lowerIndex / 2);
-                    clustersTimestampsEnd(clusterCount, :) = timestamps(middleIndex);
-                    clustersTimestampsStart(clusterCount + 1, :) = timetamps(middleIndex);
+                    clustersTimestampsEnd(clusterCount) = timestamps(middleIndex);
+                    clustersTimestampsStart(clusterCount + 1) = timestamps(middleIndex);
                     labels(lowerIndex : middleIndex) = ones(middleIndex - lowerIndex - 1, 1) .* labels(lowerIndex - 1);
                     labels(middleIndex : upperIndex) = ones(upperIndex - lowerIndex, - 1, 1) .* labels(upperIndex + 1);
                 end
+            end
         end
+        clustersTimestampsEnd(clusterCount) = clusterBordersTimestamps(x, 1);
         clusterCount = clusterCount + 1;
+    %end
 end
+
+clustersTimestampsStart = clustersTimestampsStart
+clustersTimestampsEnd = clustersTimestampsEnd
