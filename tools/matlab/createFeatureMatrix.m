@@ -1,9 +1,16 @@
-function out = createFeatureMatrix( deviceId )
+function [TrainingData, labels] = createFeatureMatrix( deviceId )
 %CREATE_FEATURE_MATRIX create a matrix with the features of 
 %
-% deviceId: string with the annotated device id
-% method: learning method (TODO)
+% Arguments:
+% 	- deviceId string of the device-id of a bird with real-annotated data
+%
+% Returns:
+%	- TrainingData matrix with features of the bird.
+%	- labels cell array of labels corresponding to features columns 
 
+labels = {'duration','avg_speed','height_diff','grnd_dist','tot_dist', ...
+		'angle_var','dist_diff','resolution','fx','fy','fz', ...
+		'prev_cluster','annotation'};
 
 % The indices of the features to extract from cluster data
 % Cluster format: 
@@ -32,7 +39,4 @@ while exist(sessionFilePath, 'file') == 2
     sessionId = sessionId + 1;
     sessionFilePath = strcat(folderPath, inputFilePrefix, ...
     	sprintf('%03d', sessionId), inputFileSuffix);
-end
-out = TrainingData;
-
 end
