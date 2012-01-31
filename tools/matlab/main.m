@@ -68,7 +68,6 @@ function [Max Index] = main(deviceId, sessionId)
 
     Clusters = simpleFindClusters(Class, 1200);
 
-    Clusters
     subplot(3, 1, 2);
     hold on
     PlotClusters = (Clusters - Input(1, 1))./60;
@@ -79,7 +78,6 @@ function [Max Index] = main(deviceId, sessionId)
     hold off
 
     Clusters = interpolatedToRealTimestamp(Clusters, Input(:, 1));
-    Clusters
     subplot(3, 1, 1);
 
     % for plotting purposes:

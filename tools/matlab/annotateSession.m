@@ -89,7 +89,8 @@ while i <= amountOfClusters
     ClusterCoordinates = ClusterData(:, 3:4);
       
     % plot session trajectory
-    subplot(5,7,[1:2 8:9 15:16])
+    % subplot(5,7,[1:2 8:9 15:16])
+    subplot('Position', [0.13, 0.44 0.22 0.5])
     hold on
     plotTrajectory(SessionCoordinates, ClusterCoordinates);
     if i > 1
@@ -100,6 +101,7 @@ while i <= amountOfClusters
     
     % plot cluster trajectory
     subplot(5, 7, [3:4 10:11 17:18])
+    %subplot('Position', [0.38, 0.44 0.22 0.5])
     hold on
     plotTrajectory(ClusterCoordinates);
     title('Cluster trajectroy');
@@ -107,6 +109,7 @@ while i <= amountOfClusters
     
     % plot accelerometer data
     subplot(5, 7, 5:7)
+    %subplot('Position', [0.65, 0.46 0.3 0.5])
     if size(SessionAccData) == [0 0]
         text(0.2, 0.5, 'No Accelerometer data found');
         accPoints = [];
@@ -116,14 +119,16 @@ while i <= amountOfClusters
     
     % plot velocity and acceleration   
     subplot(5, 7, 22:26)
+    %subplot('Position', [0.13, 0.21 0.6 0.18])
     plotVelAndAcc(ClusterData, accPoints);
         
     % plot instantanious speed vectors
     subplot(5, 7, 29:33);
+    %subplot('Position', [0.13, 0.02 0.6 0.18])
     plotInstantSpeed(ClusterData);
     
     subplot(5,7,[27:28 34:35])
-     
+    %subplot('Position', [0.7, 0.05 0.3 0.4])
     % show features  
     plotFeatureInfo(ClusterFeatures, behaviourClasses);
     
@@ -141,11 +146,13 @@ while i <= amountOfClusters
     
     hbgc = uibuttongroup('Parent', hp, 'Title', 'options', 'Position', [0 0.5 1 0.3]);
     uicontrol('Parent', hbgc, 'Style', 'pushbutton', 'String', 'Back', ...
-        'Callback', {@previousCluster}, 'Position', [buttonWidthMargin 130 buttonWidth 30])
+        'Callback', {@previousCluster}, 'Position', [buttonWidthMargin 90 buttonWidth 30])
     uicontrol('Parent', hbgc, 'Style', 'pushbutton', 'String', 'Exit', ...
-        'Callback', {@exitTool, true}, 'Position', [buttonWidthMargin 90 buttonWidth 30])
-    uicontrol('Parent', hbgc, 'Style', 'pushbutton', 'String', 'Zoom', ...
-        'Callback', {@zoomSession}, 'Position', [buttonWidthMargin 10 buttonWidth 30])
+        'Callback', {@exitTool, true}, 'Position', [buttonWidthMargin 130 buttonWidth 30])
+    uicontrol('Parent', hbgc, 'Style', 'pushbutton', 'String', 'Zoom in', ...
+        'Callback', {@zoomSession, true}, 'Position', [buttonWidthMargin 50 buttonWidth 30])
+    uicontrol('Parent', hbgc, 'Style', 'pushbutton', 'String', 'Zoom out', ...
+        'Callback', {@zoomSession, false}, 'Position', [buttonWidthMargin 10 buttonWidth 30])
     
     hbg = uibuttongroup('Parent', hp, 'Title', 'classes', 'Position', [0 0 1 0.5]);
     
@@ -166,10 +173,10 @@ while i <= amountOfClusters
     
 end
     
-    function zoomSession(~, ~)
+    function zoomSession(~, ~, zoom)
         subplot(5,7,[1:2 8:9 15:16])
         hold on
-        plotTrajectory(SessionCoordinates, ClusterCoordinates, true);
+        plotTrajectory(SessionCoordinates, ClusterCoordinates, zoom);
         if i > 1
             annotatedTrajectories(annotatedTrajectory);
         end
