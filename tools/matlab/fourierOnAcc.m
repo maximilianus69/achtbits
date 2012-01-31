@@ -69,6 +69,12 @@ function frequency = fourierOnAcc(AccData, timeStamp)
     %sizes = [size(freq1, 1) size(freq2, 1) size(freq3, 1)];
     % Create the output matrix
     frequency = [];
-    frequency(1, 1) = max(f(:, freq1));
+    if(~isempty(freq1)
+        frequency(1, 1) = max(f(:, freq1));
+    end 
+    if(~isempty(freq2)
     frequency(1, 2) = max(f(:, freq2));
+    end
+    if(~isempty(freq3)
     frequency(1, 3) = max(f(:, freq3));
+    end
