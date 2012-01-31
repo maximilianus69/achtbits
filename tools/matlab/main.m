@@ -78,6 +78,8 @@ function [Max Index] = main(deviceId, sessionId)
     % This will contain the cluster beginning time stamps
     Clusters(1, 1) = timestamps(1, 1);
     % Simple loop finding differences between classified instances:
+
+    
     
     % Variable determining the current class and if it differs
     currentClass = 0
