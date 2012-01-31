@@ -3,6 +3,8 @@ function result = testClustering()
 % to be troublesome cases. Every exception should be shown with those
 % values. 
 
+% 9, 11, 12 
+
 for x = 1:15
     main('344', x);
     uiwait;
