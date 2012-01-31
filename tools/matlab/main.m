@@ -68,7 +68,6 @@ function [Max Index] = main(deviceId, sessionId)
 
     Clusters = simpleFindClusters(Class, 1200);
 
-
     Clusters
     subplot(3, 1, 2);
     hold on
@@ -95,8 +94,3 @@ function [Max Index] = main(deviceId, sessionId)
 
 
     hold off
-
-
-
-
-
