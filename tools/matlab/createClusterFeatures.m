@@ -1,4 +1,4 @@
-function [ClusterFeatures, ClusterPoints] = createClusterFeatures( Cluster, GpsData, AccData )
+function [ClusterFeatures, ClusterPoints] = createClusterFeatures( Cluster, SessionGpsData, SessionAccData )
 % CREATE_CLUSTER_FEATURES Creates feature vectors for clusters
 %
 % Arguments:
@@ -11,30 +11,45 @@ function [ClusterFeatures, ClusterPoints] = createClusterFeatures( Cluster, GpsD
 %   format: 
 %   [startTime(s),  endTime(s),   duration(s), avgSpeed(m/s), ...
 %    heightDiff(m), grndDist(km), totDist(km), angleVar(degrees/s), ...
-%    distDiff(m), resolution(dat/min), fourier(Hz)]
+%    distDiff(m), resolution(dat/min), fx(Hz), fy(Hz), fz(Hz)]
 
 startTime = Cluster(1);
 endTime = Cluster(2);
 duration = endTime - startTime;
 
-% get fourier analysis
-%AccData(1:10,:)
-%if size(AccData) ~= [0 0]
-%    fourierOnAcc(AccData, startTime)
-%end
-
 % find start and end indices of the clusters
-first = find(GpsData(:,2) == startTime);
-last = find(GpsData(:,2) == endTime);
+first = find(SessionGpsData(:,2) == startTime);
+last = find(SessionGpsData(:,2) == endTime);
 
 % data points inside cluster
-Points = GpsData(first:last, :);
+Points = SessionGpsData(first:last, :);
 ClusterPoints = Points;
+
+% if there is acc data try to fetch fourier features
+if size(SessionAccData) ~= [0 0]
+	% extract part of accelerometer data inside cluster
+	sessionAccTime = SessionAccData(:,2);
+	afterStart = sessionAccTime >= startTime;
+	beforeEnd = sessionAccTime <= endTime;
+	ClusterAccData = SessionAccData(afterStart & beforeEnd, :);
+
+	% get fourier analysis
+	if size(ClusterAccData) ~= [0 0]
+		% find the timestamp we want featured
+	    accEntries = unique(ClusterAccData(:,2));
+	    accEntry = ceil(length(accEntries)/2);
+	    fourierFreq = fourierOnAcc(ClusterAccData, accEntries(accEntry));
+	else
+		fourierFreq = [-1 -1 -1];
+	end
+else
+	fourierFreq = [-1 -1 -1];
+end
 
 % holds the time passed between two sequential points
 dt = Points(2:end,2) - Points(1:end-1,2);
 if ~isempty(dt(dt < 0))
-    print 'ERROR: the timestamps are non-sequential!');
+    print 'ERROR: the timestamps are non-sequential!';
 end
 
 % calculate avg speed
@@ -61,7 +76,7 @@ end
 
 % calculate the variance in direction in average deg/s
 speeds = Points(:, 9:11);
-speeds = speeds/norm(speeds); % only interested in angle, not speed
+speeds = speeds/norm(speeds); % only interested in angle, not length
 theta=0;
 for i=1:size(speeds,1)-1
     % formula for calculating angle between 2 vectors in 3D
@@ -78,7 +93,7 @@ resolution = size(ClusterPoints,1)/(duration/60);
 
 % return data
 ClusterFeatures = ...
-    [startTime, endTime, duration, avgSpeed, heightDiff, grndDist, totDist, angleVar, distDiff, resolution];
+    [startTime, endTime, duration, avgSpeed, heightDiff, grndDist, totDist, angleVar, distDiff, resolution, fourierFreq(1:3)];
 
 end
 

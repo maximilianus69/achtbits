@@ -17,7 +17,6 @@ if sum(inCluster) > 0
 
     % get all time-stamps and find the middle one
     timeEntries = unique(ClusterAccData(:, 1));
-
     amountOfEntries = size(timeEntries, 1);
     
     if amountOfEntries == 2
@@ -48,6 +47,8 @@ if sum(inCluster) > 0
     plotAcc(SessionAccData, timeEntries(first));
     title(strcat('Accelerometer of point ', num2str(first)));
     
+    fourierOnAcc(SessionAccData, timeEntries(first));
+
     subplot(5, 7, 12:14)
     if second ~= 0
         plotAcc(SessionAccData, timeEntries(second));

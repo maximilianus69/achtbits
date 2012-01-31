@@ -7,7 +7,8 @@ function frequency = fourierOnAcc(AccData, timeStamp)
     
     % Turn off the warning when there are no peaks found
     warning('off', 'signal:findpeaks:noPeaks');
-
+    warning('off', 'signal:findpeaks:largeMinPeakHeight');
+    
     AccData = AccData(find(AccData(:, 2) ==  timeStamp), :);
 
     %{ Delete this if you would want a plot (TODO: Remove this before delivery)
@@ -72,9 +73,9 @@ function frequency = fourierOnAcc(AccData, timeStamp)
     if(~isempty(freq1))
         frequency(1, 1) = max(f(:, freq1));
     end 
-    if(~isempty(freq2)
-    frequency(1, 2) = max(f(:, freq2));
+    if(~isempty(freq2))
+        frequency(1, 2) = max(f(:, freq2));
     end
-    if(~isempty(freq3)
-    frequency(1, 3) = max(f(:, freq3));
+    if(~isempty(freq3))
+        frequency(1, 3) = max(f(:, freq3));
     end
