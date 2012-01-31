@@ -31,5 +31,5 @@ text(3, 4, strcat(num2str(Feature(9)), ' rads')); % angle variance
 text(3, 3, classes(Feature(end)));
 
 text(3, 9, secs2hms(Feature(4))); % duration
-text(3, 8, strcat(num2str(Feature(5)*3.6), ' km/h')); % speed
+text(3, 8, strcat(num2str(Feature(5)), ' km/h')); % speed
 %text(4, 7, strcat(num2str(Feature(6)/1000), ' km')); % height diff

@@ -1,17 +1,18 @@
 function [ClusterFeatures, ClusterPoints] = createClusterFeatures( Cluster, SessionGpsData, SessionAccData )
-% CREATE_CLUSTER_FEATURES Creates feature vectors for clusters
+% CREATE_CLUSTER_FEATURES creates a feature vector for a cluster
 %
 % Arguments:
 %   - Cluster a 1x2 vector containing start and end times of the cluster
-%   - GpsData is the session gps data as created by readgps
-%   - AccData is the session acc data as created by readAcc
+%   - SessionGpsData is the session gps data as created by readgps
+%   - SessionAccData is the session acc data as created by readAcc
 %
 % Returns:
-%   Array of features of this cluster
+%   - ClusterFeatures array of features of this cluster
 %   format: 
-%   [startTime(s),  endTime(s),   duration(s), avgSpeed(m/s), ...
+%   [startTime(s),  endTime(s),   duration(s), avgSpeed(km/h), ...
 %    heightDiff(m), grndDist(km), totDist(km), angleVar(degrees/s), ...
 %    distDiff(m), resolution(dat/min), fx(Hz), fy(Hz), fz(Hz)]
+%	- ClusterPoints a matrix with the points inside this cluster
 
 startTime = Cluster(1);
 endTime = Cluster(2);
@@ -24,7 +25,7 @@ last = find(SessionGpsData(:,2) == endTime);
 % data points inside cluster
 Points = SessionGpsData(first:last, :);
 if size(Points,1) < 2
-	print 'ERROR: Cluster is too small, or has no points in session!';
+	print 'ERROR: Cluster is too small or has no points in session!';
 	return;
 end
 ClusterPoints = Points;
