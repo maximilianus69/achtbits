@@ -1,25 +1,52 @@
-\documentclass[a4paper,10pt]{article}
+\documentclass[a4paper, 11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{subfigure}
 \usepackage[margin=2.5cm, nohead]{geometry}
 \usepackage{palatino, url, multicol}
+\usepackage{amssymb, graphicx, fancyhdr, latexsym, url, verbatim}
 \usepackage{graphicx}
 \usepackage{verbatim}
 \usepackage[all]{xy}
 \usepackage[english]{babel}
 
+
+\newcommand{\projectName}{ACHTBITS}
+\newcommand{\projectAbbreviation}{Awesome
+CHaradriiformes Toegepast BIrd Tracking System}
 \newcommand{\bits}{BITS}
-% The current value of the timeThreshold given to awesomizeClusters.
+%% The current value of the timeThreshold given to awesomizeClusters.
 \newcommand{\timeThreshold}{1200}
 
-\title{Leren en Beslissen - ACHTBITS\\\large \textsc{Awesome Charadriiformes Toegepast
-BIrd Tracking System}}
-\author{Maarten de Waard\\5894883 \and Maarten Inja \\5872464 \and Jesse Eisses \\
-6352189 \and Sosha Happel\\ 6273831}
+\addtolength{\footskip}{-90mm}
+\addtolength{\headheight}{-05mm}
+\addtolength{\headsep}{05mm}
 
 
 
-%\email{mrtndwrd, maarten.inja, jesse.eisses, soshappel@gmail.com}
+\pagestyle{fancy}
+\lhead{\projectName}
+\rhead{\small \textsc{\projectAbbreviation}}
+%\cfoot{\footnotesize \textit{ \projectAbbreviation}\\[0.1cm] \small \thepage}
+%\cfoot{}
+%\rfoot{\thepage}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{10pt}
+
 \begin{document}
-\maketitle
+
+\include{title}
+%\thispagestyle{empty}
+\vspace*{00mm}
+\tableofcontents
+\newpage
+
+
+
+
+
+
 \begin{abstract}
 Of course we will have an abstract! But we can't type this yet, because we don't
 know the results. And everybody knows abstracts have spoilers! Also Dumbledore
@@ -55,15 +82,15 @@ gets killed by Snape.
  % TODO: Dit figuurtje maken. Ik kom er namelijk net achter dat de derivative
  % misschien niet exact doet wat we willen, omdat het speed1 en speed2 apart van
  % elkaar gebruikt. Een goeie hiervoor is device_535, sessie_000.
-\begin{figure}
-\centering
-\includegraphics[width=.8\textwidth]{speed.pdf}
-\caption{The speed of the bird (above) and the difference in speed (under). As
-you can see, the difference is absolute (because this makes finding peaks
-easier). The difference is some times a bit higher, while the speed does not
-seem to differ at all. This means the bird changed his direction.}
-\label{fig:storyboard}
-\end{figure}
+%\begin{figure}
+%\centering
+%\includegraphics[width=.8\textwidth]{speed.pdf}
+%\caption{The speed of the bird (above) and the difference in speed (under). As
+%you can see, the difference is absolute (because this makes finding peaks
+%easier). The difference is some times a bit higher, while the speed does not
+%seem to differ at all. This means the bird changed his direction.}
+%\label{fig:storyboard}
+%\end{figure}
 
  As can be seen, the speed-difference is low on points where the bird is assumed
  to be flying or sitting on the water. In other points the speed differs a lot.
