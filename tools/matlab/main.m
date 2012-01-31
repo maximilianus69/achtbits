@@ -94,7 +94,7 @@ function [Max Index] = main(deviceId, sessionId)
     end
     Clusters
 
-    plotSecondDerivative2('Clusters?', NewSpeed, NewTime, Clusters);
+    plotSecondDerivative2('Clusters?', m1Course, (timestamps).*60 - histogramSizeSeconds, Clusters.*60);
 
 
     
