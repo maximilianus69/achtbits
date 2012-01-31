@@ -11,7 +11,7 @@ function Clusters = analyseSession( SessionData )
     histogramSizeSeconds = 900;
     timestampStep = 100;
     % Initialize the half of the window. In the loop we will look back and forth by this size
-    halfWindowSize = 2;
+    halfWindowSize = 3;
     
     % Get the time and instantaneous speed
     Time = SessionData(:, 2);
