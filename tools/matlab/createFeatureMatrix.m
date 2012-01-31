@@ -32,7 +32,7 @@ TrainingData = [];
 
 while exist(sessionFilePath, 'file') == 2
     % read in data
-    SessionClusters = dlmread(sessionFilePath, ',')
+    SessionClusters = dlmread(sessionFilePath, ',');
     TrainingData = [TrainingData; SessionClusters(:,neededFeatures)];
     
     % update filepath to next session
