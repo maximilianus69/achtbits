@@ -9,7 +9,7 @@ function Clusters = analyseSession( SessionData )
     % *** maybe add more session analysis?***
 
     histogramSizeSeconds = 900;
-    timestampStep = 150;
+    timestampStep = 100;
     % Initialize the half of the window. In the loop we will look back and forth by this size
     halfWindowSize = 3;
     

@@ -67,7 +67,6 @@ hDerv = dh ./ dt;
 heightDiff = abs(mean(hDerv))*duration;
 
 % calculate ground distance between begin point to end point
-Points
 latDist = Points([1 end], 3);
 longDist = Points([1 end], 4);
 grndDist = deg2km(stdist(latDist, longDist));
