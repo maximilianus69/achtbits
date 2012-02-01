@@ -178,7 +178,7 @@ close all;
         hold on
         plotTrajectory(SessionCoordinates, ClusterCoordinates, zoom);
         if i > 1
-            annotatedTrajectories(annotatedTrajectory);
+            annotatedTrajectories(annotatedTrajectory, classColors);
         end
         title('Session trajectory');
         hold off
