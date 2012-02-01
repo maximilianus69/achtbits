@@ -8,7 +8,7 @@ function Class = main(deviceId, sessionId)
     histogramSizeSeconds = 900;
     timestampStep = 50;
     % Initialize the half of the window. In the loop we will look back and forth by this size
-    halfWindowSize = 5;
+    halfWindowSize = 4;
 
     addpath('plot');
     Gps = readgps(deviceId, sessionId);
