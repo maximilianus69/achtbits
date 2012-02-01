@@ -56,9 +56,9 @@ if type  == 7
     while exist(sessionFilePath) == 2
         
         fprintf(strcat('\n','starting annotation for session_', sprintf('%03d', sessionId), '\n'))
-        output = annotateSession(deviceId, sessionId, outputDeviceFolder);
+        stopAnnotation = annotateSession(deviceId, sessionId, outputDeviceFolder);
         
-        if strcmp(output, 'stop')
+        if stopAnnotation
             close all
             fprintf(strcat('aborted annotation for session_', sprintf('%03d', sessionId), '\n'))
             return
