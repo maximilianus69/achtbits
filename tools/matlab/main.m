@@ -73,7 +73,7 @@ function Class = main(deviceId, sessionId)
         Class(i-halfWindowSize, 2) = mode(Index(i-halfWindowSize:i+halfWindowSize));
     end
 
-    Clusters = simpleFindClusters(Class, 900);
+    Clusters = simpleFindClusters(Class, 900)
 
     subplot(3, 1, 2);
     hold on
@@ -84,7 +84,7 @@ function Class = main(deviceId, sessionId)
     end
     hold off
 
-    Clusters = interpolatedToRealTimestamp(Clusters, Input(:, 1));
+    Clusters = interpolatedToRealTimestamp(Clusters, Input(:, 1))
     subplot(3, 1, 1);
 
     % for plotting purposes:
