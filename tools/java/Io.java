@@ -80,7 +80,6 @@ includeColumnsAcc=1, 2, 3, 4, 5, 0}
         for (AccelerometerPoint point: lines)
         {
             newLines.addAll(point.toLines());
-            PreprocessCsvFiles.accelLinesWritten += point.getDataSize();
         }
 
 
@@ -94,7 +93,6 @@ includeColumnsAcc=1, 2, 3, 4, 5, 0}
         for (String[] lineSplitted : lines)
         {
             newLines.add(PreprocessCsvFiles.arrayToString(lineSplitted));
-            PreprocessCsvFiles.gpsLinesWritten ++; // bleh is ugly 
         }
         writeFile(newLines, fileName);
     }
