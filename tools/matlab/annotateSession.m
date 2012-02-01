@@ -164,7 +164,7 @@ while i <= amountOfClusters
         'Callback', {@updateBehaviour, 3}, 'Position', [buttonWidthMargin 90 buttonWidth 30])
     uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Flying', ...
         'Callback', {@updateBehaviour, 4}, 'Position', [buttonWidthMargin 130 buttonWidth 30])
-    uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Hunting', ...
+    uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Diving', ...
         'Callback', {@updateBehaviour, 5}, 'Position', [buttonWidthMargin 170 buttonWidth 30])
     uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Bad cluster', ...
         'Callback', {@updateBehaviour, 6}, 'Position', [buttonWidthMargin 210 buttonWidth 30])
@@ -207,7 +207,10 @@ end
     function previousCluster(~, ~)
         
         if i > 1
+            i
             annotatedData = annotatedData(1:end-1, :);
+            lastCluster = annotatedTrajectory(:, 1) == i-1;
+            annotatedTrajectory(lastCluster, :) = [];
             i = i - 1;
         end
         
