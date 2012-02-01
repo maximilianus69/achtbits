@@ -5,7 +5,7 @@ function [Max Index] = main(deviceId, sessionId)
 
 
     histogramSizeSeconds = 900;
-    timestampStep = 50;
+    timestampStep = 150;
     % Initialize the half of the window. In the loop we will look back and forth by this size
     halfWindowSize = 3;
 
@@ -60,16 +60,19 @@ function [Max Index] = main(deviceId, sessionId)
     [Max Index] = max([m1Course m2Course m3Course]');
     % Class will be a N by 1 vector containing the classes
     Class = [];
-    Class(:, 1)= timestamps(halfWindowSize:size(timestamps, 1)-halfWindowSize- 1) + histogramSizeSeconds/2; 
+    histogramSizeSeconds/2 + timestampStep *halfWindowSize
+    Class(:, 1)= timestamps(1:size(timestamps, 1)-2*halfWindowSize - 1) + timestampStep * halfWindowSize;
+    timestamps(1, 1)
+    Class(1, 1)
 
-    for i = halfWindowSize + 2:size(Index, 2) - halfWindowSize
+    for i = halfWindowSize + 1:size(Index, 2) - halfWindowSize
         % We could use a gaussian blur, that would work like this: 
         % For now it is outcommented, because we didn't see any differences
         %gauss = fspecial('gaussian', [1, (2*halfWindowSize+1)], 1);
         %class = round(halfWindowSize*gauss .* Index(i-halfWindowSize:i+halfWindowSize));
         %Class(i-halfWindowSize-1, 2) = class(halfWindowSize + 1);
 
-        Class(i-halfWindowSize-1, 2) = mode(Index(i-halfWindowSize:i+halfWindowSize));
+        Class(i-halfWindowSize, 2) = mode(Index(i-halfWindowSize:i+halfWindowSize));
     end
 
     Clusters = simpleFindClusters(Class, 1200);

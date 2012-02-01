@@ -7,9 +7,10 @@ public class Wrapper
     327, 329, 344, 355, 373, 533, 534, 535, 536, 537, 538, 540, 541,
     542};
 
-    public static final String OUTPUT_DIR = ".." + Io.SYSTEM_SEPARATOR + "parsedCsvFiles";
+    //public static final String OUTPUT_DIR = ".." + Io.SYSTEM_SEPARATOR + "parsedCsvFiles";
+    public static final String OUTPUT_DIR = "temp";
     public static final String DIR_TO_DATA_FILES = ".." + Io.SYSTEM_SEPARATOR + 
-        ".." + Io.SYSTEM_SEPARATOR + "data" + Io.SYSTEM_SEPARATOR;
+        ".." + Io.SYSTEM_SEPARATOR + "rawdata" + Io.SYSTEM_SEPARATOR;
 
     public static void main(String args[])
     {
