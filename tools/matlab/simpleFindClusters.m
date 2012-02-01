@@ -30,3 +30,6 @@ function SimpleClusters = simpleFindClusters(Classes, minClusterLength)
    % end
     SimpleClusters = SimpleClusters .* [DB DB];
     SimpleClusters(~any(SimpleClusters,2),:) = [];
+    if(isempty(SimpleClusters))
+        SimpleClusters = [Classes(1, 1), Classes(end, 1)];
+    end
