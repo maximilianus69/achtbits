@@ -187,11 +187,25 @@ close all;
 % exitTool - is called whenever the tool closes and stores result in a file
     function exitTool(~, ~)
         
+        
         outputFile = strcat(outputPath, '/device_', deviceId, '_session_', ...
             sprintf('%03d', sessionId), '_clusterFeatures.csv');
 
         dlmwrite(outputFile, annotatedData, 'precision', '%10f');
 
+        tempfig = figure();
+        hold on
+        annotatedTrajectory
+        plotTrajectory(SessionCoordinates, ClusterCoordinates, true);
+        if size(annotatedTrajectory, 1) > 1
+            annotatedTrajectories(annotatedTrajectory, classColors);
+        end
+        title('Session trajectory');
+        hold off
+        print(tempfig, '-djpeg', strcat(outputPath, '/device_', deviceId, '_session_', ...
+            sprintf('%03d', sessionId), '_sessionMap.jpeg'))
+        close(tempfig)
+        
         if ~endOfSession
             run = false;
         end

@@ -18,8 +18,11 @@ if sum(inCluster) > 0
     % get all time-stamps and find the middle one
     timeEntries = unique(ClusterAccData(:, 1));
     amountOfEntries = size(timeEntries, 1);
-    
-    if amountOfEntries == 2
+    if amountOfEntries == 1
+        first = 1;
+        second = 1;
+        third = 1;
+    elseif amountOfEntries == 2
         first = 1;
         second = 2;
         third = 2;
