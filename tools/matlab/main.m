@@ -5,7 +5,7 @@ function [Max Index] = main(deviceId, sessionId)
 
 
     histogramSizeSeconds = 900;
-    timestampStep = 150;
+    timestampStep = 50;
     % Initialize the half of the window. In the loop we will look back and forth by this size
     halfWindowSize = 3;
 
@@ -69,7 +69,7 @@ function [Max Index] = main(deviceId, sessionId)
         %class = round(halfWindowSize*gauss .* Index(i-halfWindowSize:i+halfWindowSize));
         %Class(i-halfWindowSize-1, 2) = class(halfWindowSize + 1);
 
-        Class(i-halfWindowSize, 2) = mode(Index(i-halfWindowSize:i+halfWindowSize));
+        Class(i-halfWindowSize-1, 2) = mode(Index(i-halfWindowSize:i+halfWindowSize));
     end
 
     Clusters = simpleFindClusters(Class, 1200);
