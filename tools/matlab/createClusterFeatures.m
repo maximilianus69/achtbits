@@ -94,9 +94,9 @@ sampled_dt = dt;
 if resolution > ANGLE_VAR_MAX_RES
 	numSamples = floor(ANGLE_VAR_MAX_RES * (duration/60));
 	samples = floor(linspace(1, size(speeds,1), numSamples));
-	speeds = speeds(samples,:)
+	speeds = speeds(samples,:);
 	sampled_times = Points(samples,2);
-	sampled_dt = sampled_times(2:end) - sampled_times(1:end-1)
+	sampled_dt = sampled_times(2:end) - sampled_times(1:end-1);
 end 
 theta=0;
 for i=1:size(speeds,1)-1
