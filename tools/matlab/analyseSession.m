@@ -9,9 +9,9 @@ function Clusters = analyseSession( SessionData )
     % *** maybe add more session analysis?***
 
     histogramSizeSeconds = 900;
-    timestampStep = 150;
+    timestampStep = 50;
     % Initialize the half of the window. In the loop we will look back and forth by this size
-    halfWindowSize = 2;
+    halfWindowSize = 5;
     
     % Get the time and instantaneous speed
     Time = SessionData(:, 2);
@@ -34,7 +34,7 @@ function Clusters = analyseSession( SessionData )
     [Max Index] = max([m1Course m2Course m3Course]');
     % Class will be a N by 1 vector containing the classes
     Class = [];
-    Class(:, 1)= timestamps(halfWindowSize:size(timestamps, 1)-halfWindowSize- 1) + histogramSizeSeconds/2; 
+    Class(:, 1)= timestamps(halfWindowSize:size(timestamps, 1)-halfWindowSize- 1) + timestampStep*halfWindowSize;
 
     % Smooth the clusters.
     for i = halfWindowSize + 1:size(Index, 2) - halfWindowSize

@@ -5,9 +5,9 @@ function [Max Index] = main(deviceId, sessionId)
 
 
     histogramSizeSeconds = 900;
-    timestampStep = 150;
+    timestampStep = 50;
     % Initialize the half of the window. In the loop we will look back and forth by this size
-    halfWindowSize = 3;
+    halfWindowSize = 5;
 
     addpath('plot');
     Gps = readgps(deviceId, sessionId);
@@ -60,10 +60,7 @@ function [Max Index] = main(deviceId, sessionId)
     [Max Index] = max([m1Course m2Course m3Course]');
     % Class will be a N by 1 vector containing the classes
     Class = [];
-    histogramSizeSeconds/2 + timestampStep *halfWindowSize
     Class(:, 1)= timestamps(1:size(timestamps, 1)-2*halfWindowSize - 1) + timestampStep * halfWindowSize;
-    timestamps(1, 1)
-    Class(1, 1)
 
     for i = halfWindowSize + 1:size(Index, 2) - halfWindowSize
         % We could use a gaussian blur, that would work like this: 
@@ -75,7 +72,7 @@ function [Max Index] = main(deviceId, sessionId)
         Class(i-halfWindowSize, 2) = mode(Index(i-halfWindowSize:i+halfWindowSize));
     end
 
-    Clusters = simpleFindClusters(Class, 1200);
+    Clusters = simpleFindClusters(Class, 900);
 
     subplot(3, 1, 2);
     hold on
@@ -94,7 +91,7 @@ function [Max Index] = main(deviceId, sessionId)
     hold on 
 
     
-    for p = 1:length(Clusters(:, 1))
+    for p = 1:size(Clusters, 1)
         line([Clusters(p, 1), Clusters(p, 1)], [0 max(Speed)], 'Color', 'r');
         line([Clusters(p, 2), Clusters(p, 2)], [0 max(Speed)], 'Color', 'c');
     end
