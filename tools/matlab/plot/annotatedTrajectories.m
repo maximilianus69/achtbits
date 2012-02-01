@@ -16,7 +16,7 @@ for i = 1:amountOfClusters
             color = 'magenta';
         case 3
             % digesting
-            color = 'yellow';
+            color = 'cyan';
         case 4
             % flying
             color = 'red';
@@ -25,7 +25,7 @@ for i = 1:amountOfClusters
             color = 'black';
         case 6
             % bad cluster
-            color = 'white';
+            color = 'blue';
     end
     
     geoshow(gca, cluster(:, 2), cluster(:, 3), 'LineWidth', 1, 'color', color)
