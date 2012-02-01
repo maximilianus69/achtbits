@@ -87,38 +87,36 @@ us how many times in a certain time span the bird had a certain speed.}
  second and third characteristic specified above.
 
 \subsection{The Second Method}
-The second way we tried, relies on a bit more data. Apart from the trajectory
+The second method we tried, relies on a bit more data. Apart from the trajectory
 speed, now also the instantaneous speed is used. The trajectory speed is relevant for
 the speed of the bird and now we use the instantaneous speed for finding the angle
 at the time of the GPS fix. 
 
-We take an example of each kind of behavior (floating, flying and foraging).
-This example can be compared with a fixed ammount of time in the data we are
-clustering. For this we loop over the data with a timed window. This is probably
-better explained in the following pseudo code:
-
 \begin{algorithm}
-\begin{algorithmic}
-\STATE Define: $timeThreshold = $ A threshold for how long our histogram is.
-\STATE Define: $exampleHists = $ The histograms of the behavior examples
-\FOR{$i = 1 + timeThreshold$ \TO $pointsInHistogram$}
-    \STATE $currentHists \gets getHistograms(i-timeThreshold, i+timeThreshold)$
-    \STATE $histogramValues(i) \gets \Sigma \left| currentHists - exampleHists \right|$\\
-\ENDFOR
-\RETURN histogramValues
-\end{algorithmic}
+\begin{codebox}
+\Procname{$\proc{histogramCompare}(Data, timeThreshold)$}
+\li $exampleHists \gets getExampleHists()$
+\li \For $i \gets 1 + timeThreshold$ \To $\attrib{Data}{length}$ 
+\li \Do
+    $currentHists \gets getHistograms(i-timeThreshold, i+timeThreshold)$
+    \li $histogramValues(i) \gets \Sigma \left| currentHists - exampleHists \right|$
+\End
+\li \Return histogramValues
+\end{codebox}
 \caption{Comparing example histograms to our data}
 \label{alg:hist}
 \end{algorithm}
-
-
-This data is put in histograms (see figure \ref{fig:histogram}). These
-histograms can be compared with equation \ref{eq:hist}). When Diff is small,
-histogram $H_1$ resembles $H_2$. 
 \begin{equation}
  \label{eq:hist}
- Diff = \left| \Sigma H_1 - \Sigma H_2 \right|
+ Diff = \Sigma \left| H_1 - H_2 \right|
+ \caption{How we calculate the difference between one histogram and the other.}
 \end{equation}
+
+We take an example of each kind of behavior (floating, flying and foraging).
+This example can be compared with a bit of the data we are
+clustering. For this we loop over the data with a time window. This is probably
+better explained in the pseudocode in algorithm \ref{alg:hist} and equation
+\ref{eq:hist}
 
 When using this method, some problems have to be solved.
 
