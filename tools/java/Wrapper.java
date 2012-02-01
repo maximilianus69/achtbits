@@ -13,9 +13,6 @@ public class Wrapper
 
     public static void main(String args[])
     {
-        int gpsFilesWithAccel = 0;
-        int[] resultArray = {0, 0, 0, 0};
-        int[] resultArrayTemp = {0};
 
         for (int id : KNOWN_IDS)
         {
@@ -32,7 +29,6 @@ public class Wrapper
                     args[0] = DIR_TO_DATA_FILES + gpsCsvFile.getName();
                     args[1] = OUTPUT_DIR;
                     args[2] = DIR_TO_DATA_FILES + accelCsvFile.getName();
-                    resultArrayTemp = PreprocessCsvFiles.mainWrapper(args);
                 }
                 else
                 {
@@ -40,19 +36,11 @@ public class Wrapper
                     args = new String[2];
                     args[0] = DIR_TO_DATA_FILES + gpsCsvFile.getName();
                     args[1] = OUTPUT_DIR;
-                    resultArrayTemp = PreprocessCsvFiles.mainWrapper(args);
                 }
             }
             else
                 System.out.println("\t!!!ERROR: missing gps file: " + gpsCsvFile.getName());
-            for (int i = 0; i < resultArray.length; i ++)
-                resultArray[i] += resultArrayTemp[i];
-            gpsFilesWithAccel += resultArrayTemp[2] != 0 ? 1 : 0;
         }
-        System.out.printf("Total gps entries: %d, gps entries lost %d, percentage lost: %f.\n", 
-            resultArray[0], resultArray[1], (float)resultArray[1]/(float)resultArray[0]);
-        System.out.printf("Total accel entries: %d, accel entries lost %d, percentage lost: %f\n", 
-            resultArray[2], resultArray[3], (float)resultArray[3]/(float)resultArray[2]);
 
     }
 }
