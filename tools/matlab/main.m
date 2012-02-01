@@ -62,7 +62,13 @@ function [Max Index] = main(deviceId, sessionId)
     Class = [];
     Class(:, 1)= timestamps(halfWindowSize:size(timestamps, 1)-halfWindowSize- 1) + histogramSizeSeconds/2; 
 
-    for i = halfWindowSize + 1:size(Index, 2) - halfWindowSize
+    for i = halfWindowSize + 2:size(Index, 2) - halfWindowSize
+        % We could use a gaussian blur, that would work like this: 
+        % For now it is outcommented, because we didn't see any differences
+        %gauss = fspecial('gaussian', [1, (2*halfWindowSize+1)], 1);
+        %class = round(halfWindowSize*gauss .* Index(i-halfWindowSize:i+halfWindowSize));
+        %Class(i-halfWindowSize-1, 2) = class(halfWindowSize + 1);
+
         Class(i-halfWindowSize, 2) = mode(Index(i-halfWindowSize:i+halfWindowSize));
     end
 
