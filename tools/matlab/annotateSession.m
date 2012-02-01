@@ -1,4 +1,4 @@
-function output = annotateSession( deviceId, sessionId, outputPath )
+function stopAnnotation = annotateSession( deviceId, sessionId, outputPath )
 %ANNOTATESESSION a tool to annote the clusters of a session
 %
 %   INPUT:
@@ -14,8 +14,8 @@ function output = annotateSession( deviceId, sessionId, outputPath )
 %       - user can input annotation for cluster
 
 
-
-output = 'continue';
+endOfSession = false;
+stopAnnotation = true;
 run = true;
 
 behaviourClasses = {'unknown', 'sleeping', 'digesting', 'flying',...
@@ -37,7 +37,7 @@ dateTimeStart = timestampToDateTime(SessionGpsData(1, 2));
 % initiate annotation GUI 
 
 mainFigId = figure('Name',strcat('Cluster annotation, session ', sprintf('%03d', sessionId),', start: ', dateTimeStart), 'NumberTitle','off', ...
-    'units','normalized','outerposition',[0 0.05 1 0.90], 'DeleteFcn', {@exitTool, false});
+    'units','normalized','outerposition',[0 0.05 1 0.90], 'DeleteFcn', {@exitTool});
 
 
 % LAYOUT:
@@ -133,49 +133,56 @@ while i <= amountOfClusters
     plotFeatureInfo(ClusterFeatures, behaviourClasses);
     
     % show control
-    hp = uipanel('Position', [0 0 0.1 1], 'Title', 'control');
+    showControl
 
-    set(hp, 'Units', 'pixels');
-    hpPos = get(hp, 'Position');
-    set(hp, 'Units', 'normalized');
-    buttonWidthMargin = hpPos(3)/20;
-    buttonWidth = hpPos(3) - hpPos(3)/10 - 4;
-    
-    hbgc = uibuttongroup('Parent', hp, 'Title', 'options', 'Position', [0 0.5 1 0.3]);
-    uicontrol('Parent', hbgc, 'Style', 'pushbutton', 'String', 'Back', ...
-        'Callback', {@previousCluster}, 'Position', [buttonWidthMargin 90 buttonWidth 30])
-    uicontrol('Parent', hbgc, 'Style', 'pushbutton', 'String', 'Exit', ...
-        'Callback', {@exitTool, true}, 'Position', [buttonWidthMargin 130 buttonWidth 30])
-    uicontrol('Parent', hbgc, 'Style', 'pushbutton', 'String', 'Zoom in', ...
-        'Callback', {@zoomSession, true}, 'Position', [buttonWidthMargin 50 buttonWidth 30])
-    uicontrol('Parent', hbgc, 'Style', 'pushbutton', 'String', 'Zoom out', ...
-        'Callback', {@zoomSession, false}, 'Position', [buttonWidthMargin 10 buttonWidth 30])
-    
-    hbg = uibuttongroup('Parent', hp, 'Title', 'classes', 'Position', [0 0 1 0.5]);
-    
-    uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'unknown', ...
-        'Callback', {@updateBehaviour, 1}, 'Position', [buttonWidthMargin 10 buttonWidth 30], ...
-        'ForegroundColor', 'b')
-    uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Sleeping', ...
-        'Callback', {@updateBehaviour, 2}, 'Position', [buttonWidthMargin 50 buttonWidth 30], ...
-        'ForegroundColor', 'm')
-    uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Digesting', ...
-        'Callback', {@updateBehaviour, 3}, 'Position', [buttonWidthMargin 90 buttonWidth 30], ...
-        'ForegroundColor', 'c')
-    uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Flying', ...
-        'Callback', {@updateBehaviour, 4}, 'Position', [buttonWidthMargin 130 buttonWidth 30], ...
-        'ForegroundColor', 'r')
-    uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Diving', ...
-        'Callback', {@updateBehaviour, 5}, 'Position', [buttonWidthMargin 170 buttonWidth 30], ...
-        'ForegroundColor', 'black')
-    uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Bad cluster', ...
-        'Callback', {@updateBehaviour, 6}, 'Position', [buttonWidthMargin 210 buttonWidth 30], ...
-        'ForegroundColor', 'b')
     
     uiwait
     
 end
     
+    function showControl
+        hp = uipanel('Position', [0 0 0.1 1], 'Title', 'control');
+
+        set(hp, 'Units', 'pixels');
+        hpPos = get(hp, 'Position');
+        set(hp, 'Units', 'normalized');
+        buttonWidthMargin = hpPos(3)/20;
+        buttonWidth = hpPos(3) - hpPos(3)/10 - 4;
+
+        hbgc = uibuttongroup('Parent', hp, 'Title', 'options', 'Position', [0 0.8 1 0.2]);
+        uicontrol('Parent', hbgc, 'Style', 'pushbutton', 'String', 'Back', ...
+            'Callback', {@previousCluster}, 'Position', [buttonWidthMargin 10 buttonWidth 30])
+        uicontrol('Parent', hbgc, 'Style', 'pushbutton', 'String', 'Exit', ...
+            'Callback', {@exitTool}, 'Position', [buttonWidthMargin 50 buttonWidth 30])
+
+        hbgz = uibuttongroup('Parent', hp, 'Title', 'session zoom', 'Position', [0 0.6 1 0.2]);
+        uicontrol('Parent', hbgz, 'Style', 'pushbutton', 'String', 'Zoom in', ...
+            'Callback', {@zoomSession, true}, 'Position', [buttonWidthMargin 50 buttonWidth 30])
+        uicontrol('Parent', hbgz, 'Style', 'pushbutton', 'String', 'Zoom out', ...
+            'Callback', {@zoomSession, false}, 'Position', [buttonWidthMargin 10 buttonWidth 30])
+
+        hbg = uibuttongroup('Parent', hp, 'Title', 'classes', 'Position', [0 0 1 0.5]);
+
+        uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'unknown', ...
+            'Callback', {@updateBehaviour, 1}, 'Position', [buttonWidthMargin 10 buttonWidth 30], ...
+            'ForegroundColor', 'b')
+        uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Sleeping', ...
+            'Callback', {@updateBehaviour, 2}, 'Position', [buttonWidthMargin 50 buttonWidth 30], ...
+            'ForegroundColor', 'm')
+        uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Digesting', ...
+            'Callback', {@updateBehaviour, 3}, 'Position', [buttonWidthMargin 90 buttonWidth 30], ...
+            'ForegroundColor', 'c')
+        uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Flying', ...
+            'Callback', {@updateBehaviour, 4}, 'Position', [buttonWidthMargin 130 buttonWidth 30], ...
+            'ForegroundColor', 'r')
+        uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Diving', ...
+            'Callback', {@updateBehaviour, 5}, 'Position', [buttonWidthMargin 170 buttonWidth 30], ...
+            'ForegroundColor', 'black')
+        uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Bad cluster', ...
+            'Callback', {@updateBehaviour, 6}, 'Position', [buttonWidthMargin 210 buttonWidth 30], ...
+            'ForegroundColor', 'b')
+    end
+
     function zoomSession(~, ~, zoom)
         subplot(5,7,[1:2 8:9 15:16])
         hold on
@@ -187,20 +194,14 @@ end
         hold off
     end
 
-    function exitTool(~, ~, exitAll)
+    function exitTool(~, ~)
         
         outputFile = strcat(outputPath, '/device_', deviceId, '_session_', ...
             sprintf('%03d', sessionId), '_clusterFeatures.csv');
 
         dlmwrite(outputFile, annotatedData, 'precision', '%10f');
-        
-%         if i == 1
-%             dlmwrite(outputFile, ClusterFeatures, 'precision', '%10f');
-%         else
-%             dlmwrite(outputFile, ClusterFeatures, '-append', 'roffset', 0, 'precision',  '%10f');
-%         end
-        if exitAll
-            output = 'stop';   
+
+        if ~endOfSession
             run = false;
         end
         uiresume
@@ -237,7 +238,11 @@ end
         annotatedTrajectory = [annotatedTrajectory;temp];
 
         uiresume;
-
+        
+        if i == amountOfClusters
+            stopAnnotation = false;
+            endOfSession = true;
+        end
         i = i + 1;
     end
 
