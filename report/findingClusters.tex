@@ -99,9 +99,13 @@ better explained in the following pseudo code:
 
 \begin{algorithm}
 \begin{algorithmic}
-\FOR{i = Awesome}
-    \PRINT {boobies}
+\STATE Define: $timeThreshold = $ A threshold for how long our histogram is.
+\STATE Define: $exampleHists = $ The histograms of the behavior examples
+\FOR{$i = 1 + timeThreshold$ \TO $pointsInHistogram$}
+    \STATE $currentHists \gets getHistograms(i-timeThreshold, i+timeThreshold)$
+    \STATE $histogramValues(i) \gets \Sigma \left| currentHists - exampleHists \right|$\\
 \ENDFOR
+\RETURN histogramValues
 \end{algorithmic}
 \caption{Comparing example histograms to our data}
 \label{alg:hist}
@@ -116,7 +120,7 @@ histogram $H_1$ resembles $H_2$.
  Diff = \left| \Sigma H_1 - \Sigma H_2 \right|
 \end{equation}
 
-When using this methods, some problems have to be solved.
+When using this method, some problems have to be solved.
 
 \subsubsection{Interpolating the Values}
 The first problem we encounter is the difference in resolution of the data. This
