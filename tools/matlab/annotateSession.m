@@ -20,7 +20,9 @@ run = true;
 
 behaviourClasses = {'unknown', 'sleeping', 'digesting', 'flying',...
         'diving', 'bad cluster'};
-    
+
+classColors = [[0 0 0]; [1 0 1]; [1 0.5 0]; [0 1 0]; [1 0 0]; [0 0 0]];
+
 % read the session data from input file
 SessionGpsData = readgps(deviceId, sessionId);
 
@@ -36,11 +38,13 @@ dateTimeStart = timestampToDateTime(SessionGpsData(1, 2));
 
 % initiate annotation GUI 
 
-mainFigId = figure('Name',strcat('Cluster annotation, session ', sprintf('%03d', sessionId),', start: ', dateTimeStart), 'NumberTitle','off', ...
-    'units','normalized','outerposition',[0 0.05 1 0.90], 'DeleteFcn', {@exitTool});
+mainFigId = figure('Name',strcat('Cluster annotation, session ', ...
+    sprintf('%03d', sessionId),', start: ', dateTimeStart),...
+    'NumberTitle','off', 'units','normalized',...
+    'outerposition',[0 0.05 1 0.90], 'DeleteFcn', {@exitTool});
 
 
-% LAYOUT:
+% LAYOUT (organized in a 5x7 matrix containing subplots):
 
 % 1 - session trajectory
 % 2 - cluster trajectory
@@ -58,16 +62,16 @@ mainFigId = figure('Name',strcat('Cluster annotation, session ', sprintf('%03d',
 % set previousClusterClass to unknown
 previousClusterClass = 1;
 
+i = 1;
+amountOfClusters = size(Clusters, 1);
+
+annotatedData = []; % stores all features with class
+annotatedTrajectory = []; % stores coordinates with class
+
 % for each cluster:
 %   find the data and features
 %   plot the trajectory, data and features
 %   ask for user input (behaviour-class)
-
-i = 1;
-amountOfClusters = size(Clusters, 1);
-
-annotatedData = [];
-annotatedTrajectory = [];
 
 while i <= amountOfClusters
     clf %clearfigure
@@ -84,24 +88,24 @@ while i <= amountOfClusters
     
     ClusterFeatures = [i ClusterFeatures previousClusterClass];
     
-    % plot trajectory
+    % get coordinates of session and cluster
     SessionCoordinates = SessionGpsData(:, 3:4);
     ClusterCoordinates = ClusterData(:, 3:4);
       
     % plot session trajectory
-     subplot(5,7,[1:2 8:9 15:16])
-    %subplot('Position', [0.13, 0.44 0.22 0.5])
+    subplot(5,7,[1:2 8:9 15:16])
+    
     hold on
     plotTrajectory(SessionCoordinates, ClusterCoordinates);
     if i > 1
-        annotatedTrajectories(annotatedTrajectory);
+        annotatedTrajectories(annotatedTrajectory, classColors);
     end
     title('Session trajectory');
     hold off
     
     % plot cluster trajectory
     subplot(5, 7, [3:4 10:11 17:18])
-    %subplot('Position', [0.38, 0.44 0.22 0.5])
+
     hold on
     plotTrajectory(ClusterCoordinates);
     title('Cluster trajectroy');
@@ -109,7 +113,7 @@ while i <= amountOfClusters
     
     % plot accelerometer data
     subplot(5, 7, 5:7)
-    %subplot('Position', [0.65, 0.46 0.3 0.5])
+
     if size(SessionAccData) == [0 0]
         text(0.2, 0.5, 'No Accelerometer data found');
         accPoints = [];
@@ -119,70 +123,56 @@ while i <= amountOfClusters
     
     % plot velocity and acceleration   
     subplot(5, 7, 22:26)
-    %subplot('Position', [0.13, 0.21 0.6 0.18])
+
     plotVelAndAcc(ClusterData, accPoints);
         
     % plot instantanious speed vectors
     subplot(5, 7, 29:33);
-    %subplot('Position', [0.13, 0.02 0.6 0.18])
+
     plotInstantSpeed(ClusterData);
     
-    subplot(5,7,[27:28 34:35])
-    %subplot('Position', [0.7, 0.05 0.3 0.4])
     % show features  
+    subplot(5,7,[27:28 34:35])
+
     plotFeatureInfo(ClusterFeatures, behaviourClasses);
     
     % show control
     showControl
 
-    
+    % wait for a button to be clicked
     uiwait
-    
+     
 end
-    
+
+close all;
+
+% end of function
+
+% nested functions used for button control
+
+% showControl - places buttons with callback on the tool
     function showControl
         hp = uipanel('Position', [0 0 0.1 1], 'Title', 'control');
 
-        set(hp, 'Units', 'pixels');
-        hpPos = get(hp, 'Position');
-        set(hp, 'Units', 'normalized');
-        buttonWidthMargin = hpPos(3)/20;
-        buttonWidth = hpPos(3) - hpPos(3)/10 - 4;
-
         hbgc = uibuttongroup('Parent', hp, 'Title', 'options', 'Position', [0 0.8 1 0.2]);
-        uicontrol('Parent', hbgc, 'Style', 'pushbutton', 'String', 'Back', ...
-            'Callback', {@previousCluster}, 'Position', [buttonWidthMargin 10 buttonWidth 30])
-        uicontrol('Parent', hbgc, 'Style', 'pushbutton', 'String', 'Exit', ...
-            'Callback', {@exitTool}, 'Position', [buttonWidthMargin 50 buttonWidth 30])
+        hbs = makeButtons(hbgc, {'back', 'exit'});
+        set(hbs(1), 'Callback', {@previousCluster});
+        set(hbs(2), 'Callback', {@exitTool});
 
-        hbgz = uibuttongroup('Parent', hp, 'Title', 'session zoom', 'Position', [0 0.6 1 0.2]);
-        uicontrol('Parent', hbgz, 'Style', 'pushbutton', 'String', 'Zoom in', ...
-            'Callback', {@zoomSession, true}, 'Position', [buttonWidthMargin 50 buttonWidth 30])
-        uicontrol('Parent', hbgz, 'Style', 'pushbutton', 'String', 'Zoom out', ...
-            'Callback', {@zoomSession, false}, 'Position', [buttonWidthMargin 10 buttonWidth 30])
+        hbgz = uibuttongroup('Parent', hp, 'Title', 'session zoom', 'Position', [0 0.55 1 0.2]);
+        hbs = makeButtons(hbgz, {'Zoom in', 'Zoom out'});
+        set(hbs(1), 'Callback', {@zoomSession, true});
+        set(hbs(2), 'Callback', {@zoomSession, false});
 
-        hbg = uibuttongroup('Parent', hp, 'Title', 'classes', 'Position', [0 0 1 0.5]);
-
-        uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'unknown', ...
-            'Callback', {@updateBehaviour, 1}, 'Position', [buttonWidthMargin 10 buttonWidth 30], ...
-            'ForegroundColor', 'b')
-        uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Sleeping', ...
-            'Callback', {@updateBehaviour, 2}, 'Position', [buttonWidthMargin 50 buttonWidth 30], ...
-            'ForegroundColor', 'm')
-        uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Digesting', ...
-            'Callback', {@updateBehaviour, 3}, 'Position', [buttonWidthMargin 90 buttonWidth 30], ...
-            'ForegroundColor', 'c')
-        uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Flying', ...
-            'Callback', {@updateBehaviour, 4}, 'Position', [buttonWidthMargin 130 buttonWidth 30], ...
-            'ForegroundColor', 'r')
-        uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Diving', ...
-            'Callback', {@updateBehaviour, 5}, 'Position', [buttonWidthMargin 170 buttonWidth 30], ...
-            'ForegroundColor', 'black')
-        uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Bad cluster', ...
-            'Callback', {@updateBehaviour, 6}, 'Position', [buttonWidthMargin 210 buttonWidth 30], ...
-            'ForegroundColor', 'b')
+        hbgc = uibuttongroup('Parent', hp, 'Title', 'classes', 'Position', [0 0 1 0.5]);
+        hbs = makeButtons(hbgc, behaviourClasses, classColors);
+        for j = 1:size(hbs, 1)
+            set(hbs(j), 'Callback', {@updateBehaviour, j});
+        end
+        
     end
 
+% zoomSession - replots the session trajectory zoomed or not
     function zoomSession(~, ~, zoom)
         subplot(5,7,[1:2 8:9 15:16])
         hold on
@@ -194,6 +184,7 @@ end
         hold off
     end
 
+% exitTool - is called whenever the tool closes and stores result in a file
     function exitTool(~, ~)
         
         outputFile = strcat(outputPath, '/device_', deviceId, '_session_', ...
@@ -204,10 +195,12 @@ end
         if ~endOfSession
             run = false;
         end
+        
         uiresume
         
     end
 
+% previousCluster - goes back one cluster
     function previousCluster(~, ~)
         
         if i > 1
@@ -220,17 +213,20 @@ end
         uiresume
     end
 
+% updateBehaviour - checks which class was specified and adds it to
+% features
     function updateBehaviour(~, ~, behaviour)
 
         previousClusterClass = behaviour;
 
-        % add row to output
+        % adds class to features and cluster to annotated clusters
         ClusterFeatures = [ClusterFeatures behaviour];
 
         annotatedData = [annotatedData; ClusterFeatures];
         
         clusterPoints = size(ClusterCoordinates, 1);
         
+        % adds cluster XY with class to annotatedTrajectory
         temp = zeros(clusterPoints, 4);
         temp(1:clusterPoints, 1) = ClusterFeatures(1);
         temp(:, 2:3) = ClusterCoordinates;
@@ -239,14 +235,14 @@ end
 
         uiresume;
         
+        % checks if this was last cluster in session
         if i == amountOfClusters
             stopAnnotation = false;
             endOfSession = true;
         end
+        
         i = i + 1;
     end
-
-close all;
 
 end
 
