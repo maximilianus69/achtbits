@@ -11,8 +11,11 @@ function [ClusterFeatures, ClusterPoints] = createClusterFeatures( Cluster, Sess
 %   format: 
 %   [startTime(s),  endTime(s),   duration(s), avgSpeed(km/h), ...
 %    heightDiff(m), grndDist(km), totDist(km), angleVar(degrees/s), ...
-%    distDiff(m), resolution(dat/min), fx(Hz), fy(Hz), fz(Hz)]
+%    distDiff(km), resolution(dat/min), fx(Hz), fy(Hz), fz(Hz)]
 %	- ClusterPoints a matrix with the points inside this cluster
+
+% the maximum resolution to be used for calculating angle var
+ANGLE_VAR_MAX_RES = 1.0;
 
 startTime = Cluster(1);
 endTime = Cluster(2);
@@ -58,11 +61,14 @@ if ~isempty(dt(dt < 0))
     return;
 end
 
+% calculate resolution in datapoints per minute
+resolution = size(ClusterPoints,1)/(duration/60);
+
 % calculate avg speed
 speeds = abs(Points(:,6)) + abs(Points(:,7));
 avgSpeed = abs(mean(speeds)) * 3.6;
 
-% calculate height differences per time unit (m/s)
+% calculate height differences per time unit (m)
 dh = Points(2:end,5) - Points(1:end-1,5);
 hDerv = dh ./ dt;
 heightDiff = abs(mean(hDerv))*duration;
@@ -82,20 +88,26 @@ end
 
 % calculate the variance in direction in average deg/s
 speeds = Points(:, 9:11);
-speeds = speeds/norm(speeds); % only interested in angle, not length
+speeds = speeds/norm(speeds);
+% sample to the preferred resolution
+sampled_dt = dt;
+if resolution > ANGLE_VAR_MAX_RES
+	numSamples = floor(ANGLE_VAR_MAX_RES * (duration/60));
+	samples = floor(linspace(1, size(speeds,1), numSamples));
+	speeds = speeds(samples,:)
+	sampled_times = Points(samples,2);
+	sampled_dt = sampled_times(2:end) - sampled_times(1:end-1)
+end 
 theta=0;
 for i=1:size(speeds,1)-1
     % formula for calculating angle between 2 vectors in 3D
     theta(i) = atan2(norm(cross(speeds(i,:)',speeds(i+1,:)')),dot(speeds(i,:)',speeds(i+1,:)'));
 end
-dtheta = theta' ./ dt;
+dtheta = theta' ./ sampled_dt;
 angleVar = abs(mean(dtheta))*(180/pi);
 
 % calculate the difference between totDist and grndDist
 distDiff = abs(totDist - grndDist);
-
-% calculate resolution in datapoints per minute
-resolution = size(ClusterPoints,1)/(duration/60);
 
 % return data
 ClusterFeatures = ...
