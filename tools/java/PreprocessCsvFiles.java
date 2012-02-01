@@ -64,20 +64,20 @@ class PreprocessCsvFiles
     ///// (Should) Read these from the config file /////
 
     /** Boundaries to filter resolution in entrypoints per minutes. */
-    private static float lowerBoundresolution = 0.2f; 
-    private static float upperBoundresolution = 90; 
+    public static float lowerBoundresolution = 0.2f; 
+    public static float upperBoundresolution = 90; 
 
     /** Minimum session time before we want to include it. */
-    private static final int sessionMinimumLengthSeconds = 3600; // 1 hour 
-    private static final int sessionMinimumLengthEntries = 5;
-    private static final int sessionSeparatorSeconds = 900; // 15 min
+    public static int sessionMinimumLengthSeconds = 3600; // 1 hour 
+    public static int sessionMinimumLengthEntries = 5;
+    public static int sessionSeparatorSeconds = 900; // 15 min
 
-    private static String inputDelimiter = ",";
-    private static String outputDelimiter = ",";
+    public static String inputDelimiter = ",";
+    public static String outputDelimiter = ",";
 
     /** The integers in this column will be saved in the output file. */
-    private static int[] includeColumnsGps = {0, 1, 2, 3, 4, 18, 19, 20, 9, 10, 11}; 
-    private static int[] includeColumnsAcc = {1, 2, 3, 4, 5, 0}; 
+    public static int[] includeColumnsGps = {0, 1, 2, 3, 4, 18, 19, 20, 9, 10, 11}; 
+    public static int[] includeColumnsAcc = {1, 2, 3, 4, 5, 0}; 
 
     ///// other /////
 
@@ -102,14 +102,31 @@ class PreprocessCsvFiles
 
     public static int[] mainWrapper(String[] args)
     {
+
+
         totalLinesDiscarded = 0;
         gpsLinesWritten = accelLinesWritten = 0;
         totalGpsLines = totalAccelLines = linesRead = 0;
         parsedSessions = new ArrayList<ArrayList<String[]>> ();
         columnLabels = new ArrayList<String> ();
+
        
         // total gps lines, gps lines lost, total accel lines, accel lines lost 
         int[] resultArray = {-1, -1, -1, -1};
+
+        try
+        {
+            Io.readAndSetConfiguration();
+        }
+        catch (Exception e)
+        {
+            System.out.println("Error in reading configuration file. Keep the same format and infer the meaning of the variables by their names.");
+            System.out.println("Printing stacktrace and error message");
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            System.out.println("Will now exit");
+            return resultArray;
+        }
 
         if (args.length == 2 | (parseAccelerometerData = args.length == 3))
         {

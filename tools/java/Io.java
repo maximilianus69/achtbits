@@ -24,6 +24,45 @@ public class Io
             (new File(outputDirectory)).delete();
     }
 
+    /** Reads config.txt and sets static variabels in PreprocessCsvFiles. {{{
+    * done last moment so it isn't pretty all right!?*/
+    public static void readAndSetConfiguration() throws Exception
+    {
+/*
+lowerBoundresolution=0.2f 
+upperBoundresolution=90
+sessionMinimumLengthSeconds=3600
+sessionMinimumLengthEntries=5
+sessionSeparatorSeconds=900
+inputDelimiter=,
+outputDelimiter=,
+includeColumnsGps=0, 1, 2, 3, 4, 18, 19, 20, 9, 10, 11}
+includeColumnsAcc=1, 2, 3, 4, 5, 0}
+*/
+        ArrayList<String> lines = readFile("config.txt");
+        String delimiter = "=";
+
+        PreprocessCsvFiles.lowerBoundresolution = Float.valueOf(lines.get(0).split(delimiter)[1]);
+        PreprocessCsvFiles.lowerBoundresolution = Float.valueOf(lines.get(1).split(delimiter)[1]);
+        PreprocessCsvFiles.sessionMinimumLengthSeconds= Integer.valueOf(lines.get(2).split(delimiter)[1]);
+        PreprocessCsvFiles.sessionMinimumLengthEntries= Integer.valueOf(lines.get(3).split(delimiter)[1]);
+        PreprocessCsvFiles.sessionSeparatorSeconds = Integer.valueOf(lines.get(4).split(delimiter)[1]);
+        PreprocessCsvFiles.inputDelimiter = lines.get(5).split(delimiter)[1];
+        PreprocessCsvFiles.outputDelimiter = lines.get(6).split(delimiter)[1];
+
+        String[] values1 = lines.get(7).split(delimiter)[1].split(", ");
+        PreprocessCsvFiles.includeColumnsGps = new int[values1.length];
+        for (int i = 0; i < values1.length; i ++)
+            PreprocessCsvFiles.includeColumnsGps[i] = Integer.valueOf(values1[i]);
+        
+        
+        String[] values2 = lines.get(7).split(delimiter)[1].split(", ");
+        PreprocessCsvFiles.includeColumnsAcc = new int[values2.length];
+        for (int i = 0; i < values2.length; i ++)
+            PreprocessCsvFiles.includeColumnsAcc[i] = Integer.valueOf(values2[i]);
+        
+    } // }}}
+
     // {{{ functions to write.
    
     /** Writes an arralyist with accelerometerpoints to file. */ 
