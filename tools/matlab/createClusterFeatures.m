@@ -51,7 +51,7 @@ if size(SessionAccData) ~= [0 0]
 	    accTime = accEntries(accEntry);
 
 	    % at least three acc entries are needed for this timestamp
-	    numEntries = length(find(ClusterAccData(:,2) == accTime))
+	    numEntries = length(find(ClusterAccData(:,2) == accTime));
 	    if	numEntries >= 3
 	    	fourierFreq = fourierOnAcc(ClusterAccData, accTime);
 	    end
