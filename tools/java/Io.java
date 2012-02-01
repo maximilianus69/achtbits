@@ -43,20 +43,24 @@ includeColumnsAcc=1, 2, 3, 4, 5, 0}
         String delimiter = "=";
 
         PreprocessCsvFiles.lowerBoundresolution = Float.valueOf(lines.get(0).split(delimiter)[1]);
-        PreprocessCsvFiles.lowerBoundresolution = Float.valueOf(lines.get(1).split(delimiter)[1]);
+        PreprocessCsvFiles.upperBoundresolution = Float.valueOf(lines.get(1).split(delimiter)[1]);
         PreprocessCsvFiles.sessionMinimumLengthSeconds= Integer.valueOf(lines.get(2).split(delimiter)[1]);
         PreprocessCsvFiles.sessionMinimumLengthEntries= Integer.valueOf(lines.get(3).split(delimiter)[1]);
         PreprocessCsvFiles.sessionSeparatorSeconds = Integer.valueOf(lines.get(4).split(delimiter)[1]);
         PreprocessCsvFiles.inputDelimiter = lines.get(5).split(delimiter)[1];
         PreprocessCsvFiles.outputDelimiter = lines.get(6).split(delimiter)[1];
 
-        String[] values1 = lines.get(7).split(delimiter)[1].split(", ");
+        String[] values1 = lines.get(7).split(delimiter)[1].split(",");
         PreprocessCsvFiles.includeColumnsGps = new int[values1.length];
         for (int i = 0; i < values1.length; i ++)
             PreprocessCsvFiles.includeColumnsGps[i] = Integer.valueOf(values1[i]);
+
+        
+        //for (int i = 0; i < values1.length; i ++)
+        //    System.out.println(PreprocessCsvFiles.includeColumnsGps[i]);
         
         
-        String[] values2 = lines.get(7).split(delimiter)[1].split(", ");
+        String[] values2 = lines.get(7).split(delimiter)[1].split(",");
         PreprocessCsvFiles.includeColumnsAcc = new int[values2.length];
         for (int i = 0; i < values2.length; i ++)
             PreprocessCsvFiles.includeColumnsAcc[i] = Integer.valueOf(values2[i]);

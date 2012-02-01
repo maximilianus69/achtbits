@@ -114,6 +114,7 @@ class PreprocessCsvFiles
         // total gps lines, gps lines lost, total accel lines, accel lines lost 
         int[] resultArray = {-1, -1, -1, -1};
 
+
         try
         {
             Io.readAndSetConfiguration();
@@ -127,6 +128,8 @@ class PreprocessCsvFiles
             System.out.println("Will now exit");
             return resultArray;
         }
+
+
 
         if (args.length == 2 | (parseAccelerometerData = args.length == 3))
         {
