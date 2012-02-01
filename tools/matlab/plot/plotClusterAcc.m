@@ -46,8 +46,6 @@ if sum(inCluster) > 0
     subplot(5, 7, 5:7)
     plotAcc(SessionAccData, timeEntries(first));
     title(strcat('Accelerometer of point ', num2str(first)));
-    
-    fourierOnAcc(SessionAccData, timeEntries(first));
 
     subplot(5, 7, 12:14)
     if second ~= 0
