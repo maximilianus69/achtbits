@@ -27,7 +27,7 @@ text(3, 10, num2str(Feature(1))); % cluster
 text(3, 7, strcat(num2str(Feature(6)), ' m')); % height diff
 text(3, 6, strcat(num2str(Feature(7)), ' km')); % abs distance
 text(3, 5, strcat(num2str(Feature(8)), ' km')); % tot distance
-text(3, 4, strcat(num2str(Feature(9)), ' rads')); % angle variance
+text(3, 4, strcat(num2str(Feature(9)), ' deg/s')); % angle variance
 text(3, 3, classes(Feature(end)));
 
 text(3, 9, secs2hms(Feature(4))); % duration
