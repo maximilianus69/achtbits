@@ -1,4 +1,5 @@
-function [Max Index] = main(deviceId, sessionId)
+function Class = main(deviceId, sessionId)
+
     % Wrapper for reading gps coordinates from a csv file, taking the ones above
     % the north sea, and calculating vectors with the direction and speed
     % It uses readgps and makeVectors
@@ -60,7 +61,7 @@ function [Max Index] = main(deviceId, sessionId)
     [Max Index] = max([m1Course m2Course m3Course]');
     % Class will be a N by 1 vector containing the classes
     Class = [];
-    Class(:, 1)= timestamps(1:size(timestamps, 1)-2*halfWindowSize - 1) + timestampStep * halfWindowSize;
+    Class(:, 1)= timestamps(1:size(timestamps, 1)-2*halfWindowSize) + timestampStep * halfWindowSize;
 
     for i = halfWindowSize + 1:size(Index, 2) - halfWindowSize
         % We could use a gaussian blur, that would work like this: 
