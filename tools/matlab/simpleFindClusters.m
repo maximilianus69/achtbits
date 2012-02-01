@@ -13,10 +13,10 @@ function SimpleClusters = simpleFindClusters(Classes, minClusterLength)
             SimpleClusters(j, 2) = Classes(i, 1);
             j = j + 1;
             SimpleClusters(j, 1) = Classes(i, 1);
-            currentClass = Classes(i, 2);
+            currentClass = Classes(i, 2)
         end
     end
-    SimpleClusters(size(SimpleClusters, 1), 2) = Classes(size(Classes, 1), 1);
+    SimpleClusters(size(SimpleClusters, 1), 2) = Classes(size(Classes, 1), 1)
 
     D = SimpleClusters(:, 2) - SimpleClusters(:, 1);
     % A cluster should be 10 minutes minimum
