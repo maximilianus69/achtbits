@@ -83,10 +83,12 @@ function [SpeedHist, AngleHist] = createTrainingHist(type, binsSpeed, binsAngle,
     %subplot(2, 1, 2);
     SpeedHist = histc(RealSpeed, binsSpeed);
     %bar(binsSpeed, SpeedHist);
-    figure
-     hist(totalVar, binsAngle);
-     xlabel('Angle (deg)')
-     title('Histogram of the angle of the bird during a GPS fix')
+
+    % Plot used in the report:
+    %figure
+    % hist(totalVar, binsAngle);
+    % xlabel('Angle (deg)')
+    % title('Histogram of the angle of the bird during a GPS fix')
 
 
     
