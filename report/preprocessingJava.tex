@@ -1,0 +1,69 @@
+%\section{Preprocessing}
+The data we need to use is available from a database at the uva-bits website
+\footnote{\url{https://public.flysafe.sara.nl/phppgadmin/} }. This database is often very slow 
+and sometimes overloaded. This is why we downloaded all the data we required in one run. 
+Before we can start in Matlab we preprocess this data to load only correct data in Matlab.
+
+\subsection{Before Matlab}
+\label{subsec:beforeMatlab}
+Preprocessing of the data from a database dump is done in Java. Such data 
+is checked for the following: 
+\begin{enumerate}
+    \item Is the data above the north sea? We are only interested in the birds behaviour 
+    above the North Sea data from above the Wadden Sea or above Holland is removed.
+    \item Is the data complete? If we require longitude and latitude every entry 
+    without a value for these variables are excluded for the data for Matlab. 
+    \item Is the data usable? Our method requires data to consist of long flights,
+    not isolated data points. We call a sequence of useful data points a \textit{session}. 
+    See subsection \ref{subsec:creatingSessions} for more details on sessions and how
+    they are created.
+\end{enumerate}
+
+Furthermore the date time was rewritten to a time stamp. We wanted to time stamps to be 
+as small as possible so instead of using standard Unix time we use \textit{seconds passed
+since 
+January 1 2008}. This could be done because the earliest data in the database was from after
+this date. 
+
+\subsection{Creating Sessions}
+\label{subsec:creatingSessions}
+As discussed in subsection \ref{subsec:beforeMatlab} a part of the script involves 
+dividing the data points up in to sessions. Isolated data points should be excluded. 
+When there is a too big of a time span between two data points, a new sessions should be 
+created. Furthermore a session should not be too short and it should not contain too few
+data points (the resolution of data points per minutes should be within a range of 
+acceptable values). 
+
+This has to be done because our method involves the detection of clusters and this
+can only be done with an actual flight of the bird. 
+
+We use the following parameters to define which sequences of data points can be called sessions: 
+\begin{itemize}
+    \item Total minutes described. This is currently set to \minimumSessionLengthMinutes minutes. Less than \minimumSessionLengthMinutes minutes of flight is not interesting.
+    \item Range of resolution. We can filter for a range of data points per minutes. There is
+no way to extract the same amount of information from low resolution data as from high 
+resolution data. This is why we filter out the low resolution data. The resolution 
+we now use is \resolutionRange data points per minute.
+    \item The maximum amount of minutes between two data points. Sometimes the device
+can't update at the preferred moments. We end a session at such a point because we need
+the information of what the bird is doing \emph{all the time} to be able to cluster 
+acceptably. 
+\end{itemize}
+
+The script outputs comma separated files with sessions of GPS data and, if available, comma
+separated files with sessions of accelerometer data. Matlab can easily match these sessions
+and so use at least the GPS data but also the accelerometer data if it is available. 
+
+The amount of data that does not pass through the filters of this script depends on the 
+parameters. The parameters decide when we call a sequence of data points a session. Is
+it long enough? What should the resolution (data points per minute). How long can we receive
+no data before we end a session? Etcetera ...
+
+The parameters verified with our client result in 90\% of the data being thrown away. 
+The motivation was: ``Better to use less data that you know is good than to use more data that 
+is not as usable''. 
+
+About 25\% of the GPS data also had accelerometer data.
+
+
+
