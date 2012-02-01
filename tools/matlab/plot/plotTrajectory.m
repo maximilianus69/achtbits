@@ -57,9 +57,10 @@ elseif yDiffScaled > xDiff
 end
 
 if hasCluster && ~zoom
-    axis([3 5 53.3-(2*figureRatio) 53.3]);
+    xScaled = (2.2*figureRatio)/2;
+    axis([4.4-xScaled 4.4+xScaled 51.2 53.4]);
 else
-    axis([minX maxX minY maxY]);
+    axis([minX-xDiff*0.02 maxX+xDiff*0.02 minY-yDiff*0.02 maxY+yDiff*0.02]);
 end
 
 % plot the map
