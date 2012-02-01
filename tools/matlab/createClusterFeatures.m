@@ -33,6 +33,8 @@ if size(Points,1) < 2
 end
 ClusterPoints = Points;
 
+% default fourier data if none is found
+fourierFreq = [-1 -1 -1];
 % if there is acc data try to add fourier features
 if size(SessionAccData) ~= [0 0]
 	% extract part of accelerometer data inside cluster
@@ -46,12 +48,14 @@ if size(SessionAccData) ~= [0 0]
 		% find the timestamp we want featured
 	    accEntries = unique(ClusterAccData(:,2));
 	    accEntry = ceil(length(accEntries)/2);
-	    fourierFreq = fourierOnAcc(ClusterAccData, accEntries(accEntry));
-	else
-		fourierFreq = [-1 -1 -1];
+	    accTime = accEntries(accEntry);
+
+	    % at least three acc entries are needed for this timestamp
+	    numEntries = length(find(ClusterAccData(:,2) == accTime))
+	    if	numEntries >= 3
+	    	fourierFreq = fourierOnAcc(ClusterAccData, accTime);
+	    end
 	end
-else
-	fourierFreq = [-1 -1 -1];
 end
 
 % holds the time passed between two sequential points
