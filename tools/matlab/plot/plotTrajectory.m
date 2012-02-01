@@ -33,8 +33,7 @@ end
 
 set(gca, 'Units', 'pixels')
 pos = get(gca, 'Position');
-figureRatio = pos(4)/pos(3); %width/height
-correctionRatio = pos(3)/pos(4);
+figureRatio = pos(3)/pos(4); %height/width
 set(gca, 'Units', 'normalized')
 
 minY = min(sessionY);
@@ -50,23 +49,22 @@ yDiffScaled = yDiff*figureRatio;
 if xDiff > yDiffScaled
    % long full
    % lat scaled to fit figure
-   yMargin = (yDiff * correctionRatio)/2;
+   yMargin = (xDiff - yDiffScaled)/2;
    minY = minY-yMargin;
    maxY = maxY+yMargin;
 elseif yDiffScaled > xDiff
    % long scaled to fit figure
    % lat full
-   xMargin = (xDiff * correctionRatio)/2;
+   xMargin = (yDiffScaled - xDiff)/2;
    minX = minX-xMargin;
    maxX = maxX+xMargin;
 end
+
 if hasCluster && ~zoom
     axis([3 5 53.3-(2*figureRatio) 53.3]);
 else
     axis([minX maxX minY maxY]);
 end
-%axis([minX maxX minY maxY]);
-% hold('on')
 
 % plot the map
 geoshow(gca, 'plot/nl_shape/netherlands_land.shp',...
@@ -85,10 +83,10 @@ else
     markerSize = 5; 
 end
 
-%if ~hasCluster
+if ~hasCluster
     geoshow(gca, sessionY, sessionX, ...
     'DisplayType',  'point', 'MarkerSize', markerSize, 'MarkerEdgeColor', 'r');
-%end
+end
 
 if hasCluster
     geoshow(gca, clusterY, clusterX, ...
@@ -104,7 +102,6 @@ else
 
 end
 
-% hold('off')
 
 end
 
