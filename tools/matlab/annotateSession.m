@@ -89,8 +89,8 @@ while i <= amountOfClusters
     ClusterCoordinates = ClusterData(:, 3:4);
       
     % plot session trajectory
-    % subplot(5,7,[1:2 8:9 15:16])
-    subplot('Position', [0.13, 0.44 0.22 0.5])
+     subplot(5,7,[1:2 8:9 15:16])
+    %subplot('Position', [0.13, 0.44 0.22 0.5])
     hold on
     plotTrajectory(SessionCoordinates, ClusterCoordinates);
     if i > 1
@@ -134,10 +134,7 @@ while i <= amountOfClusters
     
     % show control
     hp = uipanel('Position', [0 0 0.1 1], 'Title', 'control');
-    
-    % text(0, 0, strcat('Session: ', sprintf('%03d', sessionId)));
-    
-    % hpPosNorm = get(hp, 'Position')
+
     set(hp, 'Units', 'pixels');
     hpPos = get(hp, 'Position');
     set(hp, 'Units', 'normalized');
@@ -157,17 +154,23 @@ while i <= amountOfClusters
     hbg = uibuttongroup('Parent', hp, 'Title', 'classes', 'Position', [0 0 1 0.5]);
     
     uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'unknown', ...
-        'Callback', {@updateBehaviour, 1}, 'Position', [buttonWidthMargin 10 buttonWidth 30])
+        'Callback', {@updateBehaviour, 1}, 'Position', [buttonWidthMargin 10 buttonWidth 30], ...
+        'ForegroundColor', 'b')
     uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Sleeping', ...
-        'Callback', {@updateBehaviour, 2}, 'Position', [buttonWidthMargin 50 buttonWidth 30])
+        'Callback', {@updateBehaviour, 2}, 'Position', [buttonWidthMargin 50 buttonWidth 30], ...
+        'ForegroundColor', 'm')
     uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Digesting', ...
-        'Callback', {@updateBehaviour, 3}, 'Position', [buttonWidthMargin 90 buttonWidth 30])
+        'Callback', {@updateBehaviour, 3}, 'Position', [buttonWidthMargin 90 buttonWidth 30], ...
+        'ForegroundColor', 'c')
     uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Flying', ...
-        'Callback', {@updateBehaviour, 4}, 'Position', [buttonWidthMargin 130 buttonWidth 30])
+        'Callback', {@updateBehaviour, 4}, 'Position', [buttonWidthMargin 130 buttonWidth 30], ...
+        'ForegroundColor', 'r')
     uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Diving', ...
-        'Callback', {@updateBehaviour, 5}, 'Position', [buttonWidthMargin 170 buttonWidth 30])
+        'Callback', {@updateBehaviour, 5}, 'Position', [buttonWidthMargin 170 buttonWidth 30], ...
+        'ForegroundColor', 'black')
     uicontrol('Parent', hbg, 'Style', 'pushbutton', 'String', 'Bad cluster', ...
-        'Callback', {@updateBehaviour, 6}, 'Position', [buttonWidthMargin 210 buttonWidth 30])
+        'Callback', {@updateBehaviour, 6}, 'Position', [buttonWidthMargin 210 buttonWidth 30], ...
+        'ForegroundColor', 'b')
     
     uiwait
     
@@ -207,7 +210,6 @@ end
     function previousCluster(~, ~)
         
         if i > 1
-            i
             annotatedData = annotatedData(1:end-1, :);
             lastCluster = annotatedTrajectory(:, 1) == i-1;
             annotatedTrajectory(lastCluster, :) = [];
