@@ -55,15 +55,15 @@ if type  == 7
     
     while exist(sessionFilePath) == 2
         
-        sprintf(strcat('starting annotation for session_', sprintf('%03d', sessionId)))
+        fprintf(strcat('\n','starting annotation for session_', sprintf('%03d', sessionId), '\n'))
         output = annotateSession(deviceId, sessionId, outputDeviceFolder);
         
         if strcmp(output, 'stop')
             close all
-            sprintf(strcat('aborted annotation for session_', sprintf('%03d', sessionId)))
+            fprintf(strcat('aborted annotation for session_', sprintf('%03d', sessionId), '\n'))
             return
         else
-            sprintf(strcat('saving to file'))
+            fprintf(strcat('saving to file \n'))
         end
         
         sessionId = sessionId + 1;
