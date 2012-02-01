@@ -19,9 +19,8 @@ function Clusters = analyseSession( SessionData )
 
     % Calculate the speed
     for i = 1:size(SessionData, 1)
-        Speed(i, :) = norm(SessionData(i, 2:3));
+        Speed(i, :) = norm(SessionData(i, 6:7));
     end
- 
     % Get interpolated values
     [NewTime, NewSpeed] = interpolate(SessionData(:, 2), Speed, timestampStep, 'linear');
     [NewXTime, NewXSpeed] = interpolate(SessionData(:, 2), abs(InstSpeed(:, 1)), timestampStep, 'pchip');
