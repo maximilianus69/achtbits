@@ -86,18 +86,39 @@ us how many times in a certain time span the bird had a certain speed.}
  a change in behavior, so a new cluster should be started.this is done by the
  second and third characteristic specified above.
 
-\subsection{The Second Way}
+\subsection{The Second Method}
 The second way we tried, relies on a bit more data. Apart from the trajectory
-speed, now the instantaneous speed is used. The trajectory speed is relevant for
-the speed of the bird, but we use the instantaneous speed for finding the angle
+speed, now also the instantaneous speed is used. The trajectory speed is relevant for
+the speed of the bird and now we use the instantaneous speed for finding the angle
 at the time of the GPS fix. 
 
+We take an example of each kind of behavior (floating, flying and foraging).
+This example can be compared with a fixed ammount of time in the data we are
+clustering. For this we loop over the data with a timed window. This is probably
+better explained in the following pseudo code:
+
+\begin{algorithm}
+\begin{algorithmic}
+\FOR{i = Awesome}
+    \PRINT {boobies}
+\ENDFOR
+\end{algorithmic}
+\caption{Comparing example histograms to our data}
+\label{alg:hist}
+\end{algorithm}
+
+
 This data is put in histograms (see figure \ref{fig:histogram}). These
-histograms can be compared, simply by subtracting one from another. When the sum of
-the absolute result is small, the histograms resemble each other (equation
-\ref{eq:hist}. 
+histograms can be compared with equation \ref{eq:hist}). When Diff is small,
+histogram $H_1$ resembles $H_2$. 
 \begin{equation}
  \label{eq:hist}
  Diff = \left| \Sigma H_1 - \Sigma H_2 \right|
 \end{equation}
 
+When using this methods, some problems have to be solved.
+
+\subsubsection{Interpolating the Values}
+The first problem we encounter is the difference in resolution of the data. This
+would mean that when we are looking at high resolution data, and we compare it
+with a low resolution example 
