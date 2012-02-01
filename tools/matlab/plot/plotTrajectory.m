@@ -6,9 +6,6 @@ function [] = plotTrajectory( SessionCoordinates, ClusterCoordinates, sessionZoo
 
 % open a new figure and make sure its clear
 
-%set(gca, 'XTickLabel', '');
-%set(gca, 'YTickLabel', '');
-
 if nargin < 2
     ClusterCoordinates = [];
     hasCluster = false;
@@ -20,8 +17,7 @@ if nargin < 3
     zoom = true;
 else
     zoom = sessionZoom;
-end
-    
+end 
 
 sessionX = SessionCoordinates(:, 2);
 sessionY = SessionCoordinates(:, 1);
@@ -91,7 +87,7 @@ end
 if hasCluster
     geoshow(gca, clusterY, clusterX, ...
         'LineWidth', 1,  ...
-        'color', 'g');
+        'color', 'c');
 end
 
 if hasCluster
