@@ -14,7 +14,7 @@ function Class = main(deviceId, sessionId)
     Gps = readgps(deviceId, sessionId);
     Input = getTimeAndSpeed(Gps);
     InstSpeed = Gps(:, 9:10);
-    Time = Input(:, 1);
+    Time = Input(:, 1)
     Time = (Time - Time(1)) ./60;
     
     % plot the speed
