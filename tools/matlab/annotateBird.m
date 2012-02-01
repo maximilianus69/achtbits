@@ -37,10 +37,12 @@ if type  == 7
     
     if annotationType == 'real'
         outputDeviceFolder = strcat('../annotatedData/real/device_', deviceId);
+        fprintf(strcat('starting real annotation session','\n', 'saving to folder:', outputDeviceFolder))
     elseif annotationType == 'test'
         outputDeviceFolder = strcat('../annotatedData/test/device_', deviceId);
+        fprintf(strcat('starting test annotation session','\n', 'saving to folder:', outputDeviceFolder, '\n'))
     else
-        sprintf('please enter "test" or "real" as second argument')
+        fprintf('please enter "test" or "real" as second argument')
         return
     end
     
@@ -60,10 +62,10 @@ if type  == 7
         
         if stopAnnotation
             close all
-            fprintf(strcat('aborted annotation for session_', sprintf('%03d', sessionId), '\n'))
+            fprintf(strcat('exiting tool\n'))
             return
         else
-            fprintf(strcat('saving to file \n'))
+            fprintf(strcat('saving session_', sprintf('%03d', sessionId),' to file \n'))
         end
         
         sessionId = sessionId + 1;
@@ -71,11 +73,11 @@ if type  == 7
         sessionFilePath = strcat(folderPath, inputFilePrefix, sprintf('%03d', sessionId), '.csv');
     end
     
-    sprintf(strcat('no more sessions found for ', folderPath))
+    fprintf(strcat('no more sessions found for ', folderPath))
     
 else
     
-    sprintf(strcat('the folder ', folderPath, 'could not be found'))
+    fprintf(strcat('the folder ', folderPath, 'could not be found'))
 end
 
 close all;

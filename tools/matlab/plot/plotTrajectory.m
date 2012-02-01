@@ -57,7 +57,7 @@ elseif yDiffScaled > xDiff
 end
 
 if hasCluster && ~zoom
-    axis([3 5 53.3-(2*figureRatio) 53.3]);
+    axis([4.4-xScaled 4.4+xScaled 51.2 53.3]);
 else
     axis([minX maxX minY maxY]);
 end
