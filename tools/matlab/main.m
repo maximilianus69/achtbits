@@ -36,7 +36,7 @@ function Class = main(deviceId, sessionId)
 
     subplot(3, 1, 2);
     % Get interpolated values
-    [NewTime, NewSpeed] = interpolate(Input(:, 1), Speed, timestampStep, 'pchip');
+    [NewTime, NewSpeed] = interpolate(Input(:, 1), Speed, timestampStep, 'linear');
     [NewXTime, NewXSpeed] = interpolate(Input(:, 1), abs(InstSpeed(:, 1)), timestampStep, 'pchip');
     [NewYTime, NewYSpeed] = interpolate(Input(:, 1), abs(InstSpeed(:, 2)), timestampStep, 'pchip');
 

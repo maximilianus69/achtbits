@@ -24,8 +24,8 @@ function Clusters = analyseSession( SessionData )
  
     % Get interpolated values
     [NewTime, NewSpeed] = interpolate(SessionData(:, 2), Speed, timestampStep, 'pchip');
-    [NewXTime, NewXSpeed] = interpolate(SessionData(:, 2), abs(InstSpeed(:, 1)), timestampStep, 'pchip');
-    [NewYTime, NewYSpeed] = interpolate(SessionData(:, 2), abs(InstSpeed(:, 2)), timestampStep, 'pchip');
+    [NewXTime, NewXSpeed] = interpolate(SessionData(:, 2), abs(InstSpeed(:, 1)), timestampStep, 'linear');
+    [NewYTime, NewYSpeed] = interpolate(SessionData(:, 2), abs(InstSpeed(:, 2)), timestampStep, 'linear');
  
     % Get the histogram awesomeness values
     [m1Course, m2Course, m3Course, timestamps] = histogramCompare(NewTime, NewSpeed,NewXSpeed, NewYSpeed, histogramSizeSeconds, timestampStep);
@@ -42,5 +42,5 @@ function Clusters = analyseSession( SessionData )
     end
     
     % find the cluster edges
-    Clusters = simpleFindClusters(Class, 1200);
+    Clusters = simpleFindClusters(Class, 900);
     Clusters = interpolatedToRealTimestamp(Clusters, SessionData(:, 2));
