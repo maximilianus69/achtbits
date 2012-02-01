@@ -38,7 +38,7 @@ end
 
 HNormData = [Data(:,1:4) h Data(:,6:end)];
 
-% debug compare
+% debug compare plots - used in report
 %figure;plot(t,Data(:,5));hold on;plot(t,h,'r');
 
 end
