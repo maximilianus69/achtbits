@@ -1,0 +1,9 @@
+lowerBoundresolution (voor een de is gelijk aan mag je van alles zetten behalve newlines of een is gelijk aan)=0.2f
+upperBoundresolution=90
+sessionMinimumLengthSeconds=3600
+sessionMinimumLengthEntries=5
+sessionSeparatorSeconds=900
+inputDelimiter=,
+outputDelimiter=,
+includeColumnsGps=0,1,2,3,4,18,19,20,9,10,11
+includeColumnsAcc=1,2,3,4,5,0
