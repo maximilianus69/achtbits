@@ -1,18 +1,20 @@
  % Describes how we find the peaks/clusters in the data (Maarten de Waard will
  % fill this in)
- This section will discuss how we find clusters in the raw data. 
- This is needed, to annotate these clusters, so we can later on use a
- learning algorithm on specified parts of the data.
+ This section will discuss how we find clusters in sessions. A cluster is a 
+part of a sessions in which the bird shows one type of behavior. Once we have
+clusters we can annotate quickly and learn per cluster.
 
 % TODO: This piece of text is probably better suited elsewhere.
      Probably the most important of the GPS data we get from \bits are the X and Y
      position and speed of the bird. There are two speed entries in the database we
-     use: One `instantaneous speed', the speed the bird has on the time of
-     connecting to the GPS, calculated from two subsequent measurements, and a
-     `trajectory speed', the speed the bird has between this, and the last
-     measurement point. For clustering, we decided to use the latter, because this
-     has a smaller error rate. Our assumption is that we can cluster the data good
-     enough, by only looking at speed differences. Figure \ref{fig:speed} shows
+     use. The first we use is `instantaneous speed'.    
+    This the speed the bird has on the time of
+     connecting to the GPS, calculated from two subsequent measurements. The second
+    we use is 
+     `trajectory speed'. This is speed calculated from two GPS entries. 
+    We decided to use the latter because it has a smaller error rate. 
+     Our assumption is that we can cluster the data well 
+     enough by only looking at speed differences. Figure \ref{fig:speed} shows
      why.
  % TODO: Dit figuurtje maken. Ik kom er namelijk net achter dat de derivative
  % misschien niet exact doet wat we willen, omdat het speed1 en speed2 apart van
