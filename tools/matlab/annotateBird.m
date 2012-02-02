@@ -1,4 +1,4 @@
-function [ output_args ] = annotateBird( deviceId, annotationType, startSessionId )
+function annotateBird( deviceId, annotationType, startSessionId )
 %ANNOTATEBIRD starts annotation of all sessions of given device
 %   INPUT:
 %   deviceId - ID number of the device as a string
@@ -14,6 +14,11 @@ function [ output_args ] = annotateBird( deviceId, annotationType, startSessionI
 %   clusterFeatures - features and class per cluster (row)
 %   path: tools/device_DEVICEID/ANNOTATIONTYPE/...
 %       device_DEVICEID_session_SESSIONID_clusterFeatures.csv
+%
+% this function is a shell for annotateSession
+%
+% initializes some folders and files to read and write data
+% and runs a loop for all session files in the folder of input deviceId
 
 addpath('plot');
 format long;
@@ -35,6 +40,7 @@ if type  == 7
     %   - open an annotation folder for session
     %   - run annotateSession
     
+    % check which folder data has to be stored
     if annotationType == 'real'
         outputDeviceFolder = strcat('../annotatedData/real/device_', deviceId);
         fprintf(strcat('starting real annotation session','\n', 'saving to folder:', outputDeviceFolder))
@@ -46,20 +52,23 @@ if type  == 7
         return
     end
     
-    
+    % create the folder if does not exists
     if exist(outputDeviceFolder, 'dir') ~= 7
         mkdir(outputDeviceFolder);
     end
     
     inputFilePrefix = strcat('/device_', deviceId, '_gps_session_');
     
+    % initialize sessionFilePath on sessionId
     sessionFilePath = strcat(folderPath, inputFilePrefix, sprintf('%03d', sessionId), '.csv');
     
+    % while there are session files in the source-folder run annotation
     while exist(sessionFilePath) == 2
         
         fprintf(strcat('\n','starting annotation for session_', sprintf('%03d', sessionId), '\n'))
         stopAnnotation = annotateSession(deviceId, sessionId, outputDeviceFolder);
         
+        % if we receive a stop signal, then terminate the loop
         if stopAnnotation
             close all
             fprintf(strcat('exiting tool\n'))
@@ -68,16 +77,16 @@ if type  == 7
             fprintf(strcat('saving session_', sprintf('%03d', sessionId),' to file \n'))
         end
         
+        %  update sessionId and sessionFilePath to next session
         sessionId = sessionId + 1;
-        
         sessionFilePath = strcat(folderPath, inputFilePrefix, sprintf('%03d', sessionId), '.csv');
     end
     
-    fprintf(strcat('no more sessions found for ', folderPath))
+    fprintf(strcat('no more sessions found for ', folderPath, '\n'))
     
 else
     
-    fprintf(strcat('the folder ', folderPath, 'could not be found'))
+    fprintf(strcat('the folder ', folderPath, 'could not be found', '\n'))
 end
 
 close all;
