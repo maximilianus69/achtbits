@@ -1,8 +1,5 @@
 \documentclass[a4paper, 11pt]{article}
 \usepackage[T1]{fontenc}
-
-%\usepackage{subfigure}
-
 \usepackage[margin=2.5cm, nohead]{geometry}
 \usepackage{palatino, url, multicol}
 \usepackage{amssymb, graphicx, fancyhdr, latexsym, url, verbatim}
@@ -12,8 +9,6 @@
 \usepackage[all]{xy}
 \usepackage[english]{babel}
 \usepackage{matlabScripts}
-
-%\usepackage{caption}
 \usepackage[font=small,format=plain,labelfont=bf,up,textfont=it,up]{caption}
 \usepackage{subfig} % has to be loaded after caption to prevent clash
 
@@ -30,7 +25,7 @@ CHaradriiformes Toegepast BIrd Tracking System}
 
 
 
-%\pagestyle{fancy}
+\pagestyle{fancy}
 \lhead{\projectName}
 \rhead{\small \textsc{\projectAbbreviation}}
 %\cfoot{\footnotesize \textit{ \projectAbbreviation}\\[0.1cm] \small \thepage}
@@ -62,15 +57,14 @@ CHaradriiformes Toegepast BIrd Tracking System}
 \begin{abstract}
 It is hard to classify the behavior of the sea gull above the North Sea. 
 There is GPS data available and sometimes even accelerometer data but it 
-remains troublesome to annotate data point by point. The goal of this project
-is to find and classify clusters of the data. In order to do this we 
-found a method to cluster data using histograms and we created an
-annotation tool to easily annotate clustered data points.
+remains troublesome to annotate data point by point. In this report we 
+describe how we cluster data using histograms. We also describe  the annotation
+tool we built with which we can annotate clustered data points more easily. 
 \end{abstract}
 
 \section{Introduction}
-% I guess we will introduce the BITS, introduce some other stuff, maybe tell
-% something about learning algorithms in general
+\input{introduction}
+
 
 \section{Preprocessing}
 \input{preprocessingJava}
