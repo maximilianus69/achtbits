@@ -1,0 +1,109 @@
+\documentclass{beamer}
+\usepackage[utf8x]{inputenc}
+%\usepackage{default}
+\usepackage{verbatim}
+
+
+\newcommand{\projectName}{ACHTBITS}
+\newcommand{\projectAbbreviation}{Awesome
+CHaradriiformes Toegepast BIrd Tracking System}
+
+
+\title{\projectName}
+\subtitle{\projectAbbreviation}
+\author{Jesse Eisses, Sosha Happel, Maarten Inja and Maarten de Waard}
+\institute{UvA}
+\usetheme{Warsaw}
+\newcommand{\slide}[2]
+{
+\begin{frame}
+\begin{block}{#1} 
+
+#2
+
+\end{block} \end{frame}
+}
+
+
+
+\begin{document}
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+
+\section{Introduction}
+\slide{Het Project}
+{
+Uva-bits verzameld GPS en accelerometer data van vogels
+Onderzoeks vragen:
+\begin{itemize}
+	\item Automatische segmentatie van datapunten
+	\item Classificatie van gedrag boven de Noordzee
+\end{itemize} 
+}
+
+\slide{Problemen}
+{
+\begin{itemize}
+	\item Veel onbruikbare data
+	\item Weinig features
+	\item Geen geannoteerde data
+	\item Annoteren is erg lastig
+\end{itemize} 
+}
+
+\slide{Plan}
+{
+Zo veel mogelijk automatisch
+\begin{itemize}
+	\item Data opsplitsen in bruikbare sessies
+	\item Sessies automatisch segmenteren in clusters
+	\item nieuwe features maken voor clusters
+	\item Annoteren versimpelen
+	\item Clusters classificeren met nieuwe features
+\end{itemize} 
+}
+
+\section{Preprocessing}
+\slide{Creating sessions}
+{
+    
+}
+
+\slide{Finding clusters (old method)}
+{
+    
+}
+
+\slide{Finding clusters (new method)}
+{
+    
+}
+
+
+
+\section{Results}
+\slide{Annotation tool}
+{
+	
+}
+
+\slide{Classification}
+{
+	
+}
+
+\section{Conclusion}
+
+\slide{Conlusion}
+{
+	
+}
+
+\slide{Future work}
+{
+	
+}
+\end{document}
