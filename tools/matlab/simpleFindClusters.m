@@ -10,13 +10,13 @@ function SimpleClusters = simpleFindClusters(Classes, minClusterLength)
     j = 1;
     for i = 1:size(Classes, 1)
         if Classes(i, 2) ~= currentClass
-            SimpleClusters(j, 2) = Classes(i, 1);
+            SimpleClusters(j, 2:3) = [Classes(i, 1) currentClass];
             j = j + 1;
             SimpleClusters(j, 1) = Classes(i, 1);
             currentClass = Classes(i, 2);
         end
     end
-    SimpleClusters(size(SimpleClusters, 1), 2) = Classes(size(Classes, 1), 1);
+    SimpleClusters(end, 2:3) = [Classes(end, 1) currentClass];
 
     D = SimpleClusters(:, 2) - SimpleClusters(:, 1);
     % A cluster should be 10 minutes minimum
@@ -28,9 +28,8 @@ function SimpleClusters = simpleFindClusters(Classes, minClusterLength)
    %     end
    %     DB(size(DB, 1)) = 1;
    % end
-    SimpleClusters = SimpleClusters .* [DB DB];
+    SimpleClusters = SimpleClusters .* [DB DB DB];
     SimpleClusters(~any(SimpleClusters,2),:) = [];
     if(isempty(SimpleClusters))
-        'IT IS EMPTY! OH NOES!'
         SimpleClusters = [Classes(1, 1), Classes(end, 1)];
     end
