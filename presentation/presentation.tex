@@ -13,15 +13,16 @@ CHaradriiformes Toegepast BIrd Tracking System}
 \subtitle{\projectAbbreviation}
 \author{Jesse Eisses, Sosha Happel, Maarten Inja and Maarten de Waard}
 \institute{UvA}
-\usetheme{Warsaw}
+\usetheme{Berkeley}
 \newcommand{\slide}[2]
 {
 \begin{frame}
-\begin{block}{#1} 
+\frametitle{#1} 
+
 
 #2
 
-\end{block} \end{frame}
+\end{frame}
 }
 
 
@@ -36,8 +37,8 @@ CHaradriiformes Toegepast BIrd Tracking System}
 \section{Introduction}
 \slide{Het Project}
 {
-Uva-bits verzameld GPS en accelerometer data van vogels
-Onderzoeks vragen:
+UvA-bits verzamelt GPS en accelerometerdata van vogels.\\
+Onderzoeksdoelen:
 \begin{itemize}
 	\item Automatische segmentatie van datapunten
 	\item Classificatie van gedrag boven de Noordzee
@@ -60,21 +61,43 @@ Zo veel mogelijk automatisch
 \begin{itemize}
 	\item Data opsplitsen in bruikbare sessies
 	\item Sessies automatisch segmenteren in clusters
-	\item nieuwe features maken voor clusters
-	\item Annoteren versimpelen
+	\item Nieuwe features maken voor clusters
+	\item Annoteerproces vergemakkelijken
 	\item Clusters classificeren met nieuwe features
 \end{itemize} 
 }
 
 \section{Preprocessing}
-\slide{Creating sessions}
+\slide{Data opsplitsen in sessies}
 {
-    
+\begin{itemize}
+    \item Alles boven de noordzee weggooien
+    \item Data mag niet `NULL' zijn.
+    \item Minimaal 1 uur
+    \item Gewenste resolutie
+    \item Geen te grote gaten tussen datapunten
+\end{itemize}
 }
 
 \slide{Finding clusters (old method)}
 {
-    
+     Alleen kijken naar snelheid.\\
+     Pieken vinden:
+ \begin{itemize}
+    \item Kijk of de waarde van het snelheidsverschil groter is dan een
+    threshold
+    \item Loop door deze waardes, en markeer een cluster voordat de waarde omhoog
+    gaat, of nadat deze omlaag gaat.
+ \end{itemize}
+    Pieken clusteren:
+    \begin{itemize}
+ \item The time elapsed between two peaks
+ \item The difference between the current time elapsed between peaks, and the
+ current cluster's average
+ \item The difference between the time elapsed between the first peak of the
+ cluster, and the average of the rest of the cluster.
+ \end{itemize}
+
 }
 
 \slide{Finding clusters (new method)}
