@@ -1,0 +1,119 @@
+\documentclass{beamer}
+\usepackage[utf8x]{inputenc}
+%\usepackage{default}
+\usepackage{verbatim}
+
+
+\newcommand{\projectName}{ACHTBITS}
+\newcommand{\projectAbbreviation}{Awesome
+CHaradriiformes Toegepast BIrd Tracking System}
+
+
+\title{\projectName}
+\subtitle{\projectAbbreviation}
+\author{Jesse Eisses, Sosha Happel, Maarten Inja and Maarten de Waard}
+\institute{UvA}
+\usetheme{Warsaw}
+\newcommand{\slide}[2]
+{
+\begin{frame}
+\begin{block}{#1} 
+
+#2
+
+\end{block} \end{frame}
+}
+
+
+
+\begin{document}
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+
+\section{Introduction}
+\slide{Het Project}
+{
+Uva-bits verzameld GPS en accelerometer data van vogels
+Onderzoeks vragen:
+\begin{itemize}
+	\item Automatische segmentatie van datapunten
+	\item Classificatie van gedrag boven de Noordzee
+\end{itemize} 
+}
+
+\slide{Problemen}
+{
+\begin{itemize}
+	\item Veel onbruikbare data
+	\item Weinig features
+	\item Geen geannoteerde data
+	\item Annoteren is erg lastig
+\end{itemize} 
+}
+
+\slide{Plan}
+{
+Zo veel mogelijk automatisch
+\begin{itemize}
+	\item Data opsplitsen in bruikbare sessies
+	\item Sessies automatisch segmenteren in clusters
+	\item Nieuwe features maken voor clusters
+	\item Annoteren versimpelen
+	\item Clusters classificeren met nieuwe features
+\end{itemize} 
+}
+
+\section{Preprocessing}
+\slide{Creating sessions}
+{
+    
+}
+
+\slide{Finding clusters (old method)}
+{
+    
+}
+
+\slide{Finding clusters (new method)}
+{
+    
+}
+
+
+
+\section{Results}
+\slide{Annotation tool}
+{
+	Tool gemaakt in matlab die de data verwerkt en het annoteren makkelijker maakt
+}
+
+\slide{Classification}
+{
+	
+}
+
+\section{Conclusion}
+
+\slide{Conclusie}
+{
+\begin{itemize}
+	\item Automatische segmentatie is goed gelukt met histogrammen
+	\item Classificeren op 'directional flight', 'searching' en 'floating' werkt goed
+	\item Onderscheid maken tussen 'sleeping' en 'digesting' is lastiger
+	\item Annoteren is een stuk makkelijker geworden
+\end{itemize} 
+}
+
+\slide{Future work}
+{
+\begin{itemize}
+	\item Automatische segmentatie verbeteren
+	\item Annotatie tool uitbereiden met suggesties
+	\item Features uitbereiden
+	\item Classificeren met annotatie van experts
+\end{itemize} 
+}
+\end{document}
