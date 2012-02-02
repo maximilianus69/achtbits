@@ -172,17 +172,17 @@ close all;
     function showControl
         hp = uipanel('Position', [0 0 0.1 1], 'Title', 'control');
 
-        hbgc = uibuttongroup('Parent', hp, 'Title', 'options', 'Position', [0 0.8 1 0.2]);
+        hbgc = uibuttongroup('Parent', hp, 'Title', 'options', 'Position', [0 0.85 1 0.15]);
         hbs = makeButtons(hbgc, {'back', 'exit'});
         set(hbs(1), 'Callback', {@previousCluster});
         set(hbs(2), 'Callback', {@exitTool});
 
-        hbgz = uibuttongroup('Parent', hp, 'Title', 'session zoom', 'Position', [0 0.55 1 0.2]);
+        hbgz = uibuttongroup('Parent', hp, 'Title', 'session zoom', 'Position', [0 0.7 1 0.15]);
         hbs = makeButtons(hbgz, {'Zoom in', 'Zoom out'});
         set(hbs(1), 'Callback', {@zoomSession, true});
         set(hbs(2), 'Callback', {@zoomSession, false});
 
-        hbgc = uibuttongroup('Parent', hp, 'Title', 'classes', 'Position', [0 0 1 0.5]);
+        hbgc = uibuttongroup('Parent', hp, 'Title', 'classes', 'Position', [0 0 1 0.7]);
         hbs = makeButtons(hbgc, behaviourClasses, classColors);
         for j = 1:size(hbs, 1)
             set(hbs(j), 'Callback', {@updateBehaviour, j});
@@ -213,23 +213,26 @@ close all;
             sprintf('%03d', sessionId), '_clusterFeatures.csv');
 
         dlmwrite(outputFile, annotatedData, 'precision', '%10f');
+        
+        if ~exitBeforeEnd
+            
+            % create figure with a plot of the session and write it to file
+            tempfig = figure();
+            hold on
 
-        % create figure with a plot of the session and write it to file
-        tempfig = figure();
-        hold on
-        
-        plotTrajectory(SessionCoordinates, ClusterCoordinates, true);
-        
-        if size(annotatedTrajectory, 1) > 1
-            annotatedTrajectories(annotatedTrajectory, classColors);
+            plotTrajectory(SessionCoordinates, ClusterCoordinates, true);
+
+            if size(annotatedTrajectory, 1) > 1
+                annotatedTrajectories(annotatedTrajectory, classColors);
+            end
+
+            title('Session trajectory');
+            hold off
+
+            print(tempfig, '-djpeg', strcat(outputPath, '/device_', deviceId, '_session_', ...
+                sprintf('%03d', sessionId), '_sessionMap.jpeg'))
+            close(tempfig)
         end
-        
-        title('Session trajectory');
-        hold off
-        
-        print(tempfig, '-djpeg', strcat(outputPath, '/device_', deviceId, '_session_', ...
-            sprintf('%03d', sessionId), '_sessionMap.jpeg'))
-        close(tempfig)
         
         % checks if the tool was closed before end of session
         if exitBeforeEnd
