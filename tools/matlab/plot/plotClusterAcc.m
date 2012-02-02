@@ -1,6 +1,14 @@
 function pointsShown = plotClusterAcc( clusterTime, SessionAccData )
 %PLOTCLUSTERACC plots accelerometer data for cluster
-%   Detailed explanation goes here
+%   
+%   INPUT:
+%   clusterTime     - [startTime endTime ..?] indicates start and end of
+%                     cluster
+%   sessionAccData  - [deviceId timeStamp time x y z]
+%
+%   OUTPUT:
+%   pointsShown     - [first second thrid] position index of data points
+%                     shown in accelerometer plots
 
 pointsShown = [];
 
