@@ -1,3 +1,4 @@
+duration,avgSpeed,heightDiff,grndDist,totDist,angleVar,distDiff,resolution,fx,fy,fz,previousCluster,annotation
 7298,12.206,4.3184,7.5333,8.9033,0.051195,1.37,0.20554,-1,-1,-1,'unknown','sleeping'
 898,32.445,4.8906,1.3852,1.8716,0.26487,0.48637,0.26726,-1,-1,-1,'sleeping','flying'
 1077,28.769,13.058,3.837,3.8722,0.25085,0.035207,0.22284,-1,-1,-1,'unknown','flying'
