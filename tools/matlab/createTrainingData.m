@@ -63,3 +63,7 @@ AllFeatures(removeRows,:) = [];
 labels = 'duration,avgSpeed,heightDiff,grndDist,totDist,angleVar,distDiff,resolution,fx,fy,fz,previousCluster,annotation';
 dlmwrite(strcat(folder,'/AllFeatures.csv'), labels, '');
 dlmwrite(strcat(folder,'/AllFeatures.csv'), AllFeatures,'-append');
+
+% legend for class names
+behaviourLabels = cellstr(cell2mat(strcat(behaviourClasses,',')))
+dlmwrite(strcat(folder,'/behaviourClasses.csv'), behaviourLabels, '');
