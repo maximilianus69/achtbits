@@ -17,15 +17,24 @@
  % TODO: Dit figuurtje maken. Ik kom er namelijk net achter dat de derivative
  % misschien niet exact doet wat we willen, omdat het speed1 en speed2 apart van
  % elkaar gebruikt. Een goeie hiervoor is device_535, sessie_000.
+
 \begin{figure}
-\centering
-\includegraphics[width=.8\textwidth]{speed.pdf}
-\caption{The speed of the bird (above) and the difference in speed (under). As
-you can see, the difference is absolute (because this makes finding peaks
-easier). The difference is some times a bit higher, while the speed does not
-seem to differ at all. This means the bird changed his direction.}
-\label{fig:speed}
+  \centering
+  \subfloat[Speed of the bird.]{\label{fig:speed1}\includegraphics[width=0.8\textwidth]{speed1}} \\
+  \subfloat[Difference in speed.]{\label{fig:speed2}\includegraphics[width=0.8\textwidth]{speed2}} \\
+  \caption{The difference is absolute because this makes finding peaks easier. The difference is sometimes a bit higher while the speed does not seem to differ at all. This means the bird changed directions.}
+  \label{fig:speed}
 \end{figure}
+
+%\begin{figure}
+%\centering
+%\includegraphics[width=.8\textwidth]{speed.pdf}
+%\caption{The speed of the bird (above) and the difference in speed (under). As
+%you can see, the difference is absolute (because this makes finding peaks
+%easier). The difference is some times a bit higher, while the speed does not
+%seem to differ at all. This means the bird changed his direction.}
+%\label{fig:speed}
+%\end{figure}
 
  As can be seen, the speed-difference is low on points where the bird is assumed
  to be flying or sitting on the water. In other points the speed differs a lot.
@@ -145,17 +154,27 @@ A plot of this percentage is shown in the bottom of figure \ref{fig:clustering}.
 This can be used to find clusters, because each time this differs, a new
 cluster can be assumed to be starting.
 
+
 \begin{figure}
-\centering
-\includegraphics[width=\textwidth]{clustering.pdf}
-\caption{\small How clustering works. Above is the raw data. The marked line is the
-absolute speed of the bird. The red and blue lines under it are the speeds in
-the x and y direction.\\
-The middle image shows the interpolated data.\\
-The bottom image shows how much the point in the middle image resembles a
-certain kind of behavior. Red is floating, green is flying and blue is foraging.}
-\label{fig:clustering}
+  \centering
+  \subfloat[Raw data of a session.]{\label{fig:clusteringRaw}\includegraphics[width=0.8\textwidth]{clustersHists1}} \\
+  \subfloat[Interpolated data of a session.]{\label{fig:clusteringInterpolated}\includegraphics[width=0.8\textwidth]{clustersHists2}} \\
+  \subfloat[Similarity of the flight to behavior percentages. Red indicates floating, green flying and blue hunting.]{\label{fig:clusteringHists}\includegraphics[width=0.8\textwidth]{clustersHists3}}
+  \caption{Different plots of the clustering process. Red vertical bars indicate starts of clusters. Cyan vertical bars indicate ends of clusters.}
+  \label{fig:clustering}
 \end{figure}
+
+%\begin{figure}
+%\centering
+%\includegraphics[width=\textwidth]{clustering.pdf}
+%\caption{\small How clustering works. Above is the raw data. The marked line is the
+%absolute speed of the bird. The red and blue lines under it are the speeds in
+%the x and y direction.\\
+%The middle image shows the interpolated data.\\
+%The bottom image shows how much the point in the middle image resembles a
+%certain kind of behavior. Red is floating, green is flying and blue is foraging.}
+%\label{fig:clustering}
+%\end{figure}
 
 \subsubsection{Smoothing the current data}
 After the previous step, the data sometimes has only one or two points above the
