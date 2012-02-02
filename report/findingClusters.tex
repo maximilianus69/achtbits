@@ -17,15 +17,15 @@
  % TODO: Dit figuurtje maken. Ik kom er namelijk net achter dat de derivative
  % misschien niet exact doet wat we willen, omdat het speed1 en speed2 apart van
  % elkaar gebruikt. Een goeie hiervoor is device_535, sessie_000.
-%\begin{figure}
-%\centering
-%\includegraphics[width=.8\textwidth]{speed.pdf}
-%\caption{The speed of the bird (above) and the difference in speed (under). As
-%you can see, the difference is absolute (because this makes finding peaks
-%easier). The difference is some times a bit higher, while the speed does not
-%seem to differ at all. This means the bird changed his direction.}
-%\label{fig:speed}
-%\end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=.8\textwidth]{speed.pdf}
+\caption{The speed of the bird (above) and the difference in speed (under). As
+you can see, the difference is absolute (because this makes finding peaks
+easier). The difference is some times a bit higher, while the speed does not
+seem to differ at all. This means the bird changed his direction.}
+\label{fig:speed}
+\end{figure}
 
  As can be seen, the speed-difference is low on points where the bird is assumed
  to be flying or sitting on the water. In other points the speed differs a lot.
@@ -109,7 +109,7 @@ at the time of the GPS fix.
 \begin{equation}
  \label{eq:hist}
  Diff = \Sigma \left| H_1 - H_2 \right|
- \caption{How we calculate the difference between one histogram and the other.}
+ %\caption{How we calculate the difference between one histogram and the other.}
 \end{equation}
 
 We take an example of each kind of behavior (floating, flying and foraging).
