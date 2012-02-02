@@ -59,8 +59,7 @@ Onderzoeks vragen:
 Zo veel mogelijk automatisch
 \begin{itemize}
 	\item Data opsplitsen in bruikbare sessies
-	\item Sessies automatisch segmenteren in clusters
-	\item nieuwe features maken voor clusters
+	\item Sessies automatisch segmenteren in clusters \item nieuwe features maken voor clusters
 	\item Annoteren versimpelen
 	\item Clusters classificeren met nieuwe features
 \end{itemize} 
@@ -87,12 +86,26 @@ Zo veel mogelijk automatisch
 \section{Results}
 \slide{Annotation tool}
 {
-	
+		
 }
 
 \slide{Classification}
 {
-	
+Cluster classificatie met WEKA:
+\begin{itemize}
+	\item We gebruikte 12 features
+	\item Meer dan 1600 geannoteerde \emph{goede} clusters
+	\item 3 klassen: vliegen, jagen en drijven
+	\item Precisie van 82\% (met logistische regressie)
+	\item Veel ruimte voor verbetering\ldots
+\end{itemize}
+
+
+\begin{itemize}
+\item Goede features: Gemiddelde snelheid, Afgelegde afstand
+\newline
+\item Slechte features: Hoogte verschil, Richtings verandering
+\end{itemize}
 }
 
 \section{Conclusion}
