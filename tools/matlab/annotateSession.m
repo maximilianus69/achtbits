@@ -1,26 +1,41 @@
-function stopAnnotation = annotateSession( deviceId, sessionId, outputPath )
-%ANNOTATESESSION a tool to annote the clusters of a session
+function exitBeforeEnd = annotateSession( deviceId, sessionId, outputPath )
+%ANNOTATESESSION a tool to annote the clusters of a session and write them
+%                to file
 %
 %   INPUT:
-%   fileName - session CSV file
+%   deviceId        - string, ID number of the device
+%   startSession    - integer, ID of the session
+%   outputPath      - string, a directory in which to store annotated data
 %
 %   OUTPUT:
-%   AnnotatedClusters - [ClusterFeatures Behaviour]
+%   exitBeforeEnd    - boolean, true if the tool was closed before the end 
+%                     of the session
 %
 %   - Finds all clusters and calculates their features
-%   - (Plots the trajectory and session data)
+%   - Plots the trajectory of the session
 %   - loops through clusters:
 %       - plot data of cluster
+%           - trajectory
+%           - velocity and acceleration
+%           - instantanious speed and direction
+%           - accelerometer XYZ (if available)
+%           - features
 %       - user can input annotation for cluster
+%
+%   
 
-
-endOfSession = false;
-stopAnnotation = true;
+% booleans used to keep track of how the session was ended
+exitBeforeEnd = true;
 run = true;
 
+annotatedData = []; % stores all clusters with features and class
+annotatedTrajectory = []; % stores coordinates with class
+
+% list of classes used to annotate clusters
 behaviourClasses = {'unknown', 'sleeping', 'digesting', 'flying',...
         'diving', 'bad cluster'};
 
+% a list of colorcodings for the classes
 classColors = [[0 0 0]; [1 0 1]; [1 0.5 0]; [0 1 0]; [1 0 0]; [0 0 0]];
 
 % read the session data from input file
@@ -36,22 +51,26 @@ Clusters = analyseSession(SessionGpsData);
 
 dateTimeStart = timestampToDateTime(SessionGpsData(1, 2));
 
+outputFile = strcat('Cluster annotation, session ',...
+    sprintf('%03d', sessionId), ', start: ', dateTimeStart);
+
 % initiate annotation GUI 
-
-mainFigId = figure('Name',strcat('Cluster annotation, session ', ...
-    sprintf('%03d', sessionId),', start: ', dateTimeStart),...
-    'NumberTitle','off', 'units','normalized',...
-    'outerposition',[0 0.05 1 0.90], 'DeleteFcn', {@exitTool});
-
+mainFigId = figure(...
+    'Name',outputFile,...
+    'NumberTitle','off', ...
+    'units','normalized',...
+    'outerposition',[0 0.05 1 0.90], ...
+    'DeleteFcn', {@exitTool});
 
 % LAYOUT (organized in a 5x7 matrix containing subplots):
 
-% 1 - session trajectory
-% 2 - cluster trajectory
-% 3 - velocity and acceleration
-% 4 - instantanious speed
-% 5 - accelerometer data
-% 6 - features
+% ind     name                subplot(5, 7, ...)
+% 1 - session trajectory        [1:2 8:9 15:16]
+% 2 - cluster trajectory        [3:4 10:11 17:18]
+% 3 - velocity and acceleration 22:26
+% 4 - instantanious speed       29:33
+% 5 - accelerometer data        5:7
+% 6 - features                  [27:28 34:35]
 %
 % [1 1 2 2 5 5 5]
 % [1 1 2 2 5 5 5]
@@ -59,14 +78,12 @@ mainFigId = figure('Name',strcat('Cluster annotation, session ', ...
 % [3 3 3 3 3 6 6]
 % [4 4 4 4 4 6 6]
 
+
 % set previousClusterClass to unknown
 previousClusterClass = 1;
 
 i = 1;
 amountOfClusters = size(Clusters, 1);
-
-annotatedData = []; % stores all features with class
-annotatedTrajectory = []; % stores coordinates with class
 
 % for each cluster:
 %   find the data and features
@@ -76,7 +93,7 @@ annotatedTrajectory = []; % stores coordinates with class
 while i <= amountOfClusters
     clf %clearfigure
 
-    % check if exit is prompted
+    % stop if the tool was closed before all clusters were annotated
     if ~run
         return
     end
@@ -86,6 +103,7 @@ while i <= amountOfClusters
     [ClusterFeatures ClusterData] = ...
         createClusterFeatures(clusterTime, SessionGpsData, SessionAccData);
     
+    % add the position in session and the previous class
     ClusterFeatures = [i ClusterFeatures previousClusterClass];
     
     % get coordinates of session and cluster
@@ -136,7 +154,7 @@ while i <= amountOfClusters
 
     plotFeatureInfo(ClusterFeatures, behaviourClasses);
     
-    % show control
+    % initialize buttons
     showControl
 
     % wait for a button to be clicked
@@ -147,6 +165,8 @@ end
 close all;
 
 % end of function
+
+
 
 % nested functions used for button control
 
@@ -176,10 +196,13 @@ close all;
     function zoomSession(~, ~, zoom)
         subplot(5,7,[1:2 8:9 15:16])
         hold on
+        
         plotTrajectory(SessionCoordinates, ClusterCoordinates, zoom);
+        
         if i > 1
             annotatedTrajectories(annotatedTrajectory, classColors);
         end
+        
         title('Session trajectory');
         hold off
     end
@@ -193,20 +216,25 @@ close all;
 
         dlmwrite(outputFile, annotatedData, 'precision', '%10f');
 
+        % create figure with a plot of the session and write it to file
         tempfig = figure();
         hold on
-        annotatedTrajectory
+        
         plotTrajectory(SessionCoordinates, ClusterCoordinates, true);
+        
         if size(annotatedTrajectory, 1) > 1
             annotatedTrajectories(annotatedTrajectory, classColors);
         end
+        
         title('Session trajectory');
         hold off
+        
         print(tempfig, '-djpeg', strcat(outputPath, '/device_', deviceId, '_session_', ...
             sprintf('%03d', sessionId), '_sessionMap.jpeg'))
         close(tempfig)
         
-        if ~endOfSession
+        % checks if the tool was closed before end of session
+        if exitBeforeEnd
             run = false;
         end
         
@@ -235,12 +263,10 @@ close all;
 
         % adds class to features and cluster to annotated clusters
         ClusterFeatures = [ClusterFeatures behaviour];
-
         annotatedData = [annotatedData; ClusterFeatures];
         
-        clusterPoints = size(ClusterCoordinates, 1);
-        
         % adds cluster XY with class to annotatedTrajectory
+        clusterPoints = size(ClusterCoordinates, 1);
         temp = zeros(clusterPoints, 4);
         temp(1:clusterPoints, 1) = ClusterFeatures(1);
         temp(:, 2:3) = ClusterCoordinates;
@@ -251,8 +277,7 @@ close all;
         
         % checks if this was last cluster in session
         if i == amountOfClusters
-            stopAnnotation = false;
-            endOfSession = true;
+            exitBeforeEnd = false;
         end
         
         i = i + 1;

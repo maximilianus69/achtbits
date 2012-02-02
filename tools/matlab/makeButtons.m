@@ -33,7 +33,7 @@ handles = zeros(amountOfButtons, 1);
 for i = 1:amountOfButtons
     heightOffset = (i-1) * (buttonHeight + buttonHeightMargin) + buttonHeightMargin;
     
-    if classes && size(classColors, 1) == amountOfButtons
+    if classes && size(classColors, 1) >= amountOfButtons
         color = classColors(i, :);
     else
         color = 'black';
