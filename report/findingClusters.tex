@@ -123,4 +123,13 @@ When using this method, some problems have to be solved.
 \subsubsection{Interpolating the Values}
 The first problem we encounter is the difference in resolution of the data. This
 would mean that when we are looking at high resolution data, and we compare it
-with a low resolution example 
+with a low resolution example, equation \ref{eq:hist} will not work. Therefore
+we need to have exactly as many data points in the one, as in the other
+histogram. 
+
+This is easily achieved by interpolating the data. Since matlab has integrated
+interpolation functions, we have chosen to interpolate with `Piecewise Cubic
+Hermite Interpolating Polynomial (PCHIP)':, which is a bit more computationally
+expensive than linear interpolation, but returns a smoother curve. This is
+better, when using low resolution data, becaus
+
