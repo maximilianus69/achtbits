@@ -58,7 +58,8 @@ badId = find(strcmp(behaviourClasses,'bad cluster'));
 removeRows = find(ismember(AllFeatures(:,end), [unknownId badId]));
 AllFeatures(removeRows,:) = [];
 
-% TODO: convert all accelere data equal to [-1 -1 -1] to unkown format
 
 % save to file
-dlmwrite(strcat(folder,'/AllFeatures.csv'), AllFeatures);
+labels = 'duration,avgSpeed,heightDiff,grndDist,totDist,angleVar,distDiff,resolution,fx,fy,fz,previousCluster,annotation';
+dlmwrite(strcat(folder,'/AllFeatures.csv'), labels, '');
+dlmwrite(strcat(folder,'/AllFeatures.csv'), AllFeatures,'-append');
