@@ -24,4 +24,4 @@ Wrapper
     Command line argument #1: the input directory of the data files.
     
 preprocess.jar
-    A jar file with all the files, especially useful for Matlab
+    A jar file with all the files, especially useful for Matlab.
