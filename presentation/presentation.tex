@@ -13,7 +13,7 @@ CHaradriiformes Toegepast BIrd Tracking System}
 \subtitle{\projectAbbreviation}
 \author{Jesse Eisses, Sosha Happel, Maarten Inja and Maarten de Waard}
 \institute{UvA}
-\usetheme{Warsaw}
+\usetheme{Berkeley}
 \newcommand{\slide}[2]
 {
 \begin{frame}
@@ -33,7 +33,7 @@ CHaradriiformes Toegepast BIrd Tracking System}
 
 
 
-\section{Introduction}
+\section{Introductie}
 \slide{Het Project}
 {
 UvA-bits verzamelt GPS en accelerometerdata van vogels.\\
@@ -78,7 +78,7 @@ Zo veel mogelijk automatisch
 \end{itemize}
 }
 
-\slide{Finding clusters (old method)}
+\slide{Clusters vinden (oude methode)}
 {
      Alleen kijken naar snelheid.\\
      Pieken vinden:
@@ -100,11 +100,29 @@ Zo veel mogelijk automatisch
 }
 
 
-\slide{Finding clusters (new method)}
+\slide{Clusters vinden (nieuwe methode)}
 {
-    
+    Gebruik van histogrammen. In ... stappee:
+\begin{enumerate}
+    \item Interpoleren
+    \item Trainingshistogrammen maken
+    \item Loop over data
+    \begin{itemize}
+        \item Histogram maken van huidige data
+        \item Histogrammen vergelijken
+    \end{itemize}
+\end{enumerate}
+
+Formule voor vergelijken histogrammen:\\
+\hspace{.5cm} $Diff =  \sum \left| currentHists - exampleHists
+\right|$\\
+\hspace{.5cm} $percentage = 100 - \frac{Diff}{2 \sum Histogram} \times 100$
 }
 
+\begin{frame}
+\frametitle{Voorbeeld}
+\includegraphics[width=\textwidth]{clustering.pdf}
+\end{frame}
 
 
 \section{Resultaten}
@@ -115,10 +133,22 @@ Zo veel mogelijk automatisch
 
 \slide{Classification}
 {
-	
+Cluster classificatie met WEKA:
+\begin{itemize}
+    \item We gebruikte 12 features
+    \item Meer dan 1600 geannoteerde \emph{goede} clusters
+    \item 3 klassen: vliegen, jagen en drijven
+    \item Precisie van 82\% (met logistische regressie)
+    \item Veel ruimte voor verbetering\ldots
+\end{itemize}
+\vspace{1cm}
+\begin{itemize}
+\item Goede features: Gemiddelde snelheid, Afgelegde afstand
+\item Slechte features: Hoogte verschil, Richtings verandering
+\end{itemize}
 }
 
-\section{Conclusion}
+\section{Conclusie}
 
 \slide{Conclusie}
 {
