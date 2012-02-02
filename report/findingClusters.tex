@@ -69,13 +69,13 @@ On these places we can assume that the bird is foraging.
  \subsubsection{Grouping Peaks}
  For grouping peaks, we created another algorithm. This algorithm looks at three
  characteristics.  
- \begin{enumerate}
+ \begin{itemize}
  \item The time elapsed between two peaks
  \item The difference between the current time elapsed between peaks, and the
  current cluster's average
  \item The difference between the time elapsed between the first peak of the
  cluster, and the average of the rest of the cluster.
- \end{enumerate}
+ \end{itemize}
  This way we can find the `chaos clusters', because the time between the peaks
  in these clusters is always between a certain threshold (currently set on
  \timeThreshold seconds). 
