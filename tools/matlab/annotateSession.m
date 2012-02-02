@@ -20,9 +20,7 @@ function exitBeforeEnd = annotateSession( deviceId, sessionId, outputPath )
 %           - instantanious speed and direction
 %           - accelerometer XYZ (if available)
 %           - features
-%       - user can input annotation for cluster
-%
-%   
+%       - user can input annotation for cluster  
 
 % booleans used to keep track of how the session was ended
 exitBeforeEnd = true;
