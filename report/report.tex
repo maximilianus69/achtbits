@@ -1,6 +1,8 @@
 \documentclass[a4paper, 11pt]{article}
 \usepackage[T1]{fontenc}
-\usepackage{subfigure}
+
+%\usepackage{subfigure}
+
 \usepackage[margin=2.5cm, nohead]{geometry}
 \usepackage{palatino, url, multicol}
 \usepackage{amssymb, graphicx, fancyhdr, latexsym, url, verbatim}
@@ -10,7 +12,11 @@
 \usepackage[all]{xy}
 \usepackage[english]{babel}
 \usepackage{matlabScripts}
-\usepackage{caption}
+
+%\usepackage{caption}
+\usepackage[font=small,format=plain,labelfont=bf,up,textfont=it,up]{caption}
+\usepackage{subfig} % has to be loaded after caption to prevent clash
+
 
 
 \newcommand{\projectName}{ACHTBITS}
