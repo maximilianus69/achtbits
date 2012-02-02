@@ -1,4 +1,4 @@
-function Class = main(deviceId, sessionId)
+function Clusters = main(deviceId, sessionId)
 
     % Wrapper for reading gps coordinates from a csv file, taking the ones above
     % the north sea, and calculating vectors with the direction and speed
@@ -84,11 +84,11 @@ function Class = main(deviceId, sessionId)
     end
     hold off
 
-    Clusters = interpolatedToRealTimestamp(Clusters, Input(:, 1))
+    Clusters(:, 1:2) = interpolatedToRealTimestamp(Clusters(:,1:2), Input(:, 1))
     subplot(3, 1, 1);
 
     % for plotting purposes:
-    Clusters = (Clusters - Input(1, 1))./60;
+    Clusters(:, 1:2) = (Clusters(:, 1:2) - Input(1, 1))./60;
     hold on 
 
     
