@@ -58,7 +58,6 @@ badId = find(strcmp(behaviourClasses,'bad cluster'));
 removeRows = find(ismember(AllFeatures(:,end), [unknownId badId]));
 AllFeatures(removeRows,:) = [];
 
-
 % save to file
 labels = 'duration,avgSpeed,heightDiff,grndDist,totDist,angleVar,distDiff,resolution,fx,fy,fz,previousCluster,annotation';
 dlmwrite(strcat(folder,'/AllFeatures.csv'), labels, '');
@@ -66,4 +65,4 @@ dlmwrite(strcat(folder,'/AllFeatures.csv'), AllFeatures,'-append');
 
 % legend for class names
 behaviourLabels = cellstr(cell2mat(strcat(behaviourClasses,',')))
-dlmwrite(strcat(folder,'/behaviourClasses.csv'), behaviourLabels, '');
+dlmwrite(strcat(folder,'/classes.txt'), behaviourLabels, '');
