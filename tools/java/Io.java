@@ -60,7 +60,7 @@ includeColumnsAcc=1, 2, 3, 4, 5, 0}
         //    System.out.println(PreprocessCsvFiles.includeColumnsGps[i]);
         
         
-        String[] values2 = lines.get(7).split(delimiter)[1].split(",");
+        String[] values2 = lines.get(8).split(delimiter)[1].split(",");
         PreprocessCsvFiles.includeColumnsAcc = new int[values2.length];
         for (int i = 0; i < values2.length; i ++)
             PreprocessCsvFiles.includeColumnsAcc[i] = Integer.valueOf(values2[i]);
