@@ -141,6 +141,30 @@ class PreprocessCsvFiles
             // extract bird number from some column
             deviceId = extractDeviceId(columnLabels, lines);
 
+            // preprocess some more to remove all data not above the north sea
+            lines = preprocessNorthSeaPerimeter(lines);
+
+            if (lines.size() < 2)
+            {
+                System.out.println("Too little remains of gps data after north sea check, exit");
+                return;
+            }
+
+            // split the lines into sessions
+            sessionize(lines);
+
+            if (parsedSessions.size() < 1)
+            {
+                System.out.println("Too little remains of gps data after sessionize, exit");
+                return;
+            }
+            
+            // Write the labels for each column + some extra info to file. 
+            Io.writeFile(columnLabels, outputDirectory + Io.SYSTEM_SEPARATOR +
+                "labels.txt");
+
+            System.out.println("Writting gps to file");
+
             if (Io.createFolder(outputDirectory + Io.SYSTEM_SEPARATOR + "device" +
                 deviceId))
                 outputDirectory += Io.SYSTEM_SEPARATOR + "device" + deviceId;
@@ -150,23 +174,6 @@ class PreprocessCsvFiles
                 return;
             }
 
-            // preprocess some more
-            lines = preprocessNorthSeaPerimeter(lines);
-
-            if (lines.size() < 2)
-            {
-                System.out.println("Too little remains of gps data, exit");
-                return;
-            }
-
-            // split the lines into sessions
-            sessionize(lines);
-
-            // Write the labels for each column + some extra info to file. 
-            Io.writeFile(columnLabels, outputDirectory + Io.SYSTEM_SEPARATOR +
-                "labels.txt");
-
-            System.out.println("Writting gps to file");
 
             // write the parsed sessions to file
             for (int i = 0; i < parsedSessions.size(); i++)
@@ -204,7 +211,7 @@ class PreprocessCsvFiles
                     linkGpsWithAccelerometer(parsedSessions, acceleros);
 
 
-                if (acceleros.size() < 2)
+                if (accelerosSessionized.size() < 2)
                 {
                     System.out.println("Too little remains of accel data, exit");
                     return;
@@ -428,6 +435,8 @@ class PreprocessCsvFiles
             String[] newSplittedLine = new String[includeColumns.length];
             boolean slashN = false;   
             int i = 0; // :(
+
+
             for (int column : includeColumns)
             {
                 // removing those crazy '"''s!

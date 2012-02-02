@@ -17,15 +17,15 @@
  % TODO: Dit figuurtje maken. Ik kom er namelijk net achter dat de derivative
  % misschien niet exact doet wat we willen, omdat het speed1 en speed2 apart van
  % elkaar gebruikt. Een goeie hiervoor is device_535, sessie_000.
-%\begin{figure}
-%\centering
-%\includegraphics[width=.8\textwidth]{speed.pdf}
-%\caption{The speed of the bird (above) and the difference in speed (under). As
-%you can see, the difference is absolute (because this makes finding peaks
-%easier). The difference is some times a bit higher, while the speed does not
-%seem to differ at all. This means the bird changed his direction.}
-%\label{fig:speed}
-%\end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=.8\textwidth]{speed.pdf}
+\caption{The speed of the bird (above) and the difference in speed (under). As
+you can see, the difference is absolute (because this makes finding peaks
+easier). The difference is some times a bit higher, while the speed does not
+seem to differ at all. This means the bird changed his direction.}
+\label{fig:speed}
+\end{figure}
 
  As can be seen, the speed-difference is low on points where the bird is assumed
  to be flying or sitting on the water. In other points the speed differs a lot.
@@ -106,24 +106,18 @@ at the time of the GPS fix.
 \caption{Comparing example histograms to our data}
 \label{alg:hist}
 \end{algorithm}
-\begin{equation}
- \label{eq:hist}
- Diff = \Sigma \left| H_1 - H_2 \right|
- \caption{How we calculate the difference between one histogram and the other.}
-\end{equation}
 
 We take an example of each kind of behavior (floating, flying and foraging).
 This example can be compared with a bit of the data we are
 clustering. For this we loop over the data with a time window. This is probably
-better explained in the pseudocode in algorithm \ref{alg:hist} and equation
-\ref{eq:hist}
+better explained in the pseudocode in algorithm \ref{alg:hist}.
 
 When using this method, some problems have to be solved.
 
 \subsubsection{Interpolating the Values}
 The first problem we encounter is the difference in resolution of the data. This
 would mean that when we are looking at high resolution data, and we compare it
-with a low resolution example, equation \ref{eq:hist} will not work. Therefore
+with a low resolution example, line 4 of \ref{alg:hist} will not work. Therefore
 we need to have exactly as many data points in the one, as in the other
 histogram. 
 
@@ -131,5 +125,46 @@ This is easily achieved by interpolating the data. Since matlab has integrated
 interpolation functions, we have chosen to interpolate with `Piecewise Cubic
 Hermite Interpolating Polynomial (PCHIP)':, which is a bit more computationally
 expensive than linear interpolation, but returns a smoother curve. This is
-better, when using low resolution data, becaus
+better, when using low resolution data, because it returns a bit smoother line.
 
+\subsubsection{Comparing the Histograms}
+As mentioned before, line 4 in algorithm \ref{alg:hist} compares two algorithms.
+This returns a number close to zero, when the histograms are alike, and a high
+number when they are different. Because this is not very intuitive, the program
+recalculates this to percentages with equation \ref{eq:perc}.
+\begin{equation}
+\label{eq:perc}
+percentage = 100 - \frac{Diff}{2 \sum Histogram} \times 100
+\end{equation}
+
+In this equation, Diff is the difference as calculated in algorithm
+\ref{alg:hist} and the sum of a histogram is the count of all its entries. 
+
+Now we have a percentage for each point, of how much it resembles each behavior.
+A plot of this percentage is shown in the bottom of figure \ref{fig:clustering}.
+This can be used to find clusters, because each time this differs, a new
+cluster can be assumed to be starting.
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{clustering.pdf}
+\caption{\small How clustering works. Above is the raw data. The marked line is the
+absolute speed of the bird. The red and blue lines under it are the speeds in
+the x and y direction.\\
+The middle image shows the interpolated data.\\
+The bottom image shows how much the point in the middle image resembles a
+certain kind of behavior. Red is floating, green is flying and blue is foraging.}
+\label{fig:clustering}
+\end{figure}
+
+\subsubsection{Smoothing the current data}
+After the previous step, the data sometimes has only one or two points above the
+others, during a cluster. This could be due to a gps error or a sudden movement
+of the bird. We do not want to see this as a new cluster, so the data should be
+smoothed.
+
+This is done in a simple and elegant way. A window of (in our case) 7 points is
+moved over the data. The mode of these points should be the value of the middle
+of the seven. This way, if less than four of the points have another value than
+their surroundings, there are too little points to create a new cluster, and the
+difference was probably noise. 
