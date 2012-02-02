@@ -52,14 +52,34 @@
  in an array with these counts. For further illustration see figure
  \ref{fig:histogram}.
 
+
 \begin{figure}
-\centering
-\includegraphics[width=.8\textwidth]{histogram.pdf}
-\caption{Example of a histogram. The x-axis contains the bins. These are the
-values in which the speeds could be. The height of the bars on the y-axis shows
-us how many times in a certain time span the bird had a certain speed.}
-\label{fig:histogram}
+  \centering
+  \subfloat[Model for floating.]{\label{fig:clusteringRaw}\includegraphics[width=0.3\textwidth]{bar1speed}} 
+  \subfloat[Model for flying.]{\label{fig:clusteringInterpolated}\includegraphics[width=0.3\textwidth]{bar2speed}} 
+  \subfloat[Model for hunting.]{\label{fig:clusteringHists}\includegraphics[width=0.3\textwidth]{bar3speed}}
+  \caption{Histograms that count the speed for the models of the three behaviors.}
+  \label{fig:modelHistogramsSpeed}
 \end{figure}
+
+
+\begin{figure}
+  \centering
+  \subfloat[Model for flying.]{\label{fig:clusteringRaw}\includegraphics[width=0.3\textwidth]{bar2angle}} 
+  \subfloat[Model for hunting.]{\label{fig:clusteringInterpolated}\includegraphics[width=0.3\textwidth]{bar3angle}} 
+  \caption{Histograms that count the angle for the models of flying and hunting.}
+  \label{fig:modelHistogramsAngle}
+\end{figure}
+
+
+%\begin{figure}
+%\centering
+%\includegraphics[width=.8\textwidth]{histogram.pdf}
+%\caption{Example of a histogram. The x-axis contains the bins. These are the
+%values in which the speeds could be. The height of the bars on the y-axis shows
+%us how many times in a certain time span the bird had a certain speed.}
+%\label{fig:histogram}
+%\end{figure}
 
 \subsection{The First Way}
  \subsubsection{Finding Peaks}
@@ -153,7 +173,6 @@ Now we have a percentage for each point, of how much it resembles each behavior.
 A plot of this percentage is shown in the bottom of figure \ref{fig:clustering}.
 This can be used to find clusters, because each time this differs, a new
 cluster can be assumed to be starting.
-
 
 \begin{figure}
   \centering
