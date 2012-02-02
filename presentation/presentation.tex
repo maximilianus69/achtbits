@@ -13,12 +13,11 @@ CHaradriiformes Toegepast BIrd Tracking System}
 \subtitle{\projectAbbreviation}
 \author{Jesse Eisses, Sosha Happel, Maarten Inja and Maarten de Waard}
 \institute{UvA}
-\usetheme{Berkeley}
+\usetheme{Warsaw}
 \newcommand{\slide}[2]
 {
 \begin{frame}
 \frametitle{#1} 
-
 
 #2
 
@@ -62,7 +61,7 @@ Zo veel mogelijk automatisch
 	\item Data opsplitsen in bruikbare sessies
 	\item Sessies automatisch segmenteren in clusters
 	\item Nieuwe features maken voor clusters
-	\item Annoteerproces vergemakkelijken
+	\item Annoteren versimpelen
 	\item Clusters classificeren met nieuwe features
 \end{itemize} 
 }
@@ -100,6 +99,7 @@ Zo veel mogelijk automatisch
 
 }
 
+
 \slide{Finding clusters (new method)}
 {
     
@@ -107,10 +107,10 @@ Zo veel mogelijk automatisch
 
 
 
-\section{Results}
-\slide{Annotation tool}
+\section{Resultaten}
+\slide{Annotatietool}
 {
-	
+	Tool gemaakt in matlab die de data verwerkt en het annoteren makkelijker maakt
 }
 
 \slide{Classification}
@@ -120,13 +120,23 @@ Zo veel mogelijk automatisch
 
 \section{Conclusion}
 
-\slide{Conlusion}
+\slide{Conclusie}
 {
-	
+\begin{itemize}
+	\item Automatische segmentatie is goed gelukt met histogrammen
+	\item Classificeren op 'directional flight', 'searching' en 'floating' werkt goed
+	\item Onderscheid maken tussen 'sleeping' en 'digesting' is lastiger
+	\item Annoteren is een stuk makkelijker geworden
+\end{itemize} 
 }
 
 \slide{Future work}
 {
-	
+\begin{itemize}
+	\item Automatische segmentatie verbeteren
+	\item Annotatie tool uitbereiden met suggesties
+	\item Features uitbereiden
+	\item Classificeren met annotatie van experts
+\end{itemize} 
 }
 \end{document}
