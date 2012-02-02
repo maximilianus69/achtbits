@@ -30,6 +30,7 @@ public class Wrapper
                     args[0] = DIR_TO_DATA_FILES + gpsCsvFile.getName();
                     args[1] = OUTPUT_DIR;
                     args[2] = DIR_TO_DATA_FILES + accelCsvFile.getName();
+                    PreprocessCsvFiles.main(args);
                 }
                 else
                 {
@@ -37,6 +38,7 @@ public class Wrapper
                     args = new String[2];
                     args[0] = DIR_TO_DATA_FILES + gpsCsvFile.getName();
                     args[1] = OUTPUT_DIR;
+                    PreprocessCsvFiles.main(args);
                 }
             }
             else
