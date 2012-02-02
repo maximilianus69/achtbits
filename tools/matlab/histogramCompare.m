@@ -44,6 +44,8 @@ m1HistSpeed .* speedFactor;
 m2HistSpeed .* speedFactor;
 m3HistSpeed .* speedFactor;
 
+
+
 speedHistEntries = sum(m1HistSpeed);
 
 angleHistEntries = sum(m1HistAngle);
