@@ -39,7 +39,8 @@ end
 HNormData = [Data(:,1:4) h Data(:,6:end)];
 
 % debug compare plots - used in report
-%figure;plot(t,Data(:,5));hold on;plot(t,h,'r');
+%beginTime = t(1);
+%timeNorm = (t - beginTime)/60;
+%figure;plot(timeNorm,Data(:,5));hold on;plot(timeNorm,h,'r');xlabel('time (s)');ylabel('gps height (m)');
 
 end
-
