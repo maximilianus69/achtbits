@@ -142,15 +142,29 @@ In this equation, Diff is the difference as calculated in algorithm
 
 Now we have a percentage for each point, of how much it resembles each behavior.
 A plot of this percentage is shown in the bottom of figure \ref{fig:clustering}.
+This can be used to find clusters, because each time this differs, a new
+cluster can be assumed to be starting.
 
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth]{clustering.pdf}
-\caption{How clustering works. Above is the raw data. The marked line is the
+\caption{\small How clustering works. Above is the raw data. The marked line is the
 absolute speed of the bird. The red and blue lines under it are the speeds in
-the x and y direction.
-The middle image shows the interpolated data.
+the x and y direction.\\
+The middle image shows the interpolated data.\\
 The bottom image shows how much the point in the middle image resembles a
 certain kind of behavior. Red is floating, green is flying and blue is foraging.}
 \label{fig:clustering}
 \end{figure}
+
+\subsubsection{Smoothing the current data}
+After the previous step, the data sometimes has only one or two points above the
+others, during a cluster. This could be due to a gps error or a sudden movement
+of the bird. We do not want to see this as a new cluster, so the data should be
+smoothed.
+
+This is done in a simple and elegant way. A window of (in our case) 7 points is
+moved over the data. The mode of these points should be the value of the middle
+of the seven. This way, if less than four of the points have another value than
+their surroundings, there are too little points to create a new cluster, and the
+difference was probably noise. 
