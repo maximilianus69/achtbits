@@ -10,7 +10,8 @@
 \usepackage[english]{babel}
 \usepackage{matlabScripts}
 \usepackage[font=small,format=plain,labelfont=bf,up,textfont=it,up]{caption}
-\usepackage{subfig} % has to be loaded after caption to prevent clash
+\usepackage{subfigure} % has to be loaded after caption to prevent clash
+\usepackage{subfig}
 
 
 
@@ -67,6 +68,8 @@ tool we built with which we can annotate clustered data points more easily.
 
 
 \section{Preprocessing}
+
+
 \input{preprocessingJava}
 % Here we will discuss the preprocessing of the .csv files. This should consist
 % of:
@@ -75,12 +78,25 @@ tool we built with which we can annotate clustered data points more easily.
  
 \section{Finding Clusters in the Data}
  \input{findingClusters.tex}
+
+
  \subsection{Annotating the data}
  % Describes how we annotate (including how the tool works. Maybe an appendix
  % should be added on how the tool should be started and how it should be used.
 
 
+
+
+
+
+
+
+
 \section{Learning}
+
+
+
+\input{learning}
 
 \section{Conclusions and results}
 
