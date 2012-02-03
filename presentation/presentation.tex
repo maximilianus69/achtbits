@@ -36,16 +36,35 @@ CHaradriiformes Toegepast BIrd Tracking System}
 \section{Introductie}
 \slide{Het Project}
 {
-UvA-bits verzamelt GPS en accelerometerdata van vogels.\\
+UvA-bits verzamelt GPS en accelerometerdata van vogels
+
+Onze focus: Kleine mantelmeeuw
+\vspace{0.5cm}
+
 Onderzoeksdoelen:
 \begin{itemize}
 	\item Automatische segmentatie van datapunten
 	\item Classificatie van gedrag boven de Noordzee
+	\begin{itemize}
+		\item 'Directional flight'
+		\item 'Searching'
+		\begin{itemize}
+			\item 'Foraging'
+			\item 'Trawler'
+		\end{itemize}
+		\item 'Floating'
+		\begin{itemize}
+			\item Sleeping'
+			\item 'Digesting'
+		\end{itemize}
+
+	\end{itemize}
 \end{itemize} 
 }
 
 \slide{Problemen}
 {
+Meeste problemen zaten in de data zelf
 \begin{itemize}
 	\item Veel onbruikbare data
 	\item Weinig features
@@ -102,7 +121,7 @@ Zo veel mogelijk automatisch
 
 \slide{Clusters vinden (nieuwe methode)}
 {
-    Gebruik van histogrammen. In ... stappee:
+    Gebruik van histogrammen.
 \begin{enumerate}
     \item Interpoleren
     \item Trainingshistogrammen maken
@@ -128,7 +147,7 @@ Formule voor vergelijken histogrammen:\\
 \section{Resultaten}
 \slide{Annotatietool}
 {
-	Tool gemaakt in matlab die de data verwerkt en het annoteren makkelijker maakt
+	Tool gemaakt in Matlab die de data verwerkt en het annoteren makkelijker maakt
 }
 
 \slide{Classification}
@@ -137,7 +156,7 @@ Cluster classificatie met WEKA:
 \begin{itemize}
     \item We gebruikte 12 features
     \item Meer dan 1600 geannoteerde \emph{goede} clusters
-    \item 3 klassen: vliegen, jagen en drijven
+    \item 3 klassen: 'Directional flight', 'Searching', 'Floating'
     \item Precisie van 82\% (met logistische regressie)
     \item Veel ruimte voor verbetering\ldots
 \end{itemize}
@@ -153,9 +172,9 @@ Cluster classificatie met WEKA:
 \slide{Conclusie}
 {
 \begin{itemize}
-	\item Automatische segmentatie is goed gelukt met histogrammen
+	\item Automatische segmentatie lijkt goed gelukt met histogrammen, alleen is lastig te meten
 	\item Classificeren op 'directional flight', 'searching' en 'floating' werkt goed
-	\item Onderscheid maken tussen 'sleeping' en 'digesting' is lastiger
+	\item Onderscheid maken tussen 'sleeping' en 'digesting' is nog niet goed gelukt
 	\item Annoteren is een stuk makkelijker geworden
 \end{itemize} 
 }
