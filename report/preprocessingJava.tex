@@ -73,6 +73,24 @@ script is $N$ comma separated GPS session files (containing GPS data that togeth
 a session) and $M$ (with $0 <= M <= N$) comma separated accelerometer data files. Matlab
 can easily match GPS data with accelerometer data using these files. 
 
+ \subsection{Normalizing Height}
+ The best way to distinguish flying from floating is, of course, by the height of the bird. Unfortunately the height calculated by the GPS is very unreliable\footnote{this has to do with triangularisation and switching of satellites}. The absolute value of the height is unusable (often the bird is flying 100 meters below the surface), but changes in height can be used on short intervals. In the preprocessing we will remove outliers from this data (large shifts in height, often because of a satellite switch) so we can later try to create features from it.
+
+\begin{figure}[htb!]
+ \begin{center}
+ \subfig {
+  \includegraphics[scale=0.5]{heightnorm9}
+ }
+ \subfig {
+  \includegraphics[scale=0.5]{heightnorm10}
+ }
+ \end{center}
+ \caption{The blue line is the height from raw gps data, the red line is the normalized height.}
+ \label{fig:heightnorm}
+\end{figure}
+
+We currently flatten height points in a cluster that are more than $3$ times the standard deviation away from the mean, which is a commonly used method\footnote{Sources:\\ http://en.wikipedia.org/wiki/Outlier\\ http://www.mathworks.nl/help/techdoc/data\_analysis/f0-7275.html} . Figure \ref{fig:heightnorm} shows some results. There is still a lot of noise left in the data, more experimenting will be needed to find a solution for this.
+
 
 
 
