@@ -48,4 +48,4 @@ function Clusters = analyseSession( SessionData )
     
     % find the cluster edges
     Clusters = simpleFindClusters(Class, 900);
-    Clusters = interpolatedToRealTimestamp(Clusters(:, 1:2), SessionData(:, 2));
+    Clusters(:, 1:2) = interpolatedToRealTimestamp(Clusters(:, 1:2), SessionData(:, 2));
