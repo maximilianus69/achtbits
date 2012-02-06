@@ -5,10 +5,11 @@ part of a sessions in which the bird shows one type of behavior. Once we have
 clusters we can annotate quickly and learn per cluster.
 
 We approached this problem in two different manners. First we simply looked at
-change in the acceleration. We spend a lot of time tweaking and optimizing the parameters
+change in the acceleration. We spent a lot of time tweaking and optimizing the parameters
 to find better clusters but in the end we had to conclude that this would never work. 
 The second
-approach works has it's origins in `computer vision' and works with histograms to 
+approach has it's origins in `computer vision' % Is dit waar!?
+and works with histograms to 
 match standard behaviour to parts of sessions.
 
 \subsection{The First Approach: Finding Peaks}
@@ -18,9 +19,9 @@ match standard behaviour to parts of sessions.
 This the speed the bird has on the time of
  connecting to the GPS, calculated from two subsequent measurements. The second
 we use is 
- `trajectory speed'. This is speed calculated from two GPS entries. 
+ `trajectory speed'. This is speed calculated from two GPS locations. 
 We decided to use the latter because it has a smaller error rate. 
- Our assumption is that we can cluster the data well 
+ Our assumption was that we could cluster the data well 
  enough by only looking at speed differences. Figure \ref{fig:speed} shows
  why.
  % TODO: Dit figuurtje maken. Ik kom er namelijk net achter dat de derivative
@@ -63,7 +64,7 @@ On these places we can assume that the bird is foraging.
  \end{itemize}
  
  This creates a representation of a peak by marking its left and right side.
- This comes in handy, because we do not want these speed differences in our
+ This has the advantage that we do not get these speed differences in our
  clusters as they would add noise to the learning data.
 
  \subsubsection{Grouping Peaks}
@@ -82,7 +83,6 @@ On these places we can assume that the bird is foraging.
  When a peak is too far from the  current average, this almost always indicates
  a change in behavior, so a new cluster should be started.this is done by the
  second and third characteristic specified above.
-
 
 It turned out however the data is too chaotic too group well in every situation. 
 Also the difference between high and low resolution turned out to be troublesome. It
@@ -115,33 +115,28 @@ method.
 
 This different version works on another basis: We create two histograms. One
 contains the trajectory speeds of the bird and the other contains the
-difference in the angle of the instantaneous speed. This means that we count
+difference in the angle of the instantaneous speeds. This means that we count
 how many times the speed or angle is between certain values, and represent that
 in an array with these counts. For further illustration see figure
-
-The second method we tried, relies on a bit more data. Apart from the trajectory
-speed, now also the instantaneous speed is used. The trajectory speed is relevant for
-the speed of the bird and now we use the instantaneous speed for finding the angle
-at the time of the GPS fix. 
-
+\ref{fig:modelHistogramsSpeed}.
 
 % algoritme is fout: 
 % en timeThreshold... 
 % for i = windowsize/2 +1 to data.length-windowsize
-\begin{algorithm}
-\begin{codebox}
-\Procname{$\proc{histogramCompare}(Data, timeThreshold)$}
-\li $exampleHists \gets getExampleHists()$
-\li \For $i \gets 1 + timeThreshold$ \To $\attrib{Data}{length}$ 
-\li \Do
-    $currentHists \gets getHistograms(i-timeThreshold, i+timeThreshold)$
-    \li $histogramValues(i) \gets \Sigma \left| currentHists - exampleHists \right|$
-\End
-\li \Return histogramValues
-\end{codebox}
-\caption{Comparing example histograms to our data}
-\label{alg:hist}
-\end{algorithm}
+%\begin{algorithm}
+%\begin{codebox}
+%\Procname{$\proc{histogramCompare}(Data, timeThreshold)$}
+%\li $exampleHists \gets getExampleHists()$
+%\li \For $i \gets 1 + timeThreshold$ \To $\attrib{Data}{length}$ 
+%\li \Do
+%    $currentHists \gets getHistograms(i-timeThreshold, i+timeThreshold)$
+%    \li $histogramValues(i) \gets \Sigma \left| currentHists - exampleHists \right|$
+%\End
+%\li \Return histogramValues
+%\end{codebox}
+%\caption{Comparing example histograms to our data}
+%\label{alg:hist}
+%\end{algorithm}
 
 We take an example of each kind of behavior (floating, flying and foraging).
 This example can be compared with a bit of the data we are
