@@ -140,10 +140,10 @@ in an array with these counts. For further illustration see figure
 
 We take an example of each kind of behavior (floating, flying and foraging).
 This example can be compared with a bit of the data we are
-clustering. For this we loop over the data with a time window. This is probably
-better explained in the pseudocode in algorithm \ref{alg:hist}.
+clustering. For this we loop over the session data, each time selecting
+\windowSize.
 
-When using this method, some problems have to be solved.
+This method consists of the following 
 
 
 \begin{figure}
@@ -227,7 +227,7 @@ cluster can be assumed to be starting.
 %\label{fig:clustering}
 %\end{figure}
 
-\subsubsection{Smoothing the current data}
+\subsubsection{Smoothing the Histogram Values}
 After the previous step, the data sometimes has only one or two points above the
 others, during a cluster. This could be due to a gps error or a sudden movement
 of the bird. We do not want to see this as a new cluster, so the data should be
