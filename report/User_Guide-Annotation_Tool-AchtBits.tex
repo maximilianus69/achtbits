@@ -1,0 +1,145 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{subfigure}
+\usepackage[margin=2.5cm, nohead]{geometry}
+\usepackage{palatino, url, multicol}
+\usepackage{amssymb, graphicx, fancyhdr, latexsym, url, verbatim}
+\usepackage{algorithm, algorithmic}
+\usepackage{hyperref}
+\usepackage{clrscode3e}
+\usepackage[all]{xy}
+\usepackage[english]{babel}
+\usepackage{matlabScripts}
+\usepackage{caption}
+
+
+\newcommand{\projectName}{ACHTBITS}
+\newcommand{\projectAbbreviation}{Awesome
+CHaradriiformes Toegepast BIrd Tracking System}
+\newcommand{\bits}{BITS}
+
+\addtolength{\footskip}{-90mm}
+\addtolength{\headheight}{-05mm}
+\addtolength{\headsep}{05mm}
+
+%\pagestyle{fancy}
+\lhead{\projectName}
+%\chead{Annotation Tool - User Guide}
+\rhead{\small \textsc{\projectAbbreviation}}
+%\cfoot{\footnotesize \textit{ \projectAbbreviation}\\[0.1cm] \small \thepage}
+%\cfoot{}
+%\rfoot{\thepage}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{10pt}
+
+\begin{document}
+
+\include{userGuideTitle}
+%\thispagestyle{empty}
+\vspace*{00mm}
+\tableofcontents
+\newpage
+
+\section{Overview}
+% Overview of the functionality of the tool
+
+This tool was created to aid the annotation of data from the UvA-BITS (BIrd Tracking System) database, in particular data of the lesser black-backed gull above the North sea. The tool contains:
+\begin{itemize}
+\item
+a script that reads raw data downloaded from the database and creates flight-sessions.
+\item
+an automated segmentation algorithm that splits sessions into clusters that are likely to belong to the same class of behaviours 
+\item
+a GUI that shows information about a cluster and lets the user choose a behaviour class.
+\item
+A shell that runs through all sessions of a device and calls the annotation tool
+\item
+Functions to prepare the annotated data for a classification algorithm
+\end{itemize}
+
+\section{Installation}
+% short explanation of how to get the tool ready for use
+\begin{itemize}
+	\item
+	download the tool from ???
+	\item
+	extract the zip to a folder (referred to as installFolder)
+	\item
+	run matlab
+	\item
+	in matlab, navigate to installFolder/matlab
+\end{itemize}
+\section{Usage}
+\subsection{Preparing Data}
+% how to get data from the database ready for the tool
+ 
+\subsection{Annotating Sessions and Clusters}
+
+The main function to use the annotation tool is annotateBird, this functions takes a deviceId, loops through all sessions in the folder of the device and puts them into the tool. The function is a shell for annotateSession, which runs the tool on one session. When this function is run independently there is no guarantee that the results will be properly saved, so this is not advised. The classes given as user input are added to the features of the cluster and these are saved to a file to a file. For a more detailed explanation, please refer to the help documents of the functions (in matlab enter: help 'functionName')\\ \\
+\newpage
+{
+\begin{figure}[h]
+\includegraphics[scale = 0.5]{tool_overview_indexed.png}
+\caption{an overview of the layout of the annotation-tool}
+\end{figure}
+}
+Layout:
+\begin{enumerate}
+	\item button control
+	\begin{enumerate}
+		\item
+		exit - closes the tool\\
+		back - returns to the previous cluster
+		\item
+		zoom in - zooms in on the whole session\\
+		zoom out - zooms out to the entire coast of the Netherlands
+		\item
+		classes - a group of class buttons used to annotate the current cluster
+	\end{enumerate}
+	\item
+	plot of the trajectory of the session\\
+	the current cluster is highlighted in light blue\\
+	the start of the session is marked with a red square\\
+	the start of the current cluster is marked by a green square\\
+	the previous clusters are color coded with their class
+	\item
+	plot of the trajectory of the current cluster\\
+	the start of the cluster is marked by a green square
+	\item
+	accelerometer-data plots of the points marked by a vertical line in the velocity plot
+	\item
+	velocity and acceleration plot
+	\item
+	instantaneous speed and direction vectors
+	\item
+	features of the current cluster
+\end{enumerate}
+		
+ % running and using the tool
+
+\subsection{Using the Resulting Annotated Features}
+
+% what the tool outputs and how this can be adjusted
+The tool created a csv file for every annotated session. They are stored in a folder hierarchy in \verb|tools/annotatedData/real/|. To use this data in a learning algorithm you will need one large csv file of cluster features and annotations. The function \verb|createTrainingData.m| does this automatically. You can run it from matlab without any arguments, you only have to navigate to the folder containing the annotated data (\verb|tools/annotatedData/real/| by default). It will output the files \verb|AllFeatures.csv| and \verb|classes.txt|, which maps annotation IDs to strings.
+Depending on your machine learning tool you might need to apply some of the following changes in \verb|AllFeatures.csv|:
+\begin{itemize}
+	\item Replace all $-1$ values with missing values characters ('?' in WEKA)
+	\item Replace all class IDs (the last two columns) with strings (\verb|classes.txt| shows which ID belongs to which class)
+\end{itemize}
+
+\section{Making Adjustments}
+% things that could be added and how this should be done
+
+\subsection{Adding Features}
+
+To add new features you will have to modify the matlab code of the tool. All features generated by the tool are created in \verb|createClusterFeatures.m|, with exception for the \emph{previsousCluster} feature. Any new features can be appended to the return value of this function. 
+
+If you want to add features to already annotated data, you can use the \verb|reloadFeatures.m| function. This script basically recreates all clusters and features from the raw data, and transfers the \emph{annotation} and \emph{previousCluster} columns from the already annotated data. After executing the function you must navigate to your annotated data folder in the dialog (\verb|tools/annotatedData/real/| by default). Inside this directory a new folder is created called \verb|real_reloaded|, containing the new features (this can take a few minutes). The raw device data should be located in \verb|tools/parsedCsvFiles/| for this to work.
+
+\subsection{Adjusting Parameters}
+
+\subsection{Explanation of main functions}
+
+\end{document}

@@ -1,0 +1,113 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[margin=2.5cm, nohead]{geometry}
+\usepackage{palatino, url, multicol}
+\usepackage{amssymb, graphicx, fancyhdr, latexsym, url, verbatim}
+\usepackage{algorithm, algorithmic}
+\usepackage{hyperref}
+\usepackage{clrscode3e}
+\usepackage[all]{xy}
+\usepackage[english]{babel}
+\usepackage{matlabScripts}
+\usepackage[font=small,format=plain,labelfont=bf,up,textfont=it,up]{caption}
+\usepackage{xspace}
+%\usepackage{subfigure} % has to be loaded after caption to prevent clash Commented, because subfig is the newer (and presumably
+% better) version of subfigure...
+\usepackage{subfig}
+
+
+
+\newcommand{\projectName}{ACHTBITS\xspace}
+\newcommand{\projectAbbreviation}{Awesome
+CHaradriiformes Toegepast BIrd Tracking System\xspace}
+\newcommand{\bits}{BITS\xspace}
+% xspace only puts a space where we want one!
+\newcommand{\matlab}{\textsc{matlab}\xspace}
+
+\addtolength{\footskip}{-90mm}
+\addtolength{\headheight}{-05mm}
+\addtolength{\headsep}{05mm}
+
+
+
+\pagestyle{fancy}
+\lhead{\projectName}
+\rhead{\small \textsc{\projectAbbreviation}}
+%\cfoot{\footnotesize \textit{ \projectAbbreviation}\\[0.1cm] \small \thepage}
+%\cfoot{}
+%\rfoot{\thepage}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{10pt}
+
+\begin{document}
+
+\include{title}
+%\thispagestyle{empty}
+\vspace*{00mm}
+\tableofcontents
+\newpage
+
+
+%%%%%%%%%%%%%%%% variables
+
+\newcommand{\minimumSessionLengthMinutes}{60\xspace}
+\newcommand{\resolutionRange}{$0.2$ - $\infty$\xspace}
+\newcommand{\sessionSeparatorLengthMinutes}{15\xspace}
+%% The current value of the timeThreshold given to awesomizeClusters.
+\newcommand{\timeThreshold}{1200\xspace}
+\newcommand{\windowSize}{20 minutes\xspace}
+
+% sja, ik tiep hier maar wat hoor
+\begin{abstract}
+Using the data from the project of UvA-BITS, it is hard to classify the behavior of the sea gull above the North Sea. 
+There is GPS data available and sometimes even accelerometer data but it 
+remains troublesome to annotate data point by point. i
+
+In this report we 
+describe how we cluster data using histograms. We also describe the annotation
+tool we built, with which we can annotate clustered data points more easily. 
+\end{abstract}
+
+\section{Introduction}
+\input{introduction}
+
+
+\section{Preprocessing}
+
+
+\input{preprocessingJava}
+% Here we will discuss the preprocessing of the .csv files. This should consist
+% of:
+ % Describing how we only get the data above the north sea. Maybe an appendix
+ % should be added on how the java script can (should) be run.
+ 
+\section{Finding Clusters in the Data}
+\input{findingClusters.tex}
+
+
+ \subsection{Annotating the data}
+ % Describes how we annotate (including how the tool works. Maybe an appendix
+ % should be added on how the tool should be started and how it should be used.
+
+
+
+
+
+
+
+
+
+\section{Learning}
+
+
+
+\input{learning}
+
+\section{Conclusions and results}
+
+\section{Improvements and future work}
+\input{futureWork}
+
+\end{document}

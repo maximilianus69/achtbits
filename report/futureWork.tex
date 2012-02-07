@@ -1,0 +1,36 @@
+The project as it is now, is not perfect. These are the improvements that can be done.
+\subsection{Finding Clusters} 
+The current cluster finding works pretty well. Bad (too short) clusters are
+mostly cut out of the data before annotation gets done, and the way histograms
+are used, make for a good method. There are, however, a couple of improvement
+that could be implemented.
+
+\begin{itemize}
+ \item Improving training histograms
+
+    The current training histograms are made with only one example. This means
+    that if this example is not very representative, the resulting clusters are
+    based on wrong examples. Better examples could be created by using more data
+    than just the time window we selected for the loop, and then taking the
+    mean.
+ \item Comparing histograms
+
+    The formula that is currently used for comparing histograms, is not perfect.
+    There are other, better, ways to compare histograms, but in the time we had,
+    we did not implement those.
+
+ \item Using percentages
+    
+    Our current histogram compare method in \matlab, returns the best fitting
+    histogram of the current time window. This can be 
+    used for learning algorithms. A possible improvement would be to not return
+    which histogram has the best fit, but to actually return the percentages of
+    comparison between histograms. This way, for example, a decision tree
+    learner could be able to distinguish floating behavior by saying the
+    histogram percentage for floating should at least be 80\%. This will
+    probably work better.
+\end{itemize}
+    
+
+\subsection{Features and Learning}
+The machine learning demonstrated in this report is just a prove of concept, there are a lot of improvements to be made. Most important is obtaining better data, by annotating more precisely with help of bird experts. After that more features should be created and tested for relevance. A good feature would be the resemblance of with histograms created in the Clustering stage. When the learning algorithm has better accuracy it can be implemented in Matlab so that the entire process can be automated.
