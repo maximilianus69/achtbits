@@ -39,16 +39,16 @@ The focus of this report was cluster finding by unsupervised learning, which gav
   Figure \ref{fig:fourier} shows an example of a fourier transform on accelerometer data. There is a peak at 3 Hz, which means the accelerometer data has fragments recurring at that frequency. The peak at 0 Hz is an aspect of the Fourier transform and can be ignored. 
 
   Our fourier transform only returns the maxiumum frequencies of one point of accelerometer data. We currently use the center point for this feature, which is not te best method because that point could contain noise. This could be improved by taking the average of the frequencies of all accelerometer data in the cluster.
-  \item[Previous cluster] The id of the previous cluster. This may be needed to recognize some behaviour, like digesting (after hunting).
+  \item[Previous cluster] The ID of the previous cluster. This may be needed to recognize some behaviour, like digesting (after hunting).
  \end{description}
 
- We store the features in a Matlab array and save them to a csv file.
+ We store the features in a Matlab array and save them to a CSV file.
 
 \subsection{Adding Features}
 The GPS and accelerometer data can be used to create different features not mentioned above. We did not have the resources to do research in finding the best features, but we wanted to be able to add new ones without re-annotating the data. All features are calculated in \verb|createClusterFeatures.m| and are then saved along with their annotation. When a new feature is thought up it can be appended to the return value of that function. Then \verb|raloadFeatures.m| can be used to recreate the features, transferring all previous annotations. 
 
  \subsection{Results}
- We then appended all the csv files into a large database of training data. We removed \emph{unknown} and \emph{bad} labeled clusters as they indicate bad clustering or insufficient knowledge of birds. To improve the result we also combined \emph{digesting} and \emph{sleeping} clusters into one class. They can be seperated in future experiments, but with our current features and annotations an algorithm will not find a difference. The training data can then be loaded into a machine learning program. We chose for WEKA\footnote{http://www.cs.waikato.ac.nz/ml/weka/} because it is easy to use and it supports many learning algorithms.
+ We then appended all the CSV files into a large database of training data. We removed \emph{unknown} and \emph{bad} labeled clusters as they indicate bad clustering or insufficient knowledge of birds. To improve the result we also combined \emph{digesting} and \emph{sleeping} clusters into one class. They can be seperated in future experiments, but with our current features and annotations an algorithm will not find a difference. The training data can then be loaded into a machine learning program. We chose for WEKA\footnote{http://www.cs.waikato.ac.nz/ml/weka/} because it is easy to use and it supports many learning algorithms.
 
  For the tests we use following dataset:
 \begin{itemize}

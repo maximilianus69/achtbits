@@ -3,11 +3,15 @@ function AllFeatures = createTrainingData
 % then makes the data WEKA friendly
 
 % The indices of the features to extract from cluster data
+% Update this when making new features!
+%
 % Cluster format: 
 %   [id, startTime(s), endTime(s), duration(s), avgSpeed(km/h), ...
 %    heightDiff(m), grndDist(km), totDist(km), angleVar(deg/s), ...
 %    distDiff(m), resolution(dat/min), fx(Hz), fy(Hz), fz(Hz), ...
 %	 previousCluster(int), annotation(int)]
+%
+% The below array should contain the indices of all needed features only!
 neededFeatures = [4:17];
 
 % get folder
