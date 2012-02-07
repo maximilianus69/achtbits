@@ -61,15 +61,30 @@ Functions to prepare the annotated data for a classification algorithm
 
 \section{Installation}
 % short explanation of how to get the tool ready for use
-
+\begin{itemize}
+	\item
+	download the tool from ???
+	\item
+	extract the zip to a folder (referred to as installFolder)
+	\item
+	run matlab
+	\item
+	in matlab, navigate to installFolder/matlab
+\end{itemize}
 \section{Usage}
 \subsection{Preparing Data}
 % how to get data from the database ready for the tool
  
 \subsection{Annotating Sessions and Clusters}
 
-The main function to use the annotation tool is annotateBird, this functions takes a deviceId loops through all sessions in the folder of the device and puts them into the tool. The classes given as user input are added to the features of the cluster and saves them to a file.\\ \\
-
+The main function to use the annotation tool is annotateBird, this functions takes a deviceId, loops through all sessions in the folder of the device and puts them into the tool. The function is a shell for annotateSession, which runs the tool on one session. When this function is run independently there is no guarantee that the results will be properly saved, so this is not advised. The classes given as user input are added to the features of the cluster and these are saved to a file to a file. For a more detailed explanation, please refer to the help documents of the functions (in matlab enter: help 'functionName')\\ \\
+\newpage
+{
+\begin{figure}[h]
+\includegraphics[scale = 0.5]{tool_overview_indexed.png}
+\caption{an overview of the layout of the annotation-tool}
+\end{figure}
+}
 Layout:
 \begin{enumerate}
 	\item button control
@@ -100,14 +115,12 @@ Layout:
 	instantaneous speed and direction vectors
 	\item
 	features of the current cluster
-	
 \end{enumerate}
 		
  % running and using the tool
-\begin{figure}[h]
-\includegraphics[scale = 0.5]{tool_overview_indexed.png}
-\end{figure}
+
 \subsection{Using the Resulting Annotated Features}
+
 % what the tool outputs and how this can be adjusted
 The tool created a csv file for every annotated session. They are stored in a folder hierarchy in \verb|tools/annotatedData/real/|. To use this data in a learning algorithm you probably need one large csv file of cluster features and annotations. The function \verb|createTrainingData.m| does this automatically. You can run it from matlab without any arguments, you only have to navigate to the folder containing the annotated data (\verb|tools/annotatedData/real/| by default). It will output the files \verb|AllFeatures.csv| and \verb|classes.txt|, which maps annotation IDs to strings.
 Depending on your machine learning tool you might need to apply some of the following changes in \verb|AllFeatures.csv|:
