@@ -1,9 +1,6 @@
 function [ output_args ] = plotClusterData( SessionData )
 %PLOTCLUSTERDATA Plots all relevant ClusterData and features for annotation
-%   Detailed explanation goes here
-
-% plot the speed
-% figId = figure('Position', [340 40 500 360]);
+%   *** DEPRECATED ***
 
 % get time and speed
 time = SessionData(:, 2);

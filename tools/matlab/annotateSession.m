@@ -29,6 +29,9 @@ run = true;
 annotatedData = []; % stores all clusters with features and class
 annotatedTrajectory = []; % stores coordinates with class
 
+% these next 2 lists are used as the classes to annotate data, the 
+% classColors should match the position you want to code the classes with
+
 % list of classes used to annotate clusters
 behaviourClasses = {'unknown', 'sleeping', 'digesting', 'flying',...
         'diving', 'bad cluster'};
@@ -165,7 +168,6 @@ close all;
 % end of function
 
 
-
 % nested functions used for button control
 
 % showControl - places buttons with callback on the tool
@@ -214,6 +216,7 @@ close all;
 
         dlmwrite(outputFile, annotatedData, 'precision', '%10f');
         
+        % check if the tool finished the session
         if ~exitBeforeEnd
             
             % create figure with a plot of the session and write it to file
@@ -246,6 +249,8 @@ close all;
 % previousCluster - goes back one cluster
     function previousCluster(~, ~)
         
+        % if the current cluster is beyond the first, remove the last
+        % entries in the annotated data and go back one 1 in the itiration
         if i > 1
             annotatedData = annotatedData(1:end-1, :);
             lastCluster = annotatedTrajectory(:, 1) == i-1;

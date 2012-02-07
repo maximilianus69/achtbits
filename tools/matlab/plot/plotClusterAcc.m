@@ -23,7 +23,9 @@ if sum(inCluster) > 0
     % get the data that is in cluster
     ClusterAccData = SessionAccData(inCluster, 2:6);
 
-    % get all time-stamps and find the middle one
+    % get all time-stamps and find the right accelerometer points to use
+    % for the plot depending on the amount of points in the cluster
+    
     timeEntries = unique(ClusterAccData(:, 1));
     amountOfEntries = size(timeEntries, 1);
     if amountOfEntries == 1
@@ -53,6 +55,8 @@ if sum(inCluster) > 0
     else
         pointsShown = [first second third];
     end
+    
+    % plot each of the 3 points
     
     subplot(5, 7, 5:7)
     plotAcc(SessionAccData, timeEntries(first));
