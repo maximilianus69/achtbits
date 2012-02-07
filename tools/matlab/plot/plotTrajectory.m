@@ -88,11 +88,11 @@ geoshow(gca, sessionY, sessionX, ...
     'color', 'b');
 
 % this if statement is not used right now but is optional (see next part)
-% if isSessionPlot
-%     markerSize = 1;
-% else
-%     markerSize = 5; 
-% end
+if isSessionPlot
+    markerSize = 1;
+else
+    markerSize = 5; 
+end
 
 % if the next part is taken out of the if statement and the previous if
 % statement is uncommented then session plot also has mmarkers on every
