@@ -40,6 +40,10 @@ if type  == 7
     %   - open an annotation folder for session
     %   - run annotateSession
     
+    if exist('../annotatedData', 'dir') ~= 7
+        mkdir('../annotatedData');
+    end
+    
     % check which folder data has to be stored
     if annotationType == 'real'
         outputDeviceFolder = strcat('../annotatedData/real/device_', deviceId);
