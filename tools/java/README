@@ -1,0 +1,27 @@
+PreprocessCsvFiles
+    Parses a gps raw data file (and optionally an accelerometer raw data file). Excludes
+        NULL values, data above land and the Wadden Sea and creates session files. 
+        The labels of each column are saved in the output directory in a file called 
+        "labels.txt".
+
+    Command line argument #0: gps .csv file.
+    Command line argument #1: directory in which to create a folder with the session files
+        (optional) Command line argument #2: accelerometer .csv file.
+
+    One can configure config.txt to change parameters if one does not wish to see
+        the Java souce code. The values of each line after the '=' are linked to
+        variables. So do not change the order of the lines. One can write before the 
+        '=' whatever one wants. 
+
+Wrapper 
+    Checks a directory for raw gps files with the name "DATA_ALL_GPS_BIRD_X.csv and
+        accelerometer data files with the name "DATA_ALL_ACCELEROMETER_BIRD_X.csv (with
+        X being the device ID). After this it uses PreprocessCsvFiles to output session
+        files. 
+
+    Command line argument #0: output directory in which to create folders with the session
+        files.
+    Command line argument #1: the input directory of the data files.
+    
+preprocess.jar
+    A jar file with all the files, especially useful for Matlab.
