@@ -6,8 +6,6 @@ function Clusters = analyseSession( SessionData )
     %   Clusters = nx2 matrix with start/end times 
     %   [begin_t1 begin_t1; ... ; begin_tn begin_tn]
 
-    % *** maybe add more session analysis?***
-
     histogramSizeSeconds = 900;
     timestampStep = 50;
     % Initialize the half of the window. In the loop we will look back and forth by this size
@@ -31,6 +29,7 @@ function Clusters = analyseSession( SessionData )
     
     % Find the max values for which behavior is done. This defines clusters
     [Max Index] = max([m1Course m2Course m3Course]');
+
     % Class will be a N by 1 vector containing the classes
     Class = [];
     Class(:, 1)= timestamps(1:size(timestamps, 1)-2*halfWindowSize) + timestampStep*halfWindowSize;
