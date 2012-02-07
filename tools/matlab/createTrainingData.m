@@ -8,7 +8,7 @@ function AllFeatures = createTrainingData
 %    heightDiff(m), grndDist(km), totDist(km), angleVar(deg/s), ...
 %    distDiff(m), resolution(dat/min), fx(Hz), fy(Hz), fz(Hz), ...
 %	 previousCluster(int), annotation(int)]
-neededFeatures = [4:16];
+neededFeatures = [4:17];
 
 % get folder
 folder = uigetdir('../', 'Select folder with that contains the annotated data folders'); 
@@ -61,7 +61,7 @@ fprintf('\nDeleted %d unknown or bad clusters\n',length(removeRows));
 fprintf('\nWrote %d feature vectors to %s\n',size(AllFeatures,1),strcat(folder,'/AllFeatures.csv'));
 
 % save to file
-labels = 'duration,avgSpeed,heightDiff,grndDist,totDist,angleVar,distDiff,resolution,fx,fy,fz,previousCluster,annotation';
+labels = 'duration,avgSpeed,heightDiff,grndDist,totDist,angleVar,distDiff,resolution,fx,fy,fz,suggestion,previousCluster,annotation';
 dlmwrite(strcat(folder,'/AllFeatures.csv'), labels, '');
 dlmwrite(strcat(folder,'/AllFeatures.csv'), AllFeatures,'-append');
 
