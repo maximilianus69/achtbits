@@ -1,5 +1,5 @@
 %\section{Preprocessing}
-The data we need to use is available from a database at the uva-bits website
+The data we need to use is available from a database at the UvA-bits website
 \footnote{\url{https://public.flysafe.sara.nl/phppgadmin/} }. This database is often very slow 
 and sometimes overloaded. This is why we downloaded all the data we required in one run. 
 Before we can start in \matlab we preprocess this data to load only correct data
@@ -10,7 +10,7 @@ in it.
 Preprocessing of the data from a database dump is done in Java. Such data 
 is checked for the following: 
 \begin{enumerate}
-    \item Is the data above the north sea? We are only interested in the birds behaviour 
+    \item Is the data above the North Sea? We are only interested in the birds behaviour 
     above the North Sea data from above the Wadden Sea or above Holland is removed.
     \item Is the data complete? If we require longitude and latitude every entry 
     without a value for these variables are excluded for the data for \matlab. 
@@ -40,7 +40,7 @@ can only be done with an actual flight of the bird.
 
 We use the following parameters to define which sequences of data points can be called sessions: 
 \begin{itemize}
-    \item Total minutes described. This is currently set to \minimumSessionLengthMinutes minutes. Less than \minimumSessionLengthMinutes minutes of flight is not interesting.
+    \item Total minutes described. This is currently set to \minimumSessionLengthMinutes -minutes. Less than \minimumSessionLengthMinutes -minutes of flight is not interesting.
     \item Range of resolution. We can filter for a range of data points per minutes. There is
 no way to extract the same amount of information from low resolution data as from high 
 resolution data. This is why we filter out the low resolution data. The resolution 
