@@ -22,7 +22,23 @@ The focus of this report was cluster finding by unsupervised learning, which gav
   There are some problems with this feature, because the instantaneous speed is unreliable. When the resolution is high the time passed between two points is very low, but the angle between them can be a bit jumpy. This results in large changes in angle while the bird is flying straight. We try to limit this error by sampling the data when the resolution is too high (above 1 dat/min is the limit used in our code).
   \item[Distance difference] The difference between \emph{ground distance} and \emph{total distance}. When the bird is hunting he often flies in circles and returns near his startpoint, which is easy to read in this variable (we include this because the learning algorithm can not see spatial information in the trajectory).
   \item[Resolution] The average amount of data points per minute in the clusters data. Not very useful for us but maybe for the learning algorithm.
-  \item[Fourier frequencies] Maximum frequency in the fourier transform in the $x$, $y$ and $z$ directions (three features), as explained in TODO. Our fourier transform only returns the frequencies of one point. We currently use the center point for this feature, which is not te best method because that point could contain noise. This can be improved by taking the average of the frequencies of all accelerometer data in the cluster.
+  \item[Fourier frequencies] Maximum frequency in the fourier transform in the $x$, $y$ and $z$ directions (three features). The fourier transform is an operation that expresses a function of time as a function of frequencies. This is a logical way to express acceleremeter data. For the implementation we used a method called the \emph{Fast Fourier transform}\footnote{TODO Reference to article in repo}. 
+
+  \begin{figure}[htb!]
+    \centering
+    \subfloat[Accelerometer data, on the x-axis time (ms)]{
+      \includegraphics{acc1}
+    }\\
+    \subfloat[Fourier transform of the above data, on the x-axis frequency (Hz)]{
+      \includegraphics{fourier2}
+    }\\
+    \caption{The fourier transform on a fragment of accelerometer data}
+    \label{fig:fourier}
+  \end{figure}
+
+  Figure \ref{fig:fourier} shows an example of a fourier transform on accelerometer data. There is a peak at 3 Hz, which means the accelerometer data has fragments recurring at that frequency. The peak at 0 Hz is an aspect of the Fourier transform and can be ignored. 
+
+  Our fourier transform only returns the maxiumum frequencies of one point of accelerometer data. We currently use the center point for this feature, which is not te best method because that point could contain noise. This could be improved by taking the average of the frequencies of all accelerometer data in the cluster.
   \item[Previous cluster] The id of the previous cluster. This may be needed to recognize some behaviour, like digesting (after hunting).
  \end{description}
 
@@ -54,7 +70,7 @@ WEKA gave the following results, using 10-fold crossvalidation for testing:
 \end{center}
 
 
-The learning methods yield very similar results. Figure \ref{fig:wekatree} shows the J48 tree that was generated. 
+The learning methods yield very similar results. Figure \ref{fig:tree} shows the J48 tree that was generated. 
 
 \begin{figure}
 \begin{center}
