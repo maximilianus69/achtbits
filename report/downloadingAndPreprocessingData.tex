@@ -6,6 +6,7 @@ Before we can start in \textsc{matlab} we preprocess this data to load only corr
 in it.
 
 The query we use to download the GPS data is of the following format: 
+
 %\lstinputlisting[language=SQL]{queryies.sql}
 \begin{verbatim}
 select *
@@ -13,6 +14,7 @@ from gps.uva_tracking_speed_3d_limited
 where device_info_serial = 344 
 and date_time > '2008-07-01 00:00:00' 
 and date_time < '2012-08-01 00:00:00';
+
 \end{verbatim}
 
 The query we use to download the accelerometer data is of the following format:
