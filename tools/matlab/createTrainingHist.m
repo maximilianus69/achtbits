@@ -3,7 +3,7 @@ function [SpeedHist, AngleHist] = createTrainingHist(type, binsSpeed, binsAngle,
     % 'flying', 'diving', 'floating'
     % Input: 
     %       type: the type of example you want to use. There should be an example file
-    %             with the name <type>Example.csv 'flying, 'diving' or 'floating'
+    %             with the name '<type>Example.csv' 'flying, 'diving' or 'floating'
     %       binsSpeed: An array of binsSpeed that you want to make your histogram with
     %       length (optional): the time (in seconds) this histogram should take, defaults to 1200 seconds
     %               which is 20 minutes.
@@ -32,20 +32,14 @@ function [SpeedHist, AngleHist] = createTrainingHist(type, binsSpeed, binsAngle,
     end
     InstSpeed = Data(:, 9:10);
 
-
-    
-
-
     % Interpolate
     [RealTime RealSpeed] = interpolate(Time, Speed, timeStep);
     [RealXTime RealXSpeed] = interpolate(Time, Data(:, 9), timeStep);
     [RealYTime RealYSpeed] = interpolate(Time, Data(:, 10), timeStep);
 
-
-
     % Take length minutes of the Input vector
 
-    % If the example file is too short
+    % If the example file is too short, multiply it, so it fits
     while (size(RealSpeed, 1) <= length/timeStep)
         RealTime = [RealTime ; (RealTime + RealTime(size(RealTime, 1)) + timeStep)];
         RealSpeed = [RealSpeed;RealSpeed];
@@ -53,7 +47,7 @@ function [SpeedHist, AngleHist] = createTrainingHist(type, binsSpeed, binsAngle,
         RealYSpeed = [RealYSpeed;RealYSpeed];
     end
 
-    % If the example is too long:
+    % If the example is too long, shorten it.
     if(size(RealSpeed, 1) > length/timeStep)
         % Delete the last entries from RealTime
         RealTime((round(length/timeStep)+2):size(RealTime, 1), :) = [];
@@ -63,10 +57,6 @@ function [SpeedHist, AngleHist] = createTrainingHist(type, binsSpeed, binsAngle,
         RealYSpeed((round(length/timeStep)+2):size(RealYSpeed, 1), :) = [];
     end
 
-
-    
-
-    %totalVar = zeros(size(InstSpeed, 1) - 1);
     % Create angle histogram
     for i = 1:size(RealXSpeed, 1) - 1
         u = [RealXSpeed(i) RealYSpeed(i)];
@@ -76,19 +66,5 @@ function [SpeedHist, AngleHist] = createTrainingHist(type, binsSpeed, binsAngle,
     end
     
     AngleHist = histc(totalVar, binsAngle);
-    %AngleHist .* angleFactor;
 
-    %subplot(2,1,1);
-    %plot(RealTime, RealSpeed);
-    %subplot(2, 1, 2);
     SpeedHist = histc(RealSpeed, binsSpeed);
-    %bar(binsSpeed, SpeedHist);
-
-    % Plot used in the report:
-    %figure
-    % hist(totalVar, binsAngle);
-    % xlabel('Angle (deg)')
-    % title('Histogram of the angle of the bird during a GPS fix')
-
-
-    
