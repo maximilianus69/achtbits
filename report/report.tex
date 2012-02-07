@@ -10,16 +10,19 @@
 \usepackage[english]{babel}
 \usepackage{matlabScripts}
 \usepackage[font=small,format=plain,labelfont=bf,up,textfont=it,up]{caption}
+\usepackage{xspace}
 %\usepackage{subfigure} % has to be loaded after caption to prevent clash Commented, because subfig is the newer (and presumably
 % better) version of subfigure...
 \usepackage{subfig}
 
 
 
-\newcommand{\projectName}{ACHTBITS}
+\newcommand{\projectName}{ACHTBITS\xspace}
 \newcommand{\projectAbbreviation}{Awesome
-CHaradriiformes Toegepast BIrd Tracking System}
-\newcommand{\bits}{BITS}
+CHaradriiformes Toegepast BIrd Tracking System\xspace}
+\newcommand{\bits}{BITS\xspace}
+% xspace only puts a space where we want one!
+\newcommand{\matlab}{\textsc{matlab}\xspace}
 
 \addtolength{\footskip}{-90mm}
 \addtolength{\headheight}{-05mm}
@@ -54,7 +57,7 @@ CHaradriiformes Toegepast BIrd Tracking System}
 \newcommand{\sessionSeparatorLengthMinutes}{15}
 %% The current value of the timeThreshold given to awesomizeClusters.
 \newcommand{\timeThreshold}{1200}
-\newcommand{\windowSize}{20 minutes}
+\newcommand{\windowSize}{20 minutes\xspace}
 
 % sja, ik tiep hier maar wat hoor
 \begin{abstract}

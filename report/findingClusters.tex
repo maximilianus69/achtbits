@@ -12,7 +12,7 @@ approach has it's origins in `computer vision' % Is dit waar!?
 and works with histograms to 
 match standard behaviour to parts of sessions.
 
-\subsection{The First Approach: Finding Peaks}
+\subsection{The First Approach: Finding Peaks in Acceleration}
  Probably the most important of the GPS data we get from \bits are the X and Y
  position and speed of the bird. There are two speed entries in the database we
  use. The first we use is `instantaneous speed'.    
@@ -51,7 +51,7 @@ to be flying or sitting on the water. In other points the speed differs a lot.
 On these places we can assume that the bird is foraging.
 
 
-\subsubsection{Finding Peaks}
+\subsubsection{Finding the Peaks}
  Clustering, in our case, starts with finding peaks in these speed differences.
  The peaks indicate a change in the bird's behavior, or indicate that the bird
  is foraging. Finding these peaks is done in two steps:
@@ -67,7 +67,7 @@ On these places we can assume that the bird is foraging.
  This has the advantage that we do not get these speed differences in our
  clusters as they would add noise to the learning data.
 
- \subsubsection{Grouping Peaks}
+ \subsubsection{Grouping the Peaks}
  For grouping peaks, we created another algorithm. This algorithm looks at three
  characteristics.  
  \begin{itemize}
@@ -96,136 +96,110 @@ method.
 
 
 \subsection{The Second Approach: The Use of Histograms}
-%The basis of the second approach relies on one important principle. 
-%If a small part of a session is represented in such a manner that it can easily be 
-%matched to a `model' (a part of a session of which we know what it is that is represented
-%in the same manner) we can easily match the entire session to such a model. 
-%
-%The representation of a small session can easily be done with histograms. We count 
-%the speed of the bird among standard intervals of the part of the session and do the
-%same for the change of direction. The histogram we end up with can easily be matched
-%to histograms of the models (floating, flying and diving). The similarity can now be 
-%expressed in percentages: 100\% indicates a complete match and 0\% indicates a complete 
-%mismatch. 
-%
-%Algorithm \ref{alg:hist} explains how we compare a session to the models
-%
-%Because a part of the session is matched we slide a window over the session and count 
-%the speed and the angles of the directional changes in that window (\textit{getHistogram}) . 
-
+\begin{figure}
+  \centering
+  \subfloat[Model for floating.]{\label{fig:clusteringRaw}\includegraphics[width=0.3\textwidth,height=1in]{bar1speed}} 
+  \subfloat[Model for flying.]{\label{fig:clusteringInterpolated}\includegraphics[width=0.3\textwidth,height=1in]{bar2speed}} 
+  \subfloat[Model for hunting.]{\label{fig:clusteringHists}\includegraphics[width=0.3\textwidth,height=1in]{bar3speed}}
+  \caption{Histograms that count the speed for the models of the three
+  behaviors, using the following bins: [0, 1, 2, 4, 5, 10, 20, 40, 60, 120]}
+  \label{fig:modelHistogramsSpeed}
+\end{figure}
+\begin{figure}
+  \centering
+  \subfloat[Model for
+  flying.]{\label{fig:clusteringRaw}\includegraphics[width=0.3\textwidth,height=1in]{bar2angle}} 
+  \subfloat[Model for hunting.]{\label{fig:clusteringInterpolated}\includegraphics[width=0.3\textwidth, height=1in]{bar3angle}} 
+  \caption{Histograms that count the angle for the models of flying and hunting,
+  using the following bins: [0, 5, 10, 30, 60, 180, 360]. There is no model for
+  floating, because  the direction of floating could not be measured properly
+  using instantaneous speed.}
+  \label{fig:modelHistogramsAngle}
+\end{figure}
 This different version works on another basis: We create two histograms. One
 contains the trajectory speeds of the bird and the other contains the
 difference in the angle of the instantaneous speeds. This means that we count
 how many times the speed or angle is between certain values, and represent that
 in an array with these counts. For further illustration see figure
-\ref{fig:modelHistogramsSpeed}.
+\ref{fig:modelHistogramsSpeed} and \ref{fig:modelHistogramsAngle}.
 
-% algoritme is fout: 
-% en timeThreshold... 
-% for i = windowsize/2 +1 to data.length-windowsize
-%\begin{algorithm}
-%\begin{codebox}
-%\Procname{$\proc{histogramCompare}(Data, timeThreshold)$}
-%\li $exampleHists \gets getExampleHists()$
-%\li \For $i \gets 1 + timeThreshold$ \To $\attrib{Data}{length}$ 
-%\li \Do
-%    $currentHists \gets getHistograms(i-timeThreshold, i+timeThreshold)$
-%    \li $histogramValues(i) \gets \Sigma \left| currentHists - exampleHists \right|$
-%\End
-%\li \Return histogramValues
-%\end{codebox}
-%\caption{Comparing example histograms to our data}
-%\label{alg:hist}
-%\end{algorithm}
 
 We take an example of each kind of behavior (floating, flying and foraging).
 This example can be compared with a bit of the data we are
 clustering. For this we loop over the session data, each time selecting
 \windowSize.
 
-This method consists of the following 
+This method consists of five steps:
+\begin{itemize}
+    \item Interpolating the values
+    \item Creating the histograms
+    \item Comparing the histograms
+    \item Smoothing the histogram values
+    \item Finding the clusters
+\end{itemize}
 
-
-\begin{figure}
-  \centering
-  \subfloat[Model for floating.]{\label{fig:clusteringRaw}\includegraphics[width=0.3\textwidth]{bar1speed}} 
-  \subfloat[Model for flying.]{\label{fig:clusteringInterpolated}\includegraphics[width=0.3\textwidth]{bar2speed}} 
-  \subfloat[Model for hunting.]{\label{fig:clusteringHists}\includegraphics[width=0.3\textwidth]{bar3speed}}
-  \caption{Histograms that count the speed for the models of the three behaviors.}
-  \label{fig:modelHistogramsSpeed}
-\end{figure}
-
-
-\begin{figure}
-  \centering
-  \subfloat[Model for flying.]{\label{fig:clusteringRaw}\includegraphics[width=0.3\textwidth]{bar2angle}} 
-  \subfloat[Model for hunting.]{\label{fig:clusteringInterpolated}\includegraphics[width=0.3\textwidth]{bar3angle}} 
-  \caption{Histograms that count the angle for the models of flying and hunting.}
-  \label{fig:modelHistogramsAngle}
-\end{figure}
-
-
-%\begin{figure}
-%\centering
-%\includegraphics[width=.8\textwidth]{histogram.pdf}
-%\caption{Example of a histogram. The x-axis contains the bins. These are the
-%values in which the speeds could be. The height of the bars on the y-axis shows
-%us how many times in a certain time span the bird had a certain speed.}
-%\label{fig:histogram}
-%\end{figure}
-
-
-\subsubsection{Interpolating the Values}
-The first problem we encounter is the difference in resolution of the data. This
-would mean that when we are looking at high resolution data, and we compare it
-with a low resolution example, line 4 of \ref{alg:hist} will not work. Therefore
-we need to have exactly as many data points in the one, as in the other
-histogram. 
-
-This is easily achieved by interpolating the data. Since matlab has integrated
-interpolation functions, we have chosen to interpolate with `Piecewise Cubic
-Hermite Interpolating Polynomial (PCHIP)':, which is a bit more computationally
-expensive than linear interpolation, but returns a smoother curve. This is
-better, when using low resolution data, because it returns a bit smoother line.
-
-\subsubsection{Comparing the Histograms}
-As mentioned before, line 4 in algorithm \ref{alg:hist} compares two algorithms.
-This returns a number close to zero, when the histograms are alike, and a high
-number when they are different. Because this is not very intuitive, the program
-recalculates this to percentages with equation \ref{eq:perc}.
-\begin{equation}
-\label{eq:perc}
-percentage = 100 - \frac{Diff}{2 \sum Histogram} \times 100
-\end{equation}
-
-In this equation, Diff is the difference as calculated in algorithm
-\ref{alg:hist} and the sum of a histogram is the count of all its entries. 
-
-Now we have a percentage for each point, of how much it resembles each behavior.
-A plot of this percentage is shown in the bottom of figure \ref{fig:clustering}.
-This can be used to find clusters, because each time this differs, a new
-cluster can be assumed to be starting.
+Using these steps, the program can loop over the session data, using a certain time
+window. Histograms made from the time window can then be compared to the
+histograms of the examples (which equally sized) and a
+percentage of how different they are can be calculated. The session can now be clustered by
+adding cluster beginnings and endings where the values of the histogram
+differences (so the values in figure \ref{fig:clusteringHists}) cross each
+other. The histogram that has the highest values, is also put in our feature
+vector for learning purposes.
 
 \begin{figure}
   \centering
   \subfloat[Raw data of a session.]{\label{fig:clusteringRaw}\includegraphics[width=0.8\textwidth]{clustersHists1}} \\
   \subfloat[Interpolated data of a session.]{\label{fig:clusteringInterpolated}\includegraphics[width=0.8\textwidth]{clustersHists2}} \\
   \subfloat[Similarity of the flight to behavior percentages. Red indicates floating, green flying and blue hunting.]{\label{fig:clusteringHists}\includegraphics[width=0.8\textwidth]{clustersHists3}}
-  \caption{Different plots of the clustering process. Red vertical bars indicate starts of clusters. Cyan vertical bars indicate ends of clusters.}
+  \caption{Different plots of the clustering process. Red vertical bars indicate
+  beginnings of clusters. Cyan vertical bars indicate ends of clusters.}
   \label{fig:clustering}
 \end{figure}
 
-%\begin{figure}
-%\centering
-%\includegraphics[width=\textwidth]{clustering.pdf}
-%\caption{\small How clustering works. Above is the raw data. The marked line is the
-%absolute speed of the bird. The red and blue lines under it are the speeds in
-%the x and y direction.\\
-%The middle image shows the interpolated data.\\
-%The bottom image shows how much the point in the middle image resembles a
-%certain kind of behavior. Red is floating, green is flying and blue is foraging.}
-%\label{fig:clustering}
-%\end{figure}
+\subsubsection{Interpolating the Values}
+The data consists of sessions with different resolutions. Even during the
+session, the resolution can differ. This
+would mean that when we are looking at high resolution data, and we compare it
+with a low resolution example, calculating an accurate difference value between
+two histograms would get very difficult. Therefore
+we need to have exactly as many data points in the example, as in the current 
+histogram. 
+
+This is easily achieved by interpolating the data. Since \matlab has integrated
+interpolation functions, we have chosen to interpolate with `Piecewise Cubic
+Hermite Interpolating Polynomial (PCHIP)', which is a bit more computationally
+expensive than linear interpolation, but returns a smoother curve. 
+
+\subsubsection{Creating the Histograms}
+%How we cretae heistrioangsams:
+In \matlab, creating histograms is not a problem. The function \texttt{histc} is
+used, and returns a division of the data, over the specified bins. A histogram
+in \matlab is formatted like a 1 by N matrix. These
+histograms can be compared as described in the next part.
+
+\subsubsection{Comparing the Histograms}
+Equation \ref{eq:diff} compares two algorithms, and returns a value closer to
+zero when the histograms are the same, going up when they differ more.
+\begin{equation}
+\label{eq:diff}
+Diff = \sum ( \left| exampleHistogram - currentHistogram \right| ) \vspace{10pt}
+\end{equation}
+ 
+Because the maximum value of $Diff$ depends on the time window, the program converts
+it to percentages. That is done with equation \ref{eq:perc}, where the sum of a
+histogram is the same as the number of entries it has.
+
+\begin{equation}
+\label{eq:perc}
+percentage = 100 - \frac{Diff}{2 \sum Histogram} \times 100
+\end{equation}
+
+Now we have a percentage for each point, of how much it resembles each behavior.
+A plot of this percentage is shown in figure
+\ref{fig:clusteringHists}.
+This can be used to find clusters, because each time this differs, a new
+cluster can be assumed to be starting.
 
 \subsubsection{Smoothing the Histogram Values}
 After the previous step, the data sometimes has only one or two points above the
@@ -238,3 +212,14 @@ moved over the data. The mode of these points should be the value of the middle
 of the seven. This way, if less than four of the points have another value than
 their surroundings, there are too little points to create a new cluster, and the
 difference was probably noise. 
+
+\subsubsection{Finding the Clusters}
+In this smoothed data, the clusters can easily be found. The program saves the
+timestamp of each time the histogram values differ, this way returning a matrix
+with two columns: Begin time, and end time. 
+
+The clusters shorter than 15 minutes, are deleted. Allthough
+this has as a result that we do not use all the data for learning, this does
+select the best usable data, and uses that. the clusters of approximately 5 to
+15 minutes would be worthless learning data, because they are too short to
+depict actual behavior.
