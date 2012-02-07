@@ -11,14 +11,22 @@ function [ClusterFeatures, ClusterPoints] = createClusterFeatures( Cluster, Sess
 %   format: 
 %   [startTime(s),  endTime(s),   duration(s), avgSpeed(km/h), ...
 %    heightDiff(m), grndDist(km), totDist(km), angleVar(degrees/s), ...
-%    distDiff(km), resolution(dat/min), fx(Hz), fy(Hz), fz(Hz)]
+%    distDiff(km), resolution(dat/min), fx(Hz), fy(Hz), fz(Hz), ...
+%	 classSuggestion(id)]
 %	- ClusterPoints a matrix with the points inside this cluster
 
 % the maximum resolution to be used for calculating angle var
 ANGLE_VAR_MAX_RES = 1.0;
 
+% extract basic info
 startTime = Cluster(1);
 endTime = Cluster(2);
+classSuggestion = -1;
+if length(Cluster) < 3
+	fprintf('WARNING: cluster does not have suggestion, this is a bug! Cluster time (%d, %d).\n', startTime, endTime);
+else
+	classSuggestion = Cluster(3);
+end
 duration = endTime - startTime;
 
 % find start and end indices of the clusters
@@ -28,7 +36,7 @@ last = find(SessionGpsData(:,2) == endTime);
 % data points inside cluster
 Points = SessionGpsData(first:last, :);
 if size(Points,1) < 2
-	print 'ERROR: Cluster is too small or has no points in session!';
+	fprintf('ERROR: Cluster is too small or has no points in session!');
 	return;
 end
 ClusterPoints = Points;
@@ -115,7 +123,8 @@ distDiff = abs(totDist - grndDist);
 
 % return data
 ClusterFeatures = ...
-    [startTime, endTime, duration, avgSpeed, heightDiff, grndDist, totDist, angleVar, distDiff, resolution, fourierFreq(1:3)];
+    [startTime, endTime, duration, avgSpeed, heightDiff, grndDist, totDist, angleVar, distDiff, ...
+    resolution, fourierFreq(1:3), classSuggestion];
 
 end
 

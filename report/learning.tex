@@ -49,17 +49,23 @@ WEKA gave the following results, using 10-fold crossvalidation for testing:
 	\textnormal{Method} & \textnormal{Precision} \\ \hline 
 	Tree J48 & 81\% \\
 	Logistic & 82\% \\
-	Perceptron & 82\% \\
+  Perceptron & 82\% \\
 \end{tabular}
 \end{center}
 
 
 The learning methods yield very similar results. Figure \ref{fig:wekatree} shows the J48 tree that was generated. 
+
+\xymatrix{
+              & *+<12pt>[F-:<12pt>]{\txt{avgSpeed}}\ar[dl]|{<=12.315}\ar[dr]|{>12.315}  &           & & \\
+  *+<12pt>[F-:<12pt>]\txt{floating}   &           & *+<12pt>[F-:<12pt>]\txt{grndDist}  &
+}
+
 \begin{figure}[htb!]
 \begin{center}
 \includegraphics[scale=0.75]{tree2}
 \end{center}
-\caption{Large part of the WEKA generated tree}
+\caption{Top part of the WEKA generated tree}
 \label{fig:wekatree}
 \end{figure}
 
@@ -82,4 +88,4 @@ The following table shows the prediction accuracy for each class:
 \end{tabular}
 \end{center}
 
-The data was annotated by 4 different people with very little knowledge of birds, which is probably an other reason for the misclassifications. 
+The data was annotated by 4 different people with very little knowledge of birds, which is a bit reason for the misclassifications. 
