@@ -21,15 +21,10 @@ function SimpleClusters = simpleFindClusters(Classes, minClusterLength)
     D = SimpleClusters(:, 2) - SimpleClusters(:, 1);
     % A cluster should be 10 minutes minimum
     DB = D > minClusterLength;
-    % Don't delete the first and last cluster
-   % if(~isempty(DB))
-   %     if(SimpleClusters(1, 1) ~= SimpleClusters(1, 2))
-   %         DB(1) = 1;
-   %     end
-   %     DB(size(DB, 1)) = 1;
-   % end
     SimpleClusters = SimpleClusters .* [DB DB DB];
+    % Delete the short clusters
     SimpleClusters(~any(SimpleClusters,2),:) = [];
+    % Return start and end of the session, if there are no clusters. This prevents errors.
     if(isempty(SimpleClusters))
         SimpleClusters = [Classes(1, 1), Classes(end, 1)];
     end
