@@ -1,6 +1,5 @@
 function handles = makeButtons( hparent, buttons, classColors )
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+%MAKEBUTTONS functions used to create the buttons
 
 if nargin == 3
     classes = true;
