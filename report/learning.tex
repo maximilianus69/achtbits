@@ -44,9 +44,6 @@ The focus of this report was cluster finding by unsupervised learning, which gav
 
  We store the features in a Matlab array and save them to a CSV file.
 
-\subsection{Adding Features}
-The GPS and accelerometer data can be used to create different features not mentioned above. We did not have the resources to do research in finding the best features, but we wanted to be able to add new ones without re-annotating the data. All features are calculated in \verb|createClusterFeatures.m| and are then saved along with their annotation. When a new feature is thought up it can be appended to the return value of that function. Then \verb|raloadFeatures.m| can be used to recreate the features, transferring all previous annotations. 
-
  \subsection{Results}
  We then appended all the CSV files into a large database of training data. We removed \emph{unknown} and \emph{bad} labeled clusters as they indicate bad clustering or insufficient knowledge of birds. To improve the result we also combined \emph{digesting} and \emph{sleeping} clusters into one class. They can be seperated in future experiments, but with our current features and annotations an algorithm will not find a difference. The training data can then be loaded into a machine learning program. We chose for WEKA\footnote{http://www.cs.waikato.ac.nz/ml/weka/} because it is easy to use and it supports many learning algorithms.
 
