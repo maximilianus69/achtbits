@@ -67,7 +67,10 @@ remains troublesome to annotate data point by point. i
 
 In this report we 
 describe how we cluster data using histograms. We also describe the annotation
-tool we built, with which we can annotate clustered data points more easily. 
+tool we built, with which we can annotate clustered data points more easily. \\
+
+
+The UvA-BITS project has created a GPS device that is used to collect extensive data on the behavior of birds. In this report we show methods to prepare and use this data in order automatically classify their behavior. First, data is split into sessions of usable data which are divided into clusters of the same behavior. Then features are created for these clusters and they are classified with a tool made to ease this process. Finally this new data is used to train a classification algorithm.
 \end{abstract}
 
 \section{Introduction}
@@ -91,7 +94,7 @@ tool we built, with which we can annotate clustered data points more easily.
  % Describes how we annotate (including how the tool works. Maybe an appendix
  % should be added on how the tool should be started and how it should be used.
 
-
+\input{annotatingData.tex}
 
 
 
@@ -109,5 +112,9 @@ tool we built, with which we can annotate clustered data points more easily.
 
 \section{Improvements and future work}
 \input{futureWork}
+
+
+%\appendix
+%\input{User_Guide-Annotation_Tool-AchtBits}
 
 \end{document}

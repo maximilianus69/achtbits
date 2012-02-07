@@ -16,14 +16,13 @@ match standard behaviour to parts of sessions.
  Probably the most important of the GPS data we get from \bits are the X and Y
  position and speed of the bird. There are two speed entries in the database we
  use. The first we use is `instantaneous speed'.    
-This the speed the bird has on the time of
+This is the speed the bird has on the time of
  connecting to the GPS, calculated from two subsequent measurements. The second
 we use is 
  `trajectory speed'. This is speed calculated from two GPS locations. 
 We decided to use the latter because it has a smaller error rate. 
  Our assumption was that we could cluster the data well 
- enough by only looking at speed differences. Figure \ref{fig:speed} shows
- why.
+ enough by only looking at speed differences. 
  % TODO: Dit figuurtje maken. Ik kom er namelijk net achter dat de derivative
  % misschien niet exact doet wat we willen, omdat het speed1 en speed2 apart van
  % elkaar gebruikt. Een goeie hiervoor is device_535, sessie_000.
@@ -46,9 +45,8 @@ We decided to use the latter because it has a smaller error rate.
 %\label{fig:speed}
 %\end{figure}
 
-As can be seen, the speed-difference is low on points where the bird is assumed
-to be flying or sitting on the water. In other points the speed differs a lot.
-On these places we can assume that the bird is foraging.
+As can be seen in figure \ref{fig:speed}, the speed-difference is low on points where the bird is assumed
+to be flying or sitting on the water, but is high for a short period when the bird transistions from one to another. In other points the speed differs a lot over a longer period of time. On these intervals we can assume that the bird is foraging.
 
 
 \subsubsection{Finding the Peaks}
