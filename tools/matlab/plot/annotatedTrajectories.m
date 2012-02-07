@@ -1,7 +1,9 @@
 function annotatedTrajectories( annotatedData, classColors )
 %ANNOTATEDTRAJECTORIES colorcodes all annotated clusters
-%   Detailed explanation goes here
-
+%
+%   INPUT:
+%   annotatedData - matrix containing annotated clusters
+%   classColors - array of rgb values used to code clusters
 
 amountOfClusters = size(unique(annotatedData(:, 1)), 1);
 
