@@ -1,0 +1,98 @@
+\subsubsection{Downloading Data From the Database}
+The data we need to use is available from a database at the UvA-bits website
+\footnote{\url{https://public.flysafe.sara.nl/phppgadmin/} }. This database is often very slow 
+and sometimes overloaded. This is why we downloaded all the data we required in one run. 
+Before we can start in \textsc{matlab} we preprocess this data to load only correct data
+in it.
+
+The query we use to download the GPS data is of the following format: 
+
+%\lstinputlisting[language=SQL]{queryies.sql}
+\begin{verbatim}
+select *
+from gps.uva_tracking_speed_3d_limited
+where device_info_serial = 344 
+and date_time > '2008-07-01 00:00:00' 
+and date_time < '2012-08-01 00:00:00';
+
+\end{verbatim}
+
+The query we use to download the accelerometer data is of the following format:
+\begin{verbatim}
+select a.device_info_serial, a.date_time, a.index,
+(a.x_acceleration-d.x_o)/d.x_s as x_cal,
+(a.y_acceleration-d.y_o)/d.y_s as y_cal,
+(a.z_acceleration-d.z_o)/d.z_s as z_cal
+from gps.uva_device_limited d
+full outer join gps.uva_acceleration_limited a
+using (device_info_serial)
+where a.device_info_serial = 344 and
+a.device_info_serial = d.device_info_serial and
+a.date_time > '2008-07-01 00:00:00' and a.date_time < '2012-08-01 00:00:00'
+order by a.date_time, a.index;
+\end{verbatim}
+
+Only the \textit{device\_id} should change to select different. Obviously more complex queries could 
+decrease the magnitude of the task of our preprocessing script but we wanted to keep the
+work for the database to a minimum for (reasons discussed earlier) and this seemed the
+easiest way to do this. 
+
+The result of the queries should be dumped in one folder to `comma separated files' (csv) files.
+The data filenames should be the following : DATA\_ALL\_[GPS/ACCELEROMETER]\_BIRD\_X.csv for 
+GPS or accelerometer data for \textit{device\_id} X. 
+
+\subsubsection{Creating Session Files}
+Now the data is downloaded it can be preprocessed before \textsc{matlab} can do its magic. 
+This can done for a single \textit{device\_id} by \textit{PreprocessCsvFiles.java} or 
+for multiple \textit{device\_id}s by \textit{Wrapper.java}. The Wrapper simply uses the PreprocessCsvFiles. 
+
+A special \textit{config.txt} that can be adjusted for those who do not like to program 
+Java can be used to customize the script PreprocessCsvFiles. This configuration file
+has a couple of lines with description=value. The value (the part after an equal sign)
+can be adjusted to whatever legal
+value one
+would like. The description (the part before an equal sign) can be anything one would
+except more equal signs. Do not change the order of the lines.
+
+The only variables that are not self explanatory are those that decide which columns
+of the input data file should be used (those columns that should be extracted from the
+input files and should be put in the output files). 
+This is an array with integers and there are 
+two for these, one for the GPS data files and one for the accelerometer data files. 
+Luckily, these should not have to be changed since the current values extract all the 
+relevant
+columns. 
+
+Both scripts work with command line arguments. For more elaboration one what the
+scripts exactly do one could check our report for an extensive list or the README file for 
+a short overview. 
+
+Command line arguments for PreprocessCsvFiles (do not change the order of these arguments): 
+\begin{itemize}
+    \item The .csv file with GPS data.
+    \item The directory in which to create a folder with the session files.
+    \item (Optional argument) The .csv file with accelerometer data.
+\end{itemize}
+
+Command line arguments for Wrapper (do not change the order of these arguments): 
+\begin{itemize}
+    \item The output directory in which to create folders with the sessions.
+    \item The input director which contains all the data files (of the known format). 
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
