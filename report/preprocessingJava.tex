@@ -2,7 +2,8 @@
 The data we need to use is available from a database at the uva-bits website
 \footnote{\url{https://public.flysafe.sara.nl/phppgadmin/} }. This database is often very slow 
 and sometimes overloaded. This is why we downloaded all the data we required in one run. 
-Before we can start in Matlab we preprocess this data to load only correct data in Matlab.
+Before we can start in \matlab we preprocess this data to load only correct data
+in it.
 
 \subsection{Before Matlab}
 \label{subsec:beforeMatlab}
@@ -12,7 +13,7 @@ is checked for the following:
     \item Is the data above the north sea? We are only interested in the birds behaviour 
     above the North Sea data from above the Wadden Sea or above Holland is removed.
     \item Is the data complete? If we require longitude and latitude every entry 
-    without a value for these variables are excluded for the data for Matlab. 
+    without a value for these variables are excluded for the data for \matlab. 
     \item Is the data usable? Our method requires data to consist of long flights,
     not isolated data points. We call a sequence of useful data points a \textit{session}. 
     See subsection \ref{subsec:creatingSessions} for more details on sessions and how
@@ -70,7 +71,7 @@ the GPS data. We later match the accelerometer data to GPS sessions.
 
 The output of this
 script is $N$ comma separated GPS session files (containing GPS data that together makes
-a session) and $M$ (with $0 <= M <= N$) comma separated accelerometer data files. Matlab
+a session) and $M$ (with $0 <= M <= N$) comma separated accelerometer data files. \matlab
 can easily match GPS data with accelerometer data using these files. 
 
  \subsection{Normalizing Height}
